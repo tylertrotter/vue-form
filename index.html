@@ -2,10 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Vue Form</title>
+		<title>Vue Form</title>
+		<style>
+			/* User defined */
+			body {
+				background: gray;
+			}
+			.field {
+				float: none;
+			}
+
+			/* Cognito defined global */
+			[id="c-form"] * {
+				box-sizing: border-box;
+			}
+		</style>
   </head>
   <body>
-    <div id="c-form"></div>
+		<div id="c-form"></div>
+		<div class="c-field c-validation c-row-start c-label">
+			No scope creep here!
+		</div>
     <script src="/dist/build.js"></script>
   </body>
 </html>
