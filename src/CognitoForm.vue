@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 	import CognitoField from './components/CognitoField.vue';
 	import CognitoCheckbox from './components/CognitoCheckbox.vue';
 	import CognitoText from './components/CognitoText.vue';
