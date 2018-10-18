@@ -14,6 +14,18 @@
 </script>
 
 <style lang="scss">
+	.c-field {
+		float: left;
+	}
+
+	.c-span-12 {
+		width: 50%;
+	}
+
+	.c-span-6 {
+		width: 25%;
+	}
+
 	.c-label {
 		font-weight: bold;
 	}
