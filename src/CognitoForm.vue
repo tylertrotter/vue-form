@@ -1,6 +1,6 @@
 <template>
   <div id="c-form">
-		<cognito-field label="Do you agree?" column="1" colspan="6">
+		<cognito-field label="Test" column="1" colspan="6">
 			<cognito-checkbox />
 		</cognito-field>
 		<cognito-field label="Your Email" error="true" column="12" colspan="12">
