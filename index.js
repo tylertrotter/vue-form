@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './CognitoForm.vue'
+import App from './src/CognitoForm.vue'
 
 new Vue({
   el: '#c-form',
