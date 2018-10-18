@@ -53,6 +53,7 @@
 	}
 
 	.c-page {
+		// Shift the page container to accomodate c-field gutter padding
 		margin-left: -$gutter/2;
 		width: calc(100% + #{$gutter});
 
@@ -63,6 +64,8 @@
 		}
 	}
 
+	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
+	// Allowing us to use the filed component outside of 24-column grid context.
 	[class*='c-span-'] {
 		padding: 0 $gutter/2;
 	}
