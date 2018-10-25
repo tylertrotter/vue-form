@@ -1,32 +1,47 @@
 <template>
   <form id="c-form">
-		<div class="c-page">
-			<cognito-field label="Test2" help="check it if it is true." column="1" colspan="6">
-				<cognito-checkbox />
-			</cognito-field>
-			<cognito-field label="Your Email" column="7" colspan="6">
-				<cognito-text type="email" />
-			</cognito-field>
-			<cognito-field label="Your Email" column="13" colspan="6">
-				<cognito-text type="email" />
-			</cognito-field>
-			<cognito-field label="Do you agree?" column="19" colspan="6">
-				<cognito-checkbox />
-			</cognito-field>
-			<cognito-field label="Your Email" error="Something is wrong" column="1" colspan="6">
-				<cognito-text type="email" />
-			</cognito-field>
-			<cognito-field label="Your Name" column="1" colspan="12">
-				<cognito-text type="text" />
-			</cognito-field>
-			<cognito-field label="Your Name" column="13" colspan="12">
-				<cognito-text type="text" />
-			</cognito-field>
+
+		<header class="c-header c-wrapper">
+			<h1>Form Title</h1>
+		</header>
+
+		<div class="c-body c-wrapper">
+			<cognito-page-progress />
+			<cognito-page page=1>
+				<cognito-field label="Test2" help="check it if it is true." column="1" colspan="6">
+					<cognito-checkbox />
+				</cognito-field>
+				<cognito-field label="Your Email" column="7" colspan="6">
+					<cognito-text type="email" />
+				</cognito-field>
+				<cognito-field label="Your Email" column="13" colspan="6">
+					<cognito-text type="email" />
+				</cognito-field>
+				<cognito-field label="Do you agree?" column="19" colspan="6">
+					<cognito-checkbox />
+				</cognito-field>
+				<cognito-field label="Your Email" error="Something is wrong" column="1" colspan="6">
+					<cognito-text type="email" />
+				</cognito-field>
+				<cognito-field label="Your Name" column="1" colspan="12">
+					<cognito-text type="text" />
+				</cognito-field>
+				<cognito-field label="Your Name" column="13" colspan="12">
+					<cognito-text type="text" />
+				</cognito-field>
+			</cognito-page>
+			<cognito-page page=2>
+				<cognito-field label="Test2" help="check it if it is true." column="1" colspan="6">
+					<cognito-checkbox />
+				</cognito-field>
+			</cognito-page>
 		</div>
   </form>
 </template>
 
 <script>
+	import CognitoPageProgress from './components/CognitoPageProgress.vue';
+	import CognitoPage from './components/CognitoPage.vue';
 	import CognitoField from './components/CognitoField.vue';
 	import CognitoCheckbox from './components/CognitoCheckbox.vue';
 	import CognitoText from './components/CognitoText.vue';
@@ -34,6 +49,8 @@
 	export default {
 		name: 'c-form',
 		components: {
+			CognitoPageProgress,
+			CognitoPage,
 			CognitoField,
 			CognitoCheckbox,
 			CognitoText
@@ -46,22 +63,26 @@
 	$gutter: 32px;
 
 	[id="c-form"] {
+		background: white;
 		max-width: 800px;
 		margin: 0 auto;
-		padding: $form-margins;
-		background: white;
+		overflow: hidden;
 	}
 
-	.c-page {
-		// Shift the page container to accomodate c-field gutter padding
-		margin-left: -$gutter/2;
-		width: calc(100% + #{$gutter});
+	.c-wrapper {
+		padding: $form-margins/2 $form-margins;
+	}
 
-		&:after {
-			content: '';
-			display: block;
-			clear: both;
-		}
+	.c-wrapper:first-child {
+		padding-top: $form-margins;
+	}
+
+	.c-wrapper:last-child {
+		padding-bottom: $form-margins;
+	}
+
+	header {
+		background: pink;
 	}
 
 	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
