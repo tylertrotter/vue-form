@@ -1,0 +1,28 @@
+// Structure
+$form-width: 800px;
+$form-margins: 40px;
+$gutter: 24px;
+$small-text: .8em;
+
+// Typeography
+$typeface: Arial;
+$header-typeface: Georgia;
+$label-typeface: Georgia;
+$link-typeface: Georgia;
+$button-typeface: Arial;
+
+// General Colors
+$negative: red;
+$negative-reverse: white;
+$highlight: orange;
+$highlight-reverse: white;
+$primary: blue;
+$primary-reverse: white;
+$neutral: #555;
+$neutral-reverse: white;
+
+// Specific Colors
+$form-bg: white;
+$btn-primary-bg: $primary;
+$btn-primary-text: $primary-reverse;
+$neutral-bg: rgba($neutral, .05);

@@ -22,15 +22,14 @@ module.exports = {
         use: [
           'vue-style-loader',
           'css-loader',
-          'sass-loader'
-        ],
-      },
-      {
-        test: /\.sass$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader?indentedSyntax'
+					'sass-loader',
+					{
+						loader: 'sass-resources-loader',
+						options: {
+							// Provide path to the file with resources
+							resources: './src/sass/_variables.scss'
+						},
+					},
         ],
       },
       {
@@ -44,12 +43,14 @@ module.exports = {
             'scss': [
               'vue-style-loader',
               'css-loader',
-              'sass-loader'
-            ],
-            'sass': [
-              'vue-style-loader',
-              'css-loader',
-              'sass-loader?indentedSyntax'
+							'sass-loader',
+							{
+								loader: 'sass-resources-loader',
+								options: {
+									// Provide path to the file with resources
+									resources: ['./src/sass/_theme.scss', './src/sass/_field-style.scss']
+								},
+							},
             ]
           }
           // other vue-loader options go here

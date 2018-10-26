@@ -23,7 +23,7 @@ new Vue({
         Math.floor(document.getElementById("c-form").clientWidth / 100) * 100;
       var classes = [];
       for (var size = this.width; size >= 200; size = size - 100) {
-        classes.push("c-width-" + size);
+        classes.push("c-" + size);
       }
       document.getElementById("c-form").classList = classes.join(" ");
     }

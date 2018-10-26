@@ -22,14 +22,6 @@
 			}
 		},
 		methods: {
-			next(){
-				this.currentPage = 1 + 1;
-				EventBus.$emit('page-number-updated', this.currentPage);
-			},
-			prev(){
-				this.currentPage = 1 - 1;
-				EventBus.$emit('page-number-updated', this.currentPage);
-			},
 			goto(num){
 				this.currentPage = num;
 				EventBus.$emit('page-number-updated', this.currentPage);
@@ -39,12 +31,6 @@
 </script>
 
 <style scoped lang="scss">
-	// TODO: Make these variables global
-	$form-margins: 40px;
-	$gutter: 32px;
-	$highlight: orange;
-	$highlight-reverse: white;
-
 	ol {
 		margin: 0 0 $gutter/2;
 		padding: 0;

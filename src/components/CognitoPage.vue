@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide" mode="in-out">
-		<div class="c-page" v-show="show">
+		<div class="c-page" :data-page="page" v-show="show">
 			<slot></slot>
 		</div>
 	</transition>
@@ -33,10 +33,6 @@
 </script>
 
 <style scoped lang="scss">
-	// TODO: Make these variables global
-	$form-margins: 40px;
-	$gutter: 32px;
-
 	.c-page {
 		// Shift the page container to accomodate c-field gutter padding
 		margin-left: -$gutter/2;
@@ -46,6 +42,13 @@
 			content: '';
 			display: block;
 			clear: both;
+		}
+
+		&[data-page]:after {
+			content: attr(data-page);
+			text-align: right;
+			padding: $gutter $gutter/2 0 0;
+			font-size: $small-text;
 		}
 	}
 
