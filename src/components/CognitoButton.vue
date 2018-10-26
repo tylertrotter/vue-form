@@ -12,6 +12,9 @@
 </script>
 
 <style scoped lang="scss">
+	@import '../sass/_theme';
+	@import '../sass/_field-style';
+
 	.btn {
 		border: 0;
 	}

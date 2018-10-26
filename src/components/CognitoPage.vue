@@ -33,6 +33,10 @@
 </script>
 
 <style scoped lang="scss">
+		// Just to get sandbox working
+	@import '../sass/_theme';
+	@import '../sass/_field-style';
+	// End sandbox only code
 	.c-page {
 		// Shift the page container to accomodate c-field gutter padding
 		margin-left: -$gutter/2;

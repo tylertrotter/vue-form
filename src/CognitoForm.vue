@@ -73,6 +73,9 @@
 
 
 <style lang="scss">
+	@import './sass/_theme';
+	@import './sass/_field-style';
+
 	[id="c-form"] * {
 		box-sizing: border-box;
 	}
@@ -127,6 +130,9 @@
 </style>
 
 <style scoped lang="scss">
+	@import './sass/theme';
+	@import './sass/field-style.scss';
+
 	[id="c-form"] {
 		background: $form-bg;
 		max-width: $form-width;
