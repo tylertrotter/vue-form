@@ -1,7 +1,7 @@
 <template>
 	<ol class="c-page-progress">
 		<li v-for="(page, index) in pages" :key="index" :class="{active: index === currentPage-1}">
-			<a @click="goto(index + 1)"><span>{{ page }}</span></a>
+			<a @click="goto(index + 1)">{{ page }}</a>
 		</li>
 	</ol>
 </template>
@@ -37,7 +37,7 @@
 	// End sandbox only code
 
 	ol {
-		margin: 0 0 $gutter/2;
+		margin: 0 0 $gutter;
 		padding: 0;
 		counter-reset: mycounter;
 	}
@@ -70,9 +70,8 @@
 		margin-right: .5em;
 	}
 
-	a:before,
-	a span {
-		vertical-align: middle;
+	a:before{
+		vertical-align: bottom;
 	}
 
 	.active :before {

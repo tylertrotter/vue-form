@@ -1,0 +1,33 @@
+label {
+	[type="checkbox"] + span:before,
+	[type="radio"] + span:before {
+		content: '';
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		margin-bottom: -.15em;
+		margin-right: .3em;
+		// border: $hitchcock 1px solid;
+		border-radius: .2em;
+		background-color: white;
+		background-size: 0;
+		transition: all .2s;
+	}
+
+	[type="radio"] + span:before {
+		border-radius: 50%;
+		// background-color: $benjamin;
+		box-shadow: inset 0 0 0 .75em white;
+	}
+
+	[data-whatinput="keyboard"] &{
+		[type="checkbox"]:focus + span:before,
+		[type="radio"]:focus + span:before {
+			// border-color: $ansel;
+		}
+	}
+
+	[type="checkbox"],
+	[type="radio"] {
+		// @include visually-hidden;
+	}

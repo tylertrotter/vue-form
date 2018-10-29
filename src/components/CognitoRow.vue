@@ -6,7 +6,7 @@
 
 <script>
 	export default {
-		name: 'c-field-row',
+		name: 'c-field-row'
   };
 </script>
 
@@ -15,7 +15,7 @@
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
 	// End sandbox only code
-	
+
 	.c-row {
 		display: flex;
 		width: calc(100% + #{$gutter}/2);

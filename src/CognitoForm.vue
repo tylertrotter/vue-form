@@ -8,9 +8,12 @@
 		<div class="c-body c-wrapper">
 			<cognito-page-progress />
 			<cognito-page page=1>
-				<cognito-section type="section" title="Section Title" help="This is a section help" column="1" colspan="12">
-					<cognito-section type="field" title="Test2" help="check it if it is true." column="1" colspan="12">
-						<cognito-checkbox />
+				<cognito-section type="field" title="Rating Scale" column="1" colspan="24">
+					<cognito-rating-scale></cognito-rating-scale>
+				</cognito-section>
+				<cognito-section type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
+					<cognito-section type="field"  help="check it if it is true." column="1" colspan="12">
+						<cognito-checkbox label="Hello" />
 					</cognito-section>
 					<cognito-section type="field" title="Your Email" column="13" colspan="12">
 						<cognito-text type="email" />
@@ -54,6 +57,7 @@
 	import CognitoCheckbox from './components/CognitoCheckbox.vue';
 	import CognitoText from './components/CognitoText.vue';
 	import CognitoAddress from './components/CognitoAddress.vue';
+	import CognitoRatingScale from './components/CognitoRatingScale.vue';
 
 	import CognitoButtonSection from './components/CognitoButtonSection.vue';
 
@@ -66,7 +70,8 @@
 			CognitoCheckbox,
 			CognitoText,
 			CognitoAddress,
-			CognitoButtonSection
+			CognitoButtonSection,
+			CognitoRatingScale
 		}
 	}
 </script>
@@ -121,11 +126,50 @@
 		clear: both;
 	}
 
-	[type="text"],
-	[type="email"],
-	select {
-		padding: $input-padding;
+	.c-shift {
+		// Shift the page container to accomodate c-field gutter padding
+		margin-left: -$gutter/2;
+		width: calc(100% + #{$gutter});
 	}
+
+	///////////////////////
+	// End Structural CSS
+	///////////////////////
+
+	[id="c-form"] {
+		h1, h2, h3, h4, h5, h6 {
+			margin: 0;
+		}
+
+		h1:not(:last-child),
+		h2:not(:last-child),
+		h3:not(:last-child),
+		h4:not(:last-child),
+		h5:not(:last-child),
+		h6:not(:last-child) {
+			margin: 0 0 $gutter/3;
+		}
+
+		// General theme settings
+		[type="text"],
+		[type="email"],
+		select {
+			padding: $input-padding;
+		}
+	}
+
+	.c-negative-color {
+		background-color: $negative;
+		fill: $negative;
+	}
+
+	.c-negative-reverse {
+		background-color: $negative-reverse;
+		fill: $negative-reverse;
+		color: $negative-reverse;
+		stroke: $negative-reverse;
+	}
+
 
 </style>
 
@@ -165,11 +209,11 @@
 
 	// Add padding to the top of every field after the first row.
 	// (If the form is 500px or wider, otherwise do it for all but the first field.)
-	.c-500 .c-row-end ~ .c-field{
+	.c-500 .c-row-end ~ [class*='c-col-']{
 		padding-top: $gutter;
 	}
 
-	[id="c-form"]:not(.c-500) .c-field:nth-child(n+2){
+	[id="c-form"]:not(.c-500) [class*='c-col-']:nth-child(n+2){
 		padding-top: $gutter;
 	}
 

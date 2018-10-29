@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide" mode="in-out">
-		<div class="c-page" :data-page="page" v-show="show">
+		<div class="c-page c-shift" :data-page="page" v-show="show">
 			<slot></slot>
 		</div>
 	</transition>
@@ -38,9 +38,6 @@
 	@import '../sass/_field-style';
 	// End sandbox only code
 	.c-page {
-		// Shift the page container to accomodate c-field gutter padding
-		margin-left: -$gutter/2;
-		width: calc(100% + #{$gutter});
 
 		&:after {
 			content: '';
