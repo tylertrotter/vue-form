@@ -1,0 +1,6 @@
+@import '../theme';
+@import '../field-style';
+
+tbody:nth-child(odd) {
+	background: $neutral-bg;
+}

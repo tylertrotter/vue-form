@@ -1,6 +1,6 @@
 <template>
 	<label>
-		<input type="checkbox">
+		<input type="radio" :name="name">
 		<span>{{label}}</span>
 	</label>
 </template>
@@ -8,6 +8,6 @@
 <script>
 	export default {
 		name: 'c-checkbox',
-		props: ['label']
+		props: ['name']
   };
 </script>
