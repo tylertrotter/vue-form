@@ -11,7 +11,8 @@
 		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
 		(column === '1') ? 'c-row-start' : '',
 		(+column + +colspan  === 25) ? 'c-row-end' : '',
-		error ? 'c-error' : ''
+		error ? 'c-error' : '',
+		required ? 'c-required' : ''
 	]">
 		<template v-if="type === 'field'">
 			<label class="c-label" v-if="title">{{title}}</label>
@@ -60,20 +61,25 @@
 			'error',
 			'column',
 			'help',
-			'type'
+			'type',
+			'required'
 		]
   };
 </script>
 
 <style scoped lang="scss">
 	// Just to get sandbox working
-	@import '../sass/_theme';
-	@import '../sass/_field-style';
+	// @import '../sass/_theme';
+	// @import '../sass/_field-style';
 	// End sandbox only code
 
 	.c-label {
 		display: block;
 		font-family: $label-typeface;
+	}
+
+	.c-required .c-label:after {
+		@include required;
 	}
 
 	.c-helptext {

@@ -48,7 +48,7 @@ module.exports = {
 								loader: 'sass-resources-loader',
 								options: {
 									// Provide path to the file with resources
-									resources: ['./src/sass/_theme.scss', './src/sass/_field-style.scss']
+									resources: ['./src/sass/_theme.scss', './src/sass/_field-style.scss', './src/sass/_mixins.scss']
 								},
 							},
             ]

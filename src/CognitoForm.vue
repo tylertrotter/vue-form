@@ -8,7 +8,13 @@
 		<div class="c-body c-wrapper">
 			<cognito-page-progress />
 			<cognito-page page=1>
-				<cognito-section type="field" title="Rating Scale" column="1" colspan="24">
+				<cognito-section type="field" required="true" title="Rating Scale" column="1" colspan="24">
+					<cognito-rating-scale></cognito-rating-scale>
+				</cognito-section>
+				<cognito-section type="field" required="true" title="Rating Scale" column="1" colspan="15">
+					<cognito-rating-scale></cognito-rating-scale>
+				</cognito-section>
+				<cognito-section type="field" required="true" title="Rating Scale" column="16" colspan="9">
 					<cognito-rating-scale></cognito-rating-scale>
 				</cognito-section>
 				<cognito-section type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
@@ -23,7 +29,7 @@
 					<cognito-section type="field" title="Your Email" column="7" colspan="6">
 						<cognito-text type="email" />
 					</cognito-section>
-					<cognito-section type="field" title="Your Email" column="13" colspan="6">
+					<cognito-section type="field" required="true" title="Your Email" column="13" colspan="18">
 						<cognito-text type="email" />
 					</cognito-section>
 				</cognito-section>
@@ -205,6 +211,7 @@
 
 	[data-width~="500"] [class*='c-col-']:not(.c-col-24) {
 		float: left;
+		overflow: hidden;
 	}
 
 	// Add padding to the top of every field after the first row.

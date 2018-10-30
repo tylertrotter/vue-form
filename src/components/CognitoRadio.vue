@@ -8,6 +8,9 @@
 <script>
 	export default {
 		name: 'c-checkbox',
-		props: ['name']
+		props: [
+			'name',
+			'label'
+		]
   };
 </script>

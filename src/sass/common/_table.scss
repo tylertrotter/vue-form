@@ -1,6 +1,21 @@
 @import '../theme';
 @import '../field-style';
 
-tbody:nth-child(odd) {
-	background: $neutral-bg;
+.cg {
+	table {
+		border-collapse: collapse;
+	}
+
+	thead {
+		vertical-align: bottom;
+	}
+
+	tbody:nth-child(even) {
+		background: $neutral-bg;
+	}
+
+	td,
+	th {
+		padding: $gutter/4;
+	}
 }

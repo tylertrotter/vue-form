@@ -23,7 +23,7 @@ new Vue({
 			var widths = [];
 
       for (var size = width; size >= 200; size = size - 25) {
-				if(size < 600 || size % 100 === 0)
+				if(size <= 650 || size % 100 === 0)
         widths.push(size);
 			}
 

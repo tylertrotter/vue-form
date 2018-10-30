@@ -6,9 +6,9 @@
 		</thead>
 		<tbody v-for="(question, index) in questions" :key="index">
 			<tr>
-				<td>{{question}}</td>
-				<td v-for="(answer, index) in answers" :key="index">
-					<cognito-radio :name="question" />
+				<td class="c-rating-scale--question">{{question}}</td>
+				<td class="c-rating-scale--option" v-for="(answer, index) in answers" :key="index">
+					<cognito-radio :name="question" :label="answer" />
 				</td>
 			</tr>
 			<tr>
@@ -20,7 +20,6 @@
 
 <script>
 	import CognitoRadio from './CognitoRadio.vue';
-	// import './../sass/table.css';
 
 	export default {
 		name: 'c-rating-scale',
@@ -29,7 +28,7 @@
 		},
 		data() {
 			return {
-				questions: ['How happy are you with Vue.js', 'How do you like SFCs?'],
+				questions: ['How happy are you with Vue.js', 'How do you like SFCs?', 'How you liking this rating scale component?'],
 				answers: ['Very Unsatisfied', 'Unsatisfied', 'Neutral', 'Satisfied', 'Very Satisfied']
 			}
 		}
@@ -41,5 +40,42 @@
 
 	.c-rating-scale {
 		width: 100%;
+	}
+
+	.c-rating-scale--question:after {
+		@include required;
+	}
+	.c-rating-scale--option {
+		text-align: center;
+	}
+
+	.c-rating-scale--option span {
+		display: none;
+	}
+
+
+	@mixin rating-scale--one-col {
+	.c-rating-scale {
+		thead {
+			display: none;
+		}
+		td,
+		th {
+			display: block;
+			text-align: left;
+		}
+	}
+
+	.c-rating-scale--option span {
+		display: inline-block;
+	}
+}
+
+	.cg:not([data-width~="1000"]) .c-field:not(.c-col-24)  {
+		@include rating-scale--one-col;
+	}
+
+	.cg:not([data-width~="625"]) {
+		@include rating-scale--one-col;
 	}
 </style>
