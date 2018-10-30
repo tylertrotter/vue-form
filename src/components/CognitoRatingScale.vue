@@ -37,6 +37,7 @@
 
 <style lang="scss">
 	@import '../sass/common/_table.scss';
+	@import '../sass/_mixins.scss';
 
 	.c-rating-scale {
 		width: 100%;

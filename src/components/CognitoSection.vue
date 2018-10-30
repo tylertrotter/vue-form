@@ -71,6 +71,7 @@
 	// Just to get sandbox working
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
+	@import '../sass/_mixins.scss';
 	// End sandbox only code
 
 	.c-label {
