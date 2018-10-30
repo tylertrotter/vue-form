@@ -19,13 +19,15 @@ new Vue({
   methods: {
     handleResize() {
       // Add classes for every 100px width
-      this.width =
-        Math.floor(document.getElementById("c-form").clientWidth / 100) * 100;
-      var classes = [];
-      for (var size = this.width; size >= 200; size = size - 100) {
-        classes.push("c-" + size);
-      }
-      document.getElementById("c-form").classList = classes.join(" ");
+      var width = Math.ceil(document.getElementById("c-form").clientWidth / 25) * 25;
+			var widths = [];
+
+      for (var size = width; size >= 200; size = size - 25) {
+				if(size < 600 || size % 100 === 0)
+        widths.push(size);
+			}
+
+			document.getElementById("c-form").setAttribute('data-width', widths.join(" "));
     }
   }
 });

@@ -1,5 +1,5 @@
 <template>
-  <form id="c-form">
+  <form id="c-form" class="cg">
 
 		<header class="c-header c-wrapper">
 			<h1>Form Title</h1>
@@ -85,7 +85,7 @@
 		box-sizing: border-box;
 	}
 
-	.c-500,
+	[data-width~="500"],
 	.c-row {
 		.c-row-start {
 			clear: left;
@@ -203,17 +203,17 @@
 		padding: 0 $gutter/2;
 	}
 
-	.c-500 [class*='c-col-']:not(.c-col-24) {
+	[data-width~="500"] [class*='c-col-']:not(.c-col-24) {
 		float: left;
 	}
 
 	// Add padding to the top of every field after the first row.
 	// (If the form is 500px or wider, otherwise do it for all but the first field.)
-	.c-500 .c-row-end ~ [class*='c-col-']{
+	[data-width~="500"] .c-row-end ~ [class*='c-col-']{
 		padding-top: $gutter;
 	}
 
-	[id="c-form"]:not(.c-500) [class*='c-col-']:nth-child(n+2){
+	[id="c-form"]:not([data-width~="500"]) [class*='c-col-']:nth-child(n+2){
 		padding-top: $gutter;
 	}
 
