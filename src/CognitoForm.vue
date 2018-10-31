@@ -57,15 +57,15 @@
 </template>
 
 <script>
-	import CPageProgress from './components/CognitoPageProgress.vue';
-	import CPage from './components/CognitoPage.vue';
-	import CSection from './components/CognitoSection.vue';
-	import CCheckbox from './components/CognitoCheckbox.vue';
-	import CText from './components/CognitoText.vue';
-	import CAddress from './components/CognitoAddress.vue';
-	import CRatingScale from './components/CognitoRatingScale.vue';
+	import CPageProgress from './components/PageProgress.vue';
+	import CPage from './components/Page.vue';
+	import CSection from './components/Section.vue';
+	import CCheckbox from './components/Checkbox.vue';
+	import CText from './components/Text.vue';
+	import CAddress from './components/Address.vue';
+	import CRatingScale from './components/RatingScale.vue';
 
-	import CButtonSection from './components/CognitoButtonSection.vue';
+	import CButtonSection from './components/ButtonSection.vue';
 
 	export default {
 		name: 'c-form',
