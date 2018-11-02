@@ -1,5 +1,5 @@
 <template>
-  <form id="c-form" class="cg">
+  <form id="c-form" class="cg" source="Cognito.Forms.model.entry">
 
 		<header class="c-header c-wrapper">
 			<h1>Form Title</h1>
@@ -8,48 +8,48 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page page=1>
-				<c-section type="field" required="true" title="Toggle" column="1" colspan="24">
+				<c-field source="Toggle1" required="true" title="Toggle" column="1" colspan="24">
 					<c-toggle yes="Most Absolutely" no="No" />
-				</c-section>
-				<c-section type="field" required="true" title="Rating Scale" column="1" colspan="15">
+				</c-field>
+				<c-field source="RatingScale2" required="true" title="Rating Scale" column="1" colspan="15">
 					<c-rating-scale />
-				</c-section>
-				<c-section type="field" required="true" title="Rating Scale" column="16" colspan="9">
+				</c-field>
+				<c-field source="RatingScale3" required="true" title="Rating Scale" column="16" colspan="9">
 					<c-rating-scale />
-				</c-section>
-				<c-section type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
-					<c-section type="field"  help="check it if it is true." column="1" colspan="12">
+				</c-field>
+				<c-section source="RepeatingSection1" type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
+					<c-field source="Checkbox1" help="check it if it is true." column="1" colspan="12">
 						<c-checkbox label="Hello" />
-					</c-section>
-					<c-section type="field" title="Your Email" column="13" colspan="12">
+					</c-field>
+					<c-field source="Email1" title="Your Email" column="13" colspan="12">
 						<c-text type="email" />
-					</c-section>
+					</c-field>
 				</c-section>
-				<c-section type="section" title="Section Title" help="This is a section help" column="13" colspan="12">
-					<c-section type="field" title="Your Email" column="7" colspan="6">
+				<c-section source="Section1" type="section" title="Section Title" help="This is a section help" column="13" colspan="12">
+					<c-field source="Email2" title="Your Email" column="7" colspan="6">
 						<c-text type="email" />
-					</c-section>
-					<c-section type="field" required="true" title="Your Email" column="13" colspan="18">
+					</c-field>
+					<c-field source="Email3" required="true" title="Your Email" column="13" colspan="18">
 						<c-text type="email" />
-					</c-section>
+					</c-field>
 				</c-section>
-				<c-section type="field" title="Do you agree?" column="1" colspan="6">
+				<c-field source="Checkbox2" title="Do you agree?" column="1" colspan="6">
 					<c-checkbox />
-				</c-section>
-				<c-section type="field" title="Your Email" error="Something is wrong" column="1" colspan="6">
+				</c-field>
+				<c-field source="Email4" title="Your Email" error="Something is wrong" column="1" colspan="6">
 					<c-text type="email" />
-				</c-section>
-				<c-section type="field" title="Your Name" column="1" colspan="12">
+				</c-field>
+				<c-field source="Name1" title="Your Name" column="1" colspan="12">
 					<c-text type="text" />
-				</c-section>
-				<c-section type="field" title="Your Name" column="13" colspan="12">
+				</c-field>
+				<c-field source="Name2" title="Your Name" column="13" colspan="12">
 					<c-text type="text" />
-				</c-section>
+				</c-field>
 			</c-page>
 			<c-page page=2>
-				<c-section type="field" title="Address" help="The place you live." error="That's not your address!" column="1" colspan="24">
+				<c-field source="Address1" title="Address" help="The place you live." error="That's not your address!" column="1" colspan="24">
 					<c-address />
-				</c-section>
+				</c-field>
 				<c-button-section />
 			</c-page>
 		</div>
@@ -60,6 +60,7 @@
 	import CPageProgress from './components/PageProgress.vue';
 	import CPage from './components/Page.vue';
 	import CSection from './components/Section.vue';
+	import CField from './components/Field.vue';
 	import CCheckbox from './components/Checkbox.vue';
 	import CText from './components/Text.vue';
 	import CAddress from './components/Address.vue';
@@ -74,6 +75,7 @@
 			CPageProgress,
 			CPage,
 			CSection,
+			CField,
 			CCheckbox,
 			CText,
 			CAddress,
