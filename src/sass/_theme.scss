@@ -14,6 +14,8 @@ $button-typeface: Arial;
 // General Colors
 $negative: red;
 $negative-reverse: white;
+$positive: green;
+$positive-reverse: white;
 $highlight: orange;
 $highlight-reverse: white;
 $primary: blue;
@@ -25,4 +27,4 @@ $neutral-reverse: white;
 $form-bg: white;
 $btn-primary-bg: $primary;
 $btn-primary-text: $primary-reverse;
-$neutral-bg: rgba($neutral, .05);
+$neutral-bg: rgba($neutral, .07);

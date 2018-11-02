@@ -8,8 +8,8 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page page=1>
-				<c-section type="field" required="true" title="Rating Scale" column="1" colspan="24">
-					<c-rating-scale />
+				<c-section type="field" required="true" title="Toggle" column="1" colspan="24">
+					<c-toggle yes="Most Absolutely" no="No" />
 				</c-section>
 				<c-section type="field" required="true" title="Rating Scale" column="1" colspan="15">
 					<c-rating-scale />
@@ -64,6 +64,7 @@
 	import CText from './components/Text.vue';
 	import CAddress from './components/Address.vue';
 	import CRatingScale from './components/RatingScale.vue';
+	import CToggle from './components/Toggle.vue';
 
 	import CButtonSection from './components/ButtonSection.vue';
 
@@ -77,7 +78,8 @@
 			CText,
 			CAddress,
 			CButtonSection,
-			CRatingScale
+			CRatingScale,
+			CToggle
 		}
 	}
 </script>
