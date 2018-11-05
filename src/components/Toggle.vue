@@ -1,20 +1,22 @@
 <template>
 	<div class="c-toggle">
 		<label>
-			<input type="checkbox"  />
+			<input type="checkbox" :checked="value" @input="e => this.onInput(e)" />
 			<div class="c-toggle--container" aria-hidden="true"><span>{{yes}}<span class="hidden">{{no}}</span></span><span class="switch">&nbsp;</span><span>{{no}}<span class="hidden">{{yes}}</span></span></div>
 		</label>
 	</div>
 </template>
 
 <script>
-	export default {
-		name: 'c-toggle',
-		props: [
-			'yes',
-			'no'
-		]
-  };
+import VueModel from "../../ref/vuemodel.cjs";
+export default {
+	name: 'c-toggle',
+	mixins: [VueModel.mixins.SourceConsumer],
+	props: [
+		'yes',
+		'no'
+	]
+};
 </script>
 
 <style lang="scss">

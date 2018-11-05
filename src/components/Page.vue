@@ -11,9 +11,7 @@
 
 	export default {
 		name: 'c-page',
-		props: {
-			page: Number
-		},
+		props: ['page'],
 		data() {
 			return {
 					currentPage: 1

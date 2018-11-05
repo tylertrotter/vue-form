@@ -26,6 +26,7 @@ export default {
   components: {
     CRadio
   },
+  props: ["error"],
   data() {
     return {
       questions: [

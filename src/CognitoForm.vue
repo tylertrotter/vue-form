@@ -1,5 +1,5 @@
 <template>
-  <form id="c-form" class="cg" source="Cognito.Forms.model.entry">
+  <form id="c-form" class="cg">
 
 		<header class="c-header c-wrapper">
 			<h1>Form Title</h1>
@@ -17,14 +17,16 @@
 				<c-field source="RatingScale3" required="true" title="Rating Scale" column="16" colspan="9">
 					<c-rating-scale />
 				</c-field>
-				<c-section source="RepeatingSection1" type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
-					<c-field source="Checkbox1" help="check it if it is true." column="1" colspan="12">
-						<c-checkbox label="Hello" />
-					</c-field>
-					<c-field source="Email1" title="Your Email" column="13" colspan="12">
-						<c-text type="email" />
-					</c-field>
-				</c-section>
+				<c-repeating-section source="RepeatingSection1" type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
+					<template slot-scope="item">
+						<c-field source="Checkbox1" title="" help="check it if it is true." column="1" colspan="12">
+							<c-checkbox label="Hello" />
+						</c-field>
+						<c-field source="Email1" title="Your Email" column="13" colspan="12">
+							<c-text type="email" />
+						</c-field>
+					</template>
+				</c-repeating-section>
 				<c-section source="Section1" type="section" title="Section Title" help="This is a section help" column="13" colspan="12">
 					<c-field source="Email2" title="Your Email" column="7" colspan="6">
 						<c-text type="email" />
@@ -60,6 +62,7 @@
 	import CPageProgress from './components/PageProgress.vue';
 	import CPage from './components/Page.vue';
 	import CSection from './components/Section.vue';
+	import CRepeatingSection from './components/RepeatingSection.vue';
 	import CField from './components/Field.vue';
 	import CCheckbox from './components/Checkbox.vue';
 	import CText from './components/Text.vue';
@@ -75,6 +78,7 @@
 			CPageProgress,
 			CPage,
 			CSection,
+			CRepeatingSection,
 			CField,
 			CCheckbox,
 			CText,

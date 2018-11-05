@@ -7,14 +7,15 @@
 
 <template>
 	<div :class="[
-		`c-${type}`,
+		`c-field`,
 		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
 		(column === '1') ? 'c-row-start' : '',
 		(+column + +colspan  === 25) ? 'c-row-end' : '',
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 	]">
-		<label class="c-label" v-if="title">{{title}}</label>
+		<label class="c-label" v-if="title != null">{{title}}</label>
+		<label class="c-label" v-else-if="label">{{label}}</label>
 		<slot></slot>
 		<div v-if="help" class="c-helptext">{{help}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
@@ -22,18 +23,11 @@
 </template>
 
 <script>
-import CButton from "./Button.vue";
-import CEx from "./icons/Ex.vue";
-import CPlus from "./icons/Plus.vue";
-
+import VueModel from "../../ref/vuemodel.cjs";
 export default {
   name: "c-field",
-  components: {
-    CButton,
-    CEx,
-    CPlus
-  },
-  props: ["colspan", "title", "error", "column", "help", "type", "required", "source"]
+	mixins: [VueModel.mixins.SourceProvider],
+  props: ["colspan", "title", "error", "column", "help", "required"]
 };
 </script>
 

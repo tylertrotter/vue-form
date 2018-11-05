@@ -1,13 +1,6 @@
-<!--
-	This component is for sections of a form down to the field level.
-	Inside of a field the CognitoRow component can be used (if necessary).
-
-	E.g. c-field, c-section, and c-buttons (the section at the bottom for buttons).
--->
-
 <template>
 	<div :class="[
-		`c-section`,
+		`c-repeating-section`,
 		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
 		(column === '1') ? 'c-row-start' : '',
 		(+column + +colspan  === 25) ? 'c-row-end' : '',
@@ -16,11 +9,22 @@
 	]">
 		<template>
 			<h3 v-if="title">{{title}}</h3>
+			<!-- <h3 v-else-if="label">{{label}}</h3> -->
 			<div class="c-section-container c-cf">
+				<h4>
+					<c-button class="remove-section-button">
+						<c-ex />
+					</c-button>Item X
+				</h4>
 				<div class="c-shift">
-					<slot></slot>
+					<div v-for="(item, i) in value" :key="item.meta.id">
+						<c-section :source="i">
+							<slot v-bind:item="item"></slot>
+						</c-section>
+					</div>
 				</div>
 			</div>
+			<c-button class="btn-primary add-section-button"><c-plus />Add Item</c-button>
 		</template>
 		<div v-if="help" class="c-helptext">{{help}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
@@ -29,9 +33,19 @@
 
 <script>
 import VueModel from "../../ref/vuemodel.cjs";
+import CSection from "./Section";
+import CButton from "./Button.vue";
+import CEx from "./icons/Ex.vue";
+import CPlus from "./icons/Plus.vue";
 export default {
-  name: "c-section",
+	name: "c-repeating-section",
 	mixins: [VueModel.mixins.SourceProvider],
+  components: {
+		CSection,
+    CButton,
+    CEx,
+    CPlus
+  },
   props: ["colspan", "title", "error", "column", "help", "required"]
 };
 </script>
