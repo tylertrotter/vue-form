@@ -1,15 +1,17 @@
 import Vue from "vue";
 import Form from "./CognitoForm.vue";
 import VueModel from "../ref/vuemodel.cjs";
+import { createModel } from "./create-model";
+// import * as sourceBinding from "./source-binding";
 
 Vue.use(VueModel);
 
+// Can't use a source binding plugin to inject mixins...
+// Vue.use(sourceBinding);
+
 let Cognito = window.Cognito || (window.Cognito = {});
 Cognito.Forms = window.Cognito.Forms || (window.Cognito.Forms = {});
-
-import model from "./model";
-
-Cognito.Forms.model = model;
+Cognito.Forms.model = createModel();
 
 let formEntry = Cognito.Forms.model.entry;
 
@@ -20,6 +22,7 @@ formEntry.RepeatingSection1[1].Checkbox1 = true;
 formEntry.Section1.Email2 = "taylor@cognitoforms.com";
 formEntry.Section1.Email3 = "bryan@cognitoforms.com";
 formEntry.Checkbox2 = true;
+formEntry.Email4 = "tyler@cognitoforms.com";
 
 // console.log(Cognito.Forms.model.entry);
 
