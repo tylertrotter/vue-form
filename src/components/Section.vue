@@ -22,17 +22,17 @@
 				</div>
 			</div>
 		</template>
-		<div v-if="help" class="c-helptext">{{help}}</div>
+		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
 	</div>
 </template>
 
 <script>
-import VueModel from "../../ref/vuemodel.cjs";
+import { getComponentMixins } from "../utils";
 export default {
   name: "c-section",
-	mixins: [VueModel.mixins.SourceProvider],
-  props: ["colspan", "title", "error", "column", "help", "required"]
+	mixins: getComponentMixins("c-section"),
+  props: ["colspan", "title", "error", "column", "helptext", "required"]
 };
 </script>
 

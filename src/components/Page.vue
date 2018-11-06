@@ -7,27 +7,26 @@
 </template>
 
 <script>
-	import {EventBus} from './../event-bus.js';
-
-	export default {
-		name: 'c-page',
-		props: ['page'],
-		data() {
-			return {
-					currentPage: 1
-			}
-    },
-    mounted() {
-			EventBus.$on('page-number-updated', newPageNum => {
-				this.currentPage = newPageNum;
-			});
-		},
-		computed: {
-			show(){
-				return +this.page === +this.currentPage;
-			}
+import {EventBus} from './../event-bus.js';
+export default {
+	name: 'c-page',
+	props: ['page'],
+	data() {
+		return {
+			currentPage: 1
 		}
-  };
+	},
+	mounted() {
+		EventBus.$on('page-number-updated', newPageNum => {
+			this.currentPage = newPageNum;
+		});
+	},
+	computed: {
+		show(){
+			return +this.page === +this.currentPage;
+		}
+	}
+};
 </script>
 
 <style scoped lang="scss">

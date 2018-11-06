@@ -1,16 +1,20 @@
 <template>
-	<input :type="type" :v-mask="mask" :value="displayValue" @change="e => this.onInput(e)" />
+	<input :type="type" :v-mask="mask" :value="value" @change="e => this.onInput(e)" />
 </template>
 
 <script>
-import VueModel from "../../ref/vuemodel.cjs";
+import { getComponentMixins } from "../utils";
 export default {
 	name: 'c-text',
-	mixins: [VueModel.mixins.SourceConsumer],
+	mixins: getComponentMixins("c-text"),
+	model: {
+		prop: 'value',
+		event: 'change'
+	},
 	methods: {
 		onInput: function(e) {
-			debugger;
-			this.displayValue = e.target.value;
+			this.value = e.target.value;
+			this.$emit('change', { value: e.target.value });
 		}
 	},
 	props: ['type', 'value', 'mask']
