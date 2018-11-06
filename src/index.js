@@ -15,6 +15,8 @@ Cognito.Forms.model = createModel();
 
 let formEntry = Cognito.Forms.model.entry;
 
+formEntry.Spinner1 = 3;
+formEntry.Name3 = "Tyler Trotter";
 formEntry.Toggle1 = true;
 formEntry.RepeatingSection1[0].Email1 = "jamie@cognitoforms.com";
 formEntry.RepeatingSection1[1].Email1 = "royal@cognitoforms.com";

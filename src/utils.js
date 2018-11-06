@@ -33,5 +33,7 @@ export function getComponentMixins(componentTag) {
 	    return [VueModel.mixins.SourceConsumer];
     } else if (componentTag === "c-toggle") {
 	    return [VueModel.mixins.SourceConsumer];
+    } else if (componentTag === "c-spinner") {
+	    return [VueModel.mixins.SourceConsumer];
     }
 }

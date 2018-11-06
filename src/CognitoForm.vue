@@ -8,10 +8,10 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page :page="1">
-				<c-field title="Spinner" column="1" colspan="6">
+				<c-field source="Spinner1" title="Spinner" column="1" colspan="6">
 					<c-spinner min="0" max="100" step="10" />
 				</c-field>
-				<c-field title="Your Name" column="7" colspan="18">
+				<c-field source="Name3" title="Your Name" column="7" colspan="18">
 					<c-text type="text" />
 				</c-field>
 				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">

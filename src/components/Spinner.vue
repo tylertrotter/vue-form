@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import VueModel from "../../ref/vuemodel.cjs";
+import { getComponentMixins } from "../utils";
 import CText from './Text.vue';
 import CButton from './Button.vue';
 import CPlus from "./icons/Plus.vue";
@@ -16,7 +16,7 @@ import CMinus from "./icons/Minus.vue";
 
 export default {
 	name: 'c-spinner',
-	mixins: [VueModel.mixins.SourceConsumer],
+	mixins: getComponentMixins("c-spinner"),
 	components: {
 		CText,
 		CButton,

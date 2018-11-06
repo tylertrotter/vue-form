@@ -6,6 +6,8 @@ export function createModel() {
 
     var formType = model.$meta.addType("Cognito.Forms.Form");
 
+    formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
+    formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
     formType.addProperty("Toggle1", Boolean, false, false, { label: 'Toggle 1' });
     formType.addProperty("RatingScale2", Object, false, false, { label: 'Rating Scale 2' });
     formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });
