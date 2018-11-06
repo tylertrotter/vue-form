@@ -15,10 +15,10 @@
 		required ? 'c-required' : ''
 	]">
 
-		<template v-if="type.indexOf('item') === -1">
+		<template v-if="type.indexOf('section') >= 0 && type.indexOf('item') === -1">
 			<h3 v-if="title">{{title}}</h3>
 			<div class="c-section-container c-cf" v-for="(item, i) in items" :key="item.meta.id">
-				<h4 v-if="type === 'repeating-section'">
+				<h4 v-if="type === 'repeating-section'" @click="e => removeItem(e, i)">
 					<c-button class="remove-section-button">
 						<c-ex />
 					</c-button>Item X
@@ -30,7 +30,7 @@
 					<slot v-else></slot>
 				</div>
 			</div>
-			<c-button v-if="type === 'repeating-section'" class="btn-primary add-section-button">
+			<c-button v-if="type === 'repeating-section'" class="btn-primary add-section-button" @click.native="e => addItem(e)">
 				<c-plus color="white" /> Add Item
 			</c-button>
 		</template>
@@ -58,6 +58,18 @@ export default {
     CButton,
     CEx,
 		CPlus
+	},
+	methods: {
+		addItem: function(event) {
+			let list = this.$source.value;
+			let jstype = this.$source.property.jstype;
+			list.add(new jstype());
+		},
+		removeItem: function(event, index) {
+			let list = this.$source.value;
+			let item = list[index];
+			list.remove(item);
+		}
 	},
 	computed: {
 		items: function() {
