@@ -21,9 +21,7 @@ export let generalDateFormat = {
 };
 
 export function getComponentMixins(componentTag) {
-    if (componentTag === "c-repeating-section") {
-	    return [VueModel.mixins.SourceProvider];
-    } else if (componentTag === "c-section") {
+    if (componentTag === "c-section") {
 	    return [VueModel.mixins.SourceProvider];
     } else if (componentTag === "c-field") {
 	    return [VueModel.mixins.SourceProvider];

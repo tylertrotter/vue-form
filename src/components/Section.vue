@@ -7,21 +7,38 @@
 
 <template>
 	<div :class="[
-		`c-section`,
+		`c-${type}`,
 		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
 		(column === '1') ? 'c-row-start' : '',
 		(+column + +colspan  === 25) ? 'c-row-end' : '',
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 	]">
-		<template>
+
+		<template v-if="type.indexOf('item') === -1">
 			<h3 v-if="title">{{title}}</h3>
-			<div class="c-section-container c-cf">
+			<div class="c-section-container c-cf" v-for="(item, i) in items" :key="item.meta.id">
+				<h4 v-if="type === 'repeating-section'">
+					<c-button class="remove-section-button">
+						<c-ex />
+					</c-button>Item X
+				</h4>
 				<div class="c-shift">
-					<slot></slot>
+					<c-section v-if="type === 'repeating-section'" :source="i" type="repeating-section-item">
+						<slot v-bind:item="item"></slot>
+					</c-section>
+					<slot v-else></slot>
 				</div>
 			</div>
+			<c-button v-if="type === 'repeating-section'" class="btn-primary add-section-button">
+				<c-plus color="white" /> Add Item
+			</c-button>
 		</template>
+
+		<template v-else>
+			<slot></slot>
+		</template>
+
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
 	</div>
@@ -29,10 +46,30 @@
 
 <script>
 import { getComponentMixins } from "../utils";
+import CSection from "./Section";
+import CButton from "./Button.vue";
+import CEx from "./icons/Ex.vue";
+import CPlus from "./icons/Plus.vue";
 export default {
   name: "c-section",
 	mixins: getComponentMixins("c-section"),
-  props: ["colspan", "title", "error", "column", "helptext", "required"]
+	components: {
+		CSection,
+    CButton,
+    CEx,
+		CPlus
+	},
+	computed: {
+		items: function() {
+			let value = this.value;
+			if (Array.isArray(value)) {
+				return value;
+			} else {
+				return [value];
+			}
+		}
+	},
+  props: ["type", "colspan", "title", "error", "column", "value", "helptext", "required"]
 };
 </script>
 

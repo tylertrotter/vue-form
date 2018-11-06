@@ -23,7 +23,7 @@
 				<c-field source="RatingScale3" required="true" label="Rating Scale" column="16" colspan="9">
 					<c-rating-scale />
 				</c-field>
-				<c-repeating-section source="RepeatingSection1" type="repeating-section" title="Section Title" helptext="This is a section help" column="1" colspan="12">
+				<c-section source="RepeatingSection1" type="repeating-section" title="Repeating Section Title" helptext="This is a section help" column="1" colspan="12">
 					<template slot-scope="item">
 						<c-field source="Checkbox1" label="" helptext="check it if it is true." column="1" colspan="12">
 							<c-checkbox label="Hello" />
@@ -32,7 +32,7 @@
 							<c-text type="email" />
 						</c-field>
 					</template>
-				</c-repeating-section>
+				</c-section>
 				<c-section source="Section1" type="section" title="Section Title" helptext="This is a section help" column="13" colspan="12">
 					<c-field source="Email2" label="Your Email" column="7" colspan="6">
 						<c-text type="email" />
@@ -68,7 +68,6 @@
 	import CPageProgress from './components/PageProgress.vue';
 	import CPage from './components/Page.vue';
 	import CSection from './components/Section.vue';
-	import CRepeatingSection from './components/RepeatingSection.vue';
 	import CField from './components/Field.vue';
 	import CCheckbox from './components/Checkbox.vue';
 	import CText from './components/Text.vue';
@@ -85,7 +84,6 @@
 			CPageProgress,
 			CPage,
 			CSection,
-			CRepeatingSection,
 			CField,
 			CCheckbox,
 			CText,
