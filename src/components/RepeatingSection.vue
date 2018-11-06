@@ -44,7 +44,7 @@ export default {
     CEx,
     CPlus
   },
-  props: ["colspan", "title", "error", "column", "helptext", "required"]
+  props: ["colspan", "title", "error", "column", "value", "helptext", "required"]
 };
 </script>
 
