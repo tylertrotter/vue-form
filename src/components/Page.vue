@@ -10,7 +10,9 @@
 import {EventBus} from './../event-bus.js';
 export default {
 	name: 'c-page',
-	props: ['page'],
+	props: {
+		page: Number
+	},
 	data() {
 		return {
 			currentPage: 1

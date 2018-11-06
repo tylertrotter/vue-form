@@ -7,7 +7,7 @@
 
 		<div class="c-body c-wrapper">
 			<c-page-progress />
-			<c-page page=1>
+			<c-page :page="1">
 				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
 					<c-toggle yes="Most Absolutely" no="No" />
 				</c-field>
@@ -48,7 +48,7 @@
 					<c-text type="text" />
 				</c-field>
 			</c-page>
-			<c-page page=2>
+			<c-page :page="2">
 				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
 					<c-address />
 				</c-field>
