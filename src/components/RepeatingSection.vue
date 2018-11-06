@@ -22,7 +22,9 @@
 					</c-section>
 				</div>
 			</div>
-			<c-button class="btn-primary add-section-button"><c-plus />Add Item</c-button>
+			<c-button class="btn-primary add-section-button">
+				<c-plus color="white" /> Add Item
+			</c-button>
 		</template>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>

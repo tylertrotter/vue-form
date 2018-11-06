@@ -1,13 +1,12 @@
 <template>
 	<svg viewBox="0 0 12 12">
-		<line x1="6" x2="6" y1="2" y2="10" :stroke="color"></line>
-		<line x1="2" x2="10" y1="6" y2="6" :stroke="color"></line>
+		<line x1="2.5" x2="9.5" y1="6" y2="6" :stroke="color"></line>
 	</svg>
 </template>
 
 <script>
 	export default {
-		name: 'c-plus',
+		name: 'c-minus',
 		props: ['color']
   };
 </script>

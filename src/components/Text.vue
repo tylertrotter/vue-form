@@ -20,8 +20,6 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-	input {
-		width: 100%;
-	}
+<style lang="scss">
+
 </style>

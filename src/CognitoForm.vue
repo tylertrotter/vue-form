@@ -8,6 +8,12 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page :page="1">
+				<c-field title="Spinner" column="1" colspan="6">
+					<c-spinner min="0" max="100" step="10" />
+				</c-field>
+				<c-field title="Your Name" column="7" colspan="18">
+					<c-text type="text" />
+				</c-field>
 				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
 					<c-toggle yes="Most Absolutely" no="No" />
 				</c-field>
@@ -69,6 +75,7 @@
 	import CAddress from './components/Address.vue';
 	import CRatingScale from './components/RatingScale.vue';
 	import CToggle from './components/Toggle.vue';
+	import CSpinner from './components/Spinner.vue';
 
 	import CButtonSection from './components/ButtonSection.vue';
 
@@ -85,7 +92,8 @@
 			CAddress,
 			CButtonSection,
 			CRatingScale,
-			CToggle
+			CToggle,
+			CSpinner
 		}
 	}
 </script>
@@ -144,6 +152,22 @@
 		// Shift the page container to accomodate c-field gutter padding
 		margin-left: -$gutter/2;
 		width: calc(100% + #{$gutter});
+	}
+
+	[type="text"],
+	[type="email"],
+	[type="date"],
+	[type="password"] {
+		width: 100%;
+	}
+
+	.c-input {
+		background: $input-bg;
+	}
+
+	:not(.c-input) > .c-input {
+		border-radius: $input-radius;
+		border: 1px solid $input-border;
 	}
 
 	///////////////////////

@@ -11,7 +11,7 @@
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
 
@@ -31,11 +31,15 @@
 		color: $btn-primary-text;
 	}
 
+	.btn-secondary {
+		background: $neutral-reverse;
+		color: $neutral;
+	}
+
 	// Button Icon
 	.btn svg {
-		width: 1.4em;
+		width: 1.2em;
 		vertical-align: sub;
-		margin-right: $button-padding/2;
 	}
 
 	.btn-primary svg line {
