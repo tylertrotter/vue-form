@@ -1,5 +1,5 @@
 <template>
-	<input :type="type" :v-mask="mask" :value="value" @change="e => this.onInput(e)" />
+	<input :type="type" :v-mask="mask" v-model="value" />
 </template>
 
 <script>
@@ -10,11 +10,6 @@ export default {
 	model: {
 		prop: 'value',
 		event: 'change'
-	},
-	methods: {
-		onInput: function(e) {
-			this.$emit('change', { value: e.target.value });
-		}
 	},
 	props: ['type', 'value', 'mask']
 };

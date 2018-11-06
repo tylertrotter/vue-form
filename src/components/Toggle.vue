@@ -1,7 +1,7 @@
 <template>
 	<div class="c-toggle">
 		<label>
-			<input type="checkbox" :checked="value" @input="e => this.onInput(e)" />
+			<input type="checkbox" v-model="value" />
 			<div class="c-toggle--container" aria-hidden="true"><span>{{yes}}<span class="hidden">{{no}}</span></span><span class="switch">&nbsp;</span><span>{{no}}<span class="hidden">{{yes}}</span></span></div>
 		</label>
 	</div>
@@ -12,20 +12,17 @@ import { getComponentMixins } from "../utils";
 export default {
 	name: 'c-toggle',
 	mixins: getComponentMixins("c-toggle"),
-	model: {
-		prop: 'value',
-		event: 'change'
-	},
-	methods: {
-		onInput: function(e) {
-			this.$emit("change", e.target.checked);
-		}
-	},
-	props: [
-		'value',
-		'yes',
-		'no'
-	]
+	props: {
+		'value': Boolean,
+		'yes': {
+			type: String,
+			default: "Yes",
+		},
+		'no': {
+			type: String,
+			default: "No",
+		},
+	}
 };
 </script>
 

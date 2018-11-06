@@ -1,6 +1,6 @@
 <template>
 	<label>
-		<input type="checkbox" :checked="value" @input="e => this.onInput(e)">
+		<input type="checkbox" v-model="value">
 		<span>{{label}}</span>
 	</label>
 </template>
@@ -13,11 +13,6 @@ export default {
 	model: {
 		prop: 'value',
 		event: 'change'
-	},
-	methods: {
-		onInput: function(e) {
-			this.$emit("change", e.target.checked);
-		}
 	},
 	props: ['label', 'value']
 };
