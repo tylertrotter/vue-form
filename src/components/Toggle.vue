@@ -18,7 +18,6 @@ export default {
 	},
 	methods: {
 		onInput: function(e) {
-			this.value = e.target.checked;
 			this.$emit("change", e.target.checked);
 		}
 	},

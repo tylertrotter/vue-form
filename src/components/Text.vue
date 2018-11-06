@@ -13,7 +13,6 @@ export default {
 	},
 	methods: {
 		onInput: function(e) {
-			this.value = e.target.value;
 			this.$emit('change', { value: e.target.value });
 		}
 	},
