@@ -1,8 +1,9 @@
 <template>
 	<div class="c-spinner c-input" :class="(typeof max) !== 'undefined' ? 'c-spinner--width-' + max.length : ''">
-		<c-button class="btn-secondary" tabindex="-1"><c-minus color="black" /></c-button>
-		<c-text type="text" />
-		<c-button class="btn-secondary" tabindex="-1"><c-plus color="black" /></c-button>
+		<c-button @click.native="go('down')" class="btn-secondary" tabindex="-1"><c-minus color="black" /></c-button>
+		<!-- <c-text type="text" value="value" /> -->
+		<input type="text" :value="value">
+		<c-button @click.native="go('up')" class="btn-secondary" tabindex="-1"><c-plus color="black" /></c-button>
 	</div>
 </template>
 
@@ -22,15 +23,32 @@ export default {
 		CPlus,
 		CMinus
 	},
-	methods: {
-		onInput: function(e) {
-			// debugger;
-			this.displayValue = e.target.value;
+	data(){
+		return {
+			value: 0
 		}
+	},
+	methods: {
+		go (direction) {
+			var max = +this.$props.max || this.value + 1;
+			var min = +this.$props.min || 0;
+			var step = +this.$props.step || 1;
+
+			if(direction === 'up'){
+				if(this.value < max){
+					this.value = +this.value + step;
+				}
+			}else{
+				if(this.value > min){
+					this.value = +this.value - step;
+				}
+			}
+    }
 	},
 	props: [
 		'min',
-		'max'
+		'max',
+		'step'
 	]
 };
 </script>
@@ -42,8 +60,6 @@ export default {
 
 		button {
 			width: 50px;
-			// padding: $button-padding;
-			// font-size: 1em;
 
 			&:first-child {
 				border-right: 1px solid $input-border;

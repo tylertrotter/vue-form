@@ -9,7 +9,7 @@
 			<c-page-progress />
 			<c-page page=1>
 				<c-field title="Spinner" column="1" colspan="6">
-					<c-spinner min="0" max="100" />
+					<c-spinner min="0" max="100" step="10" />
 				</c-field>
 				<c-field title="Your Name" column="7" colspan="18">
 					<c-text type="text" />
