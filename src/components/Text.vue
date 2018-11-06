@@ -1,5 +1,5 @@
 <template>
-	<input :type="type" :v-mask="mask" :value="displayValue" @change="e => this.onInput(e)" />
+	<input class="c-input" :type="type" :v-mask="mask" :value="displayValue" @change="e => this.onInput(e)" />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
 	mixins: [VueModel.mixins.SourceConsumer],
 	methods: {
 		onInput: function(e) {
-			debugger;
+			// debugger;
 			this.displayValue = e.target.value;
 		}
 	},
@@ -17,8 +17,6 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-	input {
-		width: 100%;
-	}
+<style lang="scss">
+
 </style>

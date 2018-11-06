@@ -24,7 +24,9 @@
 					</div>
 				</div>
 			</div>
-			<c-button class="btn-primary add-section-button"><c-plus />Add Item</c-button>
+			<c-button class="btn-primary add-section-button">
+				<c-plus color="white" /> Add Item
+			</c-button>
 		</template>
 		<div v-if="help" class="c-helptext">{{help}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
