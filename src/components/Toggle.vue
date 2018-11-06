@@ -8,11 +8,21 @@
 </template>
 
 <script>
-import VueModel from "../../ref/vuemodel.cjs";
+import { getComponentMixins } from "../utils";
 export default {
 	name: 'c-toggle',
-	mixins: [VueModel.mixins.SourceConsumer],
+	mixins: getComponentMixins("c-toggle"),
+	model: {
+		prop: 'value',
+		event: 'change'
+	},
+	methods: {
+		onInput: function(e) {
+			this.$emit("change", e.target.checked);
+		}
+	},
 	props: [
+		'value',
 		'yes',
 		'no'
 	]

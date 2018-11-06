@@ -7,55 +7,55 @@
 
 		<div class="c-body c-wrapper">
 			<c-page-progress />
-			<c-page page=1>
+			<c-page :page="1">
 				<c-field title="Spinner" column="1" colspan="6">
 					<c-spinner min="0" max="100" step="10" />
 				</c-field>
 				<c-field title="Your Name" column="7" colspan="18">
 					<c-text type="text" />
 				</c-field>
-				<c-field source="Toggle1" required="true" title="Toggle" column="1" colspan="24">
+				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
 					<c-toggle yes="Most Absolutely" no="No" />
 				</c-field>
-				<c-field source="RatingScale2" required="true" title="Rating Scale" column="1" colspan="15">
+				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
 					<c-rating-scale />
 				</c-field>
-				<c-field source="RatingScale3" required="true" title="Rating Scale" column="16" colspan="9">
+				<c-field source="RatingScale3" required="true" label="Rating Scale" column="16" colspan="9">
 					<c-rating-scale />
 				</c-field>
-				<c-repeating-section source="RepeatingSection1" type="repeating-section" title="Section Title" help="This is a section help" column="1" colspan="12">
+				<c-repeating-section source="RepeatingSection1" type="repeating-section" title="Section Title" helptext="This is a section help" column="1" colspan="12">
 					<template slot-scope="item">
-						<c-field source="Checkbox1" title="" help="check it if it is true." column="1" colspan="12">
+						<c-field source="Checkbox1" label="" helptext="check it if it is true." column="1" colspan="12">
 							<c-checkbox label="Hello" />
 						</c-field>
-						<c-field source="Email1" title="Your Email" column="13" colspan="12">
+						<c-field source="Email1" label="Your Email" column="13" colspan="12">
 							<c-text type="email" />
 						</c-field>
 					</template>
 				</c-repeating-section>
-				<c-section source="Section1" type="section" title="Section Title" help="This is a section help" column="13" colspan="12">
-					<c-field source="Email2" title="Your Email" column="7" colspan="6">
+				<c-section source="Section1" type="section" title="Section Title" helptext="This is a section help" column="13" colspan="12">
+					<c-field source="Email2" label="Your Email" column="7" colspan="6">
 						<c-text type="email" />
 					</c-field>
-					<c-field source="Email3" required="true" title="Your Email" column="13" colspan="18">
+					<c-field source="Email3" required="true" label="Your Email" column="13" colspan="18">
 						<c-text type="email" />
 					</c-field>
 				</c-section>
-				<c-field source="Checkbox2" title="Do you agree?" column="1" colspan="6">
+				<c-field source="Checkbox2" label="Do you agree?" column="1" colspan="6">
 					<c-checkbox />
 				</c-field>
-				<c-field source="Email4" title="Your Email" error="Something is wrong" column="1" colspan="6">
+				<c-field source="Email4" label="Your Email" error="Something is wrong" column="1" colspan="6">
 					<c-text type="email" />
 				</c-field>
-				<c-field source="Name1" title="Your Name" column="1" colspan="12">
+				<c-field source="Name1" label="Your Name" column="1" colspan="12">
 					<c-text type="text" />
 				</c-field>
-				<c-field source="Name2" title="Your Name" column="13" colspan="12">
+				<c-field source="Name2" label="Your Name" column="13" colspan="12">
 					<c-text type="text" />
 				</c-field>
 			</c-page>
-			<c-page page=2>
-				<c-field source="Address1" title="Address" help="The place you live." error="That's not your address!" column="1" colspan="24">
+			<c-page :page="2">
+				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
 					<c-address />
 				</c-field>
 				<c-button-section />

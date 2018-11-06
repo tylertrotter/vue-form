@@ -10,45 +10,43 @@
 		<template>
 			<h3 v-if="title">{{title}}</h3>
 			<!-- <h3 v-else-if="label">{{label}}</h3> -->
-			<div class="c-section-container c-cf">
+			<div class="c-section-container c-cf" v-for="(item, i) in value" :key="item.meta.id">
 				<h4>
 					<c-button class="remove-section-button">
 						<c-ex />
 					</c-button>Item X
 				</h4>
 				<div class="c-shift">
-					<div v-for="(item, i) in value" :key="item.meta.id">
-						<c-section :source="i">
-							<slot v-bind:item="item"></slot>
-						</c-section>
-					</div>
+					<c-section :source="i">
+						<slot v-bind:item="item"></slot>
+					</c-section>
 				</div>
 			</div>
 			<c-button class="btn-primary add-section-button">
 				<c-plus color="white" /> Add Item
 			</c-button>
 		</template>
-		<div v-if="help" class="c-helptext">{{help}}</div>
+		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
 	</div>
 </template>
 
 <script>
-import VueModel from "../../ref/vuemodel.cjs";
+import { getComponentMixins } from "../utils";
 import CSection from "./Section";
 import CButton from "./Button.vue";
 import CEx from "./icons/Ex.vue";
 import CPlus from "./icons/Plus.vue";
 export default {
 	name: "c-repeating-section",
-	mixins: [VueModel.mixins.SourceProvider],
+	mixins: getComponentMixins("c-repeating-section"),
   components: {
 		CSection,
     CButton,
     CEx,
     CPlus
   },
-  props: ["colspan", "title", "error", "column", "help", "required"]
+  props: ["colspan", "title", "error", "column", "helptext", "required"]
 };
 </script>
 
