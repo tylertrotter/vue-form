@@ -4,6 +4,10 @@ import VueModel from "../ref/vuemodel.cjs";
 import { createModel } from "./create-model";
 
 import { DatePicker, Select } from 'element-ui';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+
+locale.use(lang)
 Vue.use(DatePicker);
 Vue.use(Select);
 
