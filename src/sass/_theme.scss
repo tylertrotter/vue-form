@@ -18,10 +18,13 @@ $positive: green;
 $positive-reverse: white;
 $highlight: orange;
 $highlight-reverse: white;
-$primary: blue;
+$primary: #bada55;
 $primary-reverse: white;
 $neutral: #555;
 $neutral-reverse: #eee;
+
+// Element's Primary Color
+$--color-primary: $primary;
 
 // Specific Colors
 $form-bg: white;

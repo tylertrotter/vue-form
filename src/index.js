@@ -2,6 +2,11 @@ import Vue from "vue";
 import Form from "./CognitoForm.vue";
 import VueModel from "../ref/vuemodel.cjs";
 import { createModel } from "./create-model";
+
+import { DatePicker, Select } from 'element-ui';
+Vue.use(DatePicker);
+Vue.use(Select);
+
 // import * as sourceBinding from "./source-binding";
 
 Vue.use(VueModel);
@@ -28,7 +33,7 @@ formEntry.Email4 = "tyler@cognitoforms.com";
 
 // console.log(Cognito.Forms.model.entry);
 
-new Vue({
+var vm = new Vue({
   el: "#c-form",
   render: h => h(Form),
   data: function() {
@@ -58,3 +63,5 @@ new Vue({
     }
   }
 });
+
+window.vm = vm;

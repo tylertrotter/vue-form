@@ -71,6 +71,7 @@ export default {
 		}
 
 		input {
+			background: $input-bg;
 			border: 0;
 			text-align: center;
 		}

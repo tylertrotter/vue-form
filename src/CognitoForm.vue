@@ -8,8 +8,14 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page :page="1">
+				<c-field label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
+					<c-date-picker></c-date-picker>
+				</c-field>
+				<c-field label="Element's Select" column="7" colspan="18">
+					<c-select></c-select>
+				</c-field>
 				<c-field source="Spinner1" title="Spinner" column="1" colspan="6">
-					<c-spinner min="0" max="100" step="10" />
+					<c-spinner min="0" max="10" step="10" />
 				</c-field>
 				<c-field source="Name3" title="Your Name" column="7" colspan="18">
 					<c-text type="text" />
@@ -75,8 +81,9 @@
 	import CRatingScale from './components/RatingScale.vue';
 	import CToggle from './components/Toggle.vue';
 	import CSpinner from './components/Spinner.vue';
-
 	import CButtonSection from './components/ButtonSection.vue';
+	import CDatePicker from './components/DatePicker.vue';
+	import CSelect from './components/Select.vue';
 
 	export default {
 		name: 'c-form',
@@ -91,7 +98,9 @@
 			CButtonSection,
 			CRatingScale,
 			CToggle,
-			CSpinner
+			CSpinner,
+			CDatePicker,
+			CSelect
 		}
 	}
 </script>
@@ -159,13 +168,8 @@
 		width: 100%;
 	}
 
-	.c-input {
-		background: $input-bg;
-	}
-
 	:not(.c-input) > .c-input {
-		border-radius: $input-radius;
-		border: 1px solid $input-border;
+		@include input;
 	}
 
 	///////////////////////

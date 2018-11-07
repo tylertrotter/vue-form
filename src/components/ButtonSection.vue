@@ -1,11 +1,11 @@
 <template>
-	<c-section type="buttons" column="1" colspan="24">
+	<div class="c-col-24">
 		<c-row>
 			<c-button class="btn btn-primary">Back</c-button>
 			<c-button type="submit" class="btn btn-primary">Submit</c-button>
 			<c-button class="c-pull btn btn-secondary">Save</c-button>
 		</c-row>
-	</c-section>
+	</div>
 </template>
 
 

@@ -1,5 +1,5 @@
 <template>
-	<input :type="type" :v-mask="mask" v-model="value" />
+	<input class="c-input" :type="type" :v-mask="mask" v-model="value" />
 </template>
 
 <script>
