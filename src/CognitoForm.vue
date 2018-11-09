@@ -8,6 +8,21 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page :page="1">
+				<c-field label="Table Field" column="1" colspan="24">
+					<c-table columns="a,b,c">
+						<template slot="a">
+							<c-text value="blah" />
+						</template>
+
+						<template slot="b">
+							<c-toggle active-text="Most Absolutely" inactive-text="No" />
+						</template>
+
+						<template slot="c">
+							<c-text value="Something Else" />
+						</template>
+					</c-table>
+				</c-field>
 				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
 					<c-date-picker></c-date-picker>
 				</c-field>
@@ -84,6 +99,7 @@
 	import CButtonSection from './components/ButtonSection.vue';
 	import CDatePicker from './components/DatePicker.vue';
 	import CSelect from './components/Select.vue';
+	import CTable from './components/Table.vue';
 
 	export default {
 		name: 'c-form',
@@ -100,7 +116,8 @@
 			CToggle,
 			CSpinner,
 			CDatePicker,
-			CSelect
+			CSelect,
+			CTable
 		}
 	}
 </script>
