@@ -8,7 +8,7 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress />
 			<c-page :page="1">
-				<c-field label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
+				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
 					<c-date-picker></c-date-picker>
 				</c-field>
 				<c-field label="Element's Select" column="7" colspan="18">

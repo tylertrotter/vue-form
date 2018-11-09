@@ -1,12 +1,25 @@
 <template>
-	<el-date-picker></el-date-picker>
+	<el-date-picker v-model="value" value-format="yyyy-MM-dd" format="MM/dd/yyyy" @change="handleChange" />
 </template>
 
 <script>
-
-	export default {
-		name: 'c-date-picker'
-	};
+import { getComponentMixins } from "../utils";
+export default {
+	name: 'c-date-picker',
+	mixins: getComponentMixins("c-text"),
+	methods: {
+		handleChange(value, ev) {
+			this.$emit('change', value, ev);
+			// temporary - to make it work
+			this.$source.value = value;
+		}
+	},
+	model: {
+		prop: 'value',
+		event: 'change'
+	},
+	props: ['value']
+};
 </script>
 
 <style lang="scss">

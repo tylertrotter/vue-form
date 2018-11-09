@@ -1,5 +1,5 @@
 <template>
-	<input class="c-input" :type="type" :v-mask="mask" v-model="value" />
+	<el-input v-model="value" :type="type" :v-mask="mask" @change="handleChange" />
 </template>
 
 <script>
@@ -11,10 +11,13 @@ export default {
 		prop: 'value',
 		event: 'change'
 	},
+	methods: {
+		handleChange(value, ev) {
+			this.$emit('change', value, ev);
+			// temporary - to make it work
+			this.$source.value = value;
+		}
+	},
 	props: ['type', 'value', 'mask']
 };
 </script>
-
-<style lang="scss">
-
-</style>

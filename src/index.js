@@ -3,13 +3,34 @@ import Form from "./CognitoForm.vue";
 import VueModel from "../ref/vuemodel.cjs";
 import { createModel } from "./create-model";
 
-import { DatePicker, Select } from 'element-ui';
+import {
+	DatePicker,
+	Select,
+	Dialog,
+	Input,
+	InputNumber,
+	Radio,
+	Checkbox,
+	TimePicker,
+	Upload,
+	Steps
+} from 'element-ui';
+
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 
-locale.use(lang)
+locale.use(lang);
+
 Vue.use(DatePicker);
 Vue.use(Select);
+Vue.use(Dialog);
+Vue.use(Input);
+Vue.use(InputNumber);
+Vue.use(Radio);
+Vue.use(Checkbox);
+Vue.use(TimePicker);
+Vue.use(Upload);
+Vue.use(Steps);
 
 // import * as sourceBinding from "./source-binding";
 
@@ -24,6 +45,7 @@ Cognito.Forms.model = createModel();
 
 let formEntry = Cognito.Forms.model.entry;
 
+formEntry.DatePicker1 = "2018-11-14";
 formEntry.Spinner1 = 3;
 formEntry.Name3 = "Tyler Trotter";
 formEntry.Toggle1 = true;
