@@ -24,18 +24,5 @@ export default {
 
 <style lang="scss">
 	@import '../sass/theme-chalk-master/src/date-picker';
-
-	.el-input {
-		@include input;
-
-		input {
-			border: 0;
-			background: transparent;
-		}
-	}
-
-	.el-date-editor {
-		display: block;
-	}
 </style>
 

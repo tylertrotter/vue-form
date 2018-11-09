@@ -15,13 +15,13 @@
 					<c-select></c-select>
 				</c-field>
 				<c-field source="Spinner1" title="Spinner" column="1" colspan="6">
-					<c-spinner min="0" max="10" step="10" />
+					<c-spinner :min="0" :max="100" :step="10" />
 				</c-field>
 				<c-field source="Name3" title="Your Name" column="7" colspan="18">
 					<c-text type="text" />
 				</c-field>
 				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
-					<c-toggle yes="Most Absolutely" no="No" />
+					<c-toggle active-text="Most Absolutely" inactive-text="No" />
 				</c-field>
 				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
 					<c-rating-scale />
@@ -161,14 +161,16 @@
 		width: calc(100% + #{$gutter});
 	}
 
+	.el-input,
 	[type="text"],
-	[type="email"],
 	[type="date"],
-	[type="password"] {
+	[type="email"],
+	[type="time"],
+	[type="password"]{
 		width: 100%;
 	}
 
-	:not(.c-input) > .c-input {
+	.el-input{
 		@include input;
 	}
 

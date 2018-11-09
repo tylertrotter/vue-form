@@ -61,7 +61,7 @@ export default {
   text-align: center;
 }
 
-.c-rating-scale--option span {
+.c-rating-scale--option .el-radio__label {
   display: none;
 }
 

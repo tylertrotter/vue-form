@@ -1,7 +1,7 @@
 <template>
-	<button type="button" class="btn">
+	<el-button>
 		<slot></slot>
-	</button>
+	</el-button>
 </template>
 
 
