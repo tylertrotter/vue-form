@@ -62,7 +62,7 @@ export default {
 	methods: {
 		addItem: function(event) {
 			let list = this.$source.value;
-			let jstype = this.$source.property.jstype;
+			let jstype = this.$source.property.propertyType;
 			list.add(new jstype());
 		},
 		removeItem: function(event, index) {
