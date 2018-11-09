@@ -43,19 +43,28 @@ let Cognito = window.Cognito || (window.Cognito = {});
 Cognito.Forms = window.Cognito.Forms || (window.Cognito.Forms = {});
 Cognito.Forms.model = createModel();
 
-let formEntry = Cognito.Forms.model.entry;
+Cognito.Forms.model.perform(function() {
 
-formEntry.DatePicker1 = "2018-11-14";
-formEntry.Spinner1 = 3;
-formEntry.Name3 = "Tyler Trotter";
-formEntry.Toggle1 = true;
-formEntry.RepeatingSection1[0].Email1 = "jamie@cognitoforms.com";
-formEntry.RepeatingSection1[1].Email1 = "royal@cognitoforms.com";
-formEntry.RepeatingSection1[1].Checkbox1 = true;
-formEntry.Section1.Email2 = "taylor@cognitoforms.com";
-formEntry.Section1.Email3 = "bryan@cognitoforms.com";
-formEntry.Checkbox2 = true;
-formEntry.Email4 = "tyler@cognitoforms.com";
+  let formEntry = new Cognito.Forms.Form();
+  formEntry.Section1 = new Cognito.Forms.FormSection1();
+  formEntry.RepeatingSection1.add(new Cognito.Forms.FormRepeatingSection1Item());
+  formEntry.RepeatingSection1.add(new Cognito.Forms.FormRepeatingSection1Item());
+
+  formEntry.DatePicker1 = "2018-11-14";
+  formEntry.Spinner1 = 3;
+  formEntry.Name3 = "Tyler Trotter";
+  formEntry.Toggle1 = true;
+  formEntry.RepeatingSection1[0].Email1 = "jamie@cognitoforms.com";
+  formEntry.RepeatingSection1[1].Email1 = "royal@cognitoforms.com";
+  formEntry.RepeatingSection1[1].Checkbox1 = true;
+  formEntry.Section1.Email2 = "taylor@cognitoforms.com";
+  formEntry.Section1.Email3 = "bryan@cognitoforms.com";
+  formEntry.Checkbox2 = true;
+  formEntry.Email4 = "tyler@cognitoforms.com";
+  
+  Cognito.Forms.model.entry = formEntry;
+
+});
 
 // console.log(Cognito.Forms.model.entry);
 
