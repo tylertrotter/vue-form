@@ -1,12 +1,31 @@
 <template>
-	<el-select></el-select>
+	<el-select v-model="selectedValue" @change="handleChange"></el-select>
 </template>
 
 <script>
+import { VueModel } from "../imports";
+export default {
+	name: 'c-select',
+	mixins: [VueModel.mixins.SourceConsumer],
+	data() {
+		return {
+			selectedValue: this.value
+		}
+	},
+	methods: {
+		handleChange(value, ev) {
+			this.$emit('change', value, ev);
 
-	export default {
-		name: 'c-select'
-	};
+			// temporary - to make it work
+			this.$source.value = value;
+		}
+	},
+	model: {
+		prop: 'value',
+		event: 'change'
+	},
+	props: ['label', 'value']
+};
 </script>
 
 <style lang="scss">

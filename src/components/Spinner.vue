@@ -3,11 +3,10 @@
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
-
+import { VueModel } from "../imports";
 export default {
 	name: 'c-spinner',
-	mixins: getComponentMixins("c-spinner"),
+	mixins: [VueModel.mixins.SourceConsumer],
 	data(){
 		return {
 			value: 0

@@ -1,6 +1,6 @@
 <template>
 	<ol class="c-page-progress">
-		<li v-for="(page, index) in pages" :key="index" :class="{active: index === currentPage-1}">
+		<li v-for="(page, index) in pageTitles" :key="index" :class="{active: index === currentPage-1}">
 			<a @click="goto(index + 1)">{{ page }}</a>
 		</li>
 	</ol>
@@ -11,14 +11,11 @@
 
 	export default {
 		name: 'c-page-progress',
+		props: ['pages'],
 		data() {
 			return {
 				currentPage: 1,
-				pages: [
-					'Start',
-					'Middle',
-					'End'
-				]
+				pageTitles: this.pages
 			}
 		},
 		methods: {

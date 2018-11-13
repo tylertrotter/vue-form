@@ -14,7 +14,7 @@
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 	]">
-		<label class="c-label" v-if="label">{{label}}</label>
+		<label class="c-label" v-if="fieldLabel">{{fieldLabel}}</label>
 		<slot></slot>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
@@ -22,10 +22,20 @@
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
+import { VueModel } from "../imports";
 export default {
   name: "c-field",
-	mixins: getComponentMixins("c-field"),
+  mixins: [VueModel.mixins.SourceProvider],
+  computed: {
+    fieldLabel: function() {
+      let sourceLabel = null;
+      if (this.$source) {
+        sourceLabel = this.$source.label;
+      }
+
+      return typeof this.label === "string" ? this.label : sourceLabel;
+    }
+  },
   props: ["colspan", "label", "helptext", "error", "column", "required"]
 };
 </script>

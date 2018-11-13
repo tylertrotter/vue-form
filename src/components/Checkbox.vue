@@ -1,32 +1,76 @@
 <template>
-	<el-checkbox v-model="checked" @change="handleChange">{{label}}</el-checkbox>
+	<el-checkbox v-model="inputModel" @focus="handleFocus" @blur="handleBlur" @change="handleChange" >{{inputLabel}}</el-checkbox>
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
+import { VueModel } from "../imports";
 export default {
 	name: 'c-checkbox',
-	mixins: getComponentMixins('c-checkbox'),
-	data() {
-		return {
-			checked: this.value
-		}
-	},
-	// temporary - to make it work
-	created() {
-		this.checked = this.value;
-	},
-	methods: {
-		handleChange(value, ev) {
-			this.$emit('change', value, ev);
-			// temporary - to make it work
-			this.$source.value = value;
-		}
-	},
+	mixins: [VueModel.mixins.SourceConsumer],
+	props: ['label', 'checked'],
 	model: {
-		prop: 'value',
+		prop: 'checked',
 		event: 'change'
 	},
-	props: ['label', 'value']
+	data: function() {
+		return {
+			hasFocus: false,
+			selfModel: (typeof this.checked === "boolean" ? this.checked : this.$source ? this.$source.value : false),
+		};
+	},
+	watch: {
+		// NOTE: This is here to watch for changes to the
+		// prop coming from OUTSIDE of the component...
+		checked: function(newVal, oldVal) {
+			this.selfModel = newVal;
+			if (this.$source && this.$source.value !== newVal) {
+				this.$source.value = newVal;
+			}
+		},
+	},
+	computed: {
+		inputLabel: function() {
+			return typeof this.label === "string" ? this.label : this.$source.label;
+		},
+		inputModel: {
+			get: function() {
+				// console.log("Received 'c-checkbox' inputModel.get()");
+
+				let sourceValue = null;
+				if (this.$source) {
+					sourceValue = this.$source.value;
+				}
+
+				return this.hasFocus ? this.selfModel : (sourceValue || this.selfModel);
+			},
+			set: function (val) {
+				// console.log("Received 'c-checkbox' inputModel.set()");
+
+				this.selfModel = val;
+
+				if (this.$source) {
+					this.$source.value = val;
+				}
+			}
+		}
+	},
+	methods: {
+		handleFocus(value, ev) {
+			// console.log("Received 'c-checkbox' focus event");
+			this.hasFocus = true;
+		},
+		handleBlur(value, ev) {
+			// console.log("Received 'c-checkbox' blur event");
+			this.hasFocus = false;
+		},
+		handleChange(value, ev) {
+			// NOTE: Could do some validation in here?
+			// console.log("Received 'c-checkbox' change event");
+			this.$emit('change', value, ev);
+			if (this.$source) {
+				this.$source.value = value;
+			}
+		}
+	}
 };
 </script>

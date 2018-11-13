@@ -16,7 +16,7 @@
 	]">
 
 		<template v-if="type.indexOf('section') >= 0 && type.indexOf('item') === -1">
-			<h3 v-if="title">{{title}}</h3>
+			<h3 v-if="sectionTitle">{{sectionTitle}}</h3>
 			<div class="c-section-container c-cf" v-for="(item, i) in items" :key="item.meta.id">
 				<h4 v-if="type === 'repeating-section'" @click="e => removeItem(e, i)">
 					<c-button class="remove-section-button">
@@ -45,14 +45,14 @@
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
+import { VueModel } from "../imports";
 import CSection from "./Section";
 import CButton from "./Button.vue";
 import CEx from "./icons/Ex.vue";
 import CPlus from "./icons/Plus.vue";
 export default {
   name: "c-section",
-	mixins: getComponentMixins("c-section"),
+	mixins: [VueModel.mixins.SourceProvider],
 	components: {
 		CSection,
     CButton,
@@ -72,8 +72,16 @@ export default {
 		}
 	},
 	computed: {
+		sectionTitle: function() {
+			let sourceLabel = null;
+			if (this.$source) {
+				sourceLabel = this.$source.label;
+			}
+
+			return typeof this.title === "string" ? this.title : sourceLabel;
+		},
 		items: function() {
-			let value = this.value;
+			let value = this.$source.value;
 			if (Array.isArray(value)) {
 				return value;
 			} else {
@@ -81,7 +89,7 @@ export default {
 			}
 		}
 	},
-  props: ["type", "colspan", "title", "error", "column", "value", "helptext", "required"]
+  props: ["type", "colspan", "title", "error", "column", "helptext", "required"]
 };
 </script>
 

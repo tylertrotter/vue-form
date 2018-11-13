@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
+import { VueModel } from "../imports";
 export default {
 	name: 'c-date-picker',
-	mixins: getComponentMixins("c-text"),
+	mixins: [VueModel.mixins.SourceConsumer],
 	methods: {
 		handleChange(value, ev) {
 			this.$emit('change', value, ev);

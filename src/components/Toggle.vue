@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { getComponentMixins } from "../utils";
+import { VueModel } from "../imports";
 export default {
 	name: 'c-toggle',
-	mixins: getComponentMixins("c-toggle"),
+	mixins: [VueModel.mixins.SourceConsumer],
 	data(){
 		return {
 			checked: this.value

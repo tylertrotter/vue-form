@@ -1,7 +1,6 @@
-import Vue from "vue";
-import Form from "./CognitoForm.vue";
-import VueModel from "../ref/vuemodel.cjs";
+import { Vue, VueModel } from "./imports";
 import { createModel } from "./create-model";
+import Form from "./CognitoForm.vue";
 
 import {
 	Button,
@@ -51,10 +50,10 @@ Cognito.Forms.model = createModel();
 
 Cognito.Forms.model.perform(function() {
 
-  let formEntry = new Cognito.Forms.Form();
-  formEntry.Section1 = new Cognito.Forms.FormSection1();
-  formEntry.RepeatingSection1.add(new Cognito.Forms.FormRepeatingSection1Item());
-  formEntry.RepeatingSection1.add(new Cognito.Forms.FormRepeatingSection1Item());
+  let formEntry = new Cognito.Forms.FormEntry();
+  formEntry.Section1 = new Cognito.Forms.FormEntrySection1();
+  formEntry.RepeatingSection1.add(new Cognito.Forms.FormEntryRepeatingSection1Item());
+  formEntry.RepeatingSection1.add(new Cognito.Forms.FormEntryRepeatingSection1Item());
 
   formEntry.DatePicker1 = "2018-11-14";
   formEntry.Spinner1 = 3;
@@ -76,10 +75,7 @@ Cognito.Forms.model.perform(function() {
 
 var vm = new Vue({
   el: "#c-form",
-  render: h => h(Form),
-  data: function() {
-    return Cognito.Forms.model.entry;
-  },
+  render: (createElement) => createElement(Form, { attrs: { eid: Cognito.Forms.model.entry.meta.id } }),
   created() {
     window.addEventListener("resize", this.handleResize);
   },

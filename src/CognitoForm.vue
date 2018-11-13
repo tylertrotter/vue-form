@@ -1,33 +1,69 @@
 <template>
   <form id="c-form" class="cg">
-
 		<header class="c-header c-wrapper">
 			<h1>Form Title</h1>
 		</header>
-
 		<div class="c-body c-wrapper">
-			<c-page-progress />
+			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Rating Scale', 'Address', 'Miscellaneous']" />
 			<c-page :page="1">
-				<c-field label="Table Field" column="1" colspan="24">
-					<c-table columns="a,b,c">
-						<template slot="a">
+				<c-field source="Name3" label="Your Name" column="7" colspan="18">
+					<c-text type="text" />
+				</c-field>
+				<c-field source="Email4" label="Your Email" column="1" colspan="6">
+					<c-text type="email" />
+				</c-field>
+				<c-field source="Checkbox2" label="" column="1" colspan="6">
+					<c-checkbox label="Do you agree?" />
+				</c-field>
+				<p class="c-col-18" style="clear: both;">{{ Name3 }} {{ Checkbox2 ? 'agrees' : 'does NOT agree' }} to signup with email {{ Email4 }}.</p>
+			</c-page>
+			<c-page :page="2">
+				<c-field source="Table1" label="Table Field" column="1" colspan="24">
+					<c-table :columns="['Text1', 'Toggle2', 'Text2']">
+						<template slot="Text1">
 							<c-text value="blah" />
 						</template>
-
-						<template slot="b">
+						<template slot="Toggle2">
 							<c-toggle active-text="Most Absolutely" inactive-text="No" />
 						</template>
-
-						<template slot="c">
+						<template slot="Text2">
 							<c-text value="Something Else" />
 						</template>
 					</c-table>
 				</c-field>
-				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
-					<c-date-picker></c-date-picker>
+			</c-page>
+			<c-page :page="3">
+				<c-section source="RepeatingSection1" type="repeating-section" title="Repeating Section" helptext="This is a section help" column="1" colspan="12">
+					<template slot-scope="item">
+						<c-field source="Checkbox1" label="" helptext="check it if it is true." column="1" colspan="9">
+							<c-checkbox label="Hello" />
+						</c-field>
+						<c-field source="Email1" label="Your Email" column="10" colspan="15">
+							<c-text type="email" />
+						</c-field>
+					</template>
+				</c-section>
+			</c-page>
+			<c-page :page="4">
+				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
+					<c-rating-scale />
 				</c-field>
-				<c-field label="Element's Select" column="7" colspan="18">
-					<c-select></c-select>
+				<c-field source="RatingScale3" required="true" label="Rating Scale" column="16" colspan="9">
+					<c-rating-scale />
+				</c-field>
+			</c-page>
+			<c-page :page="5">
+				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
+					<c-address />
+				</c-field>
+				<c-button-section />
+			</c-page>
+			<c-page :page="6">
+				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
+					<c-date-picker />
+				</c-field>
+				<c-field source="Select1" label="Element's Select" column="7" colspan="18">
+					<c-select />
 				</c-field>
 				<c-field source="Spinner1" title="Spinner" column="1" colspan="6">
 					<c-spinner :min="0" :max="100" :step="10" />
@@ -38,22 +74,7 @@
 				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
 					<c-toggle active-text="Most Absolutely" inactive-text="No" />
 				</c-field>
-				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
-					<c-rating-scale />
-				</c-field>
-				<c-field source="RatingScale3" required="true" label="Rating Scale" column="16" colspan="9">
-					<c-rating-scale />
-				</c-field>
-				<c-section source="RepeatingSection1" type="repeating-section" title="Repeating Section Title" helptext="This is a section help" column="1" colspan="12">
-					<template slot-scope="item">
-						<c-field source="Checkbox1" label="" helptext="check it if it is true." column="1" colspan="12">
-							<c-checkbox label="Hello" />
-						</c-field>
-						<c-field source="Email1" label="Your Email" column="13" colspan="12">
-							<c-text type="email" />
-						</c-field>
-					</template>
-				</c-section>
+
 				<c-section source="Section1" type="section" title="Section Title" helptext="This is a section help" column="13" colspan="12">
 					<c-field source="Email2" label="Your Email" column="7" colspan="6">
 						<c-text type="email" />
@@ -75,53 +96,50 @@
 					<c-text type="text" />
 				</c-field>
 			</c-page>
-			<c-page :page="2">
-				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
-					<c-address />
-				</c-field>
-				<c-button-section />
-			</c-page>
 		</div>
   </form>
 </template>
 
 <script>
-	import CPageProgress from './components/PageProgress.vue';
-	import CPage from './components/Page.vue';
-	import CSection from './components/Section.vue';
-	import CField from './components/Field.vue';
-	import CCheckbox from './components/Checkbox.vue';
-	import CText from './components/Text.vue';
-	import CAddress from './components/Address.vue';
-	import CRatingScale from './components/RatingScale.vue';
-	import CToggle from './components/Toggle.vue';
-	import CSpinner from './components/Spinner.vue';
-	import CButtonSection from './components/ButtonSection.vue';
-	import CDatePicker from './components/DatePicker.vue';
-	import CSelect from './components/Select.vue';
-	import CTable from './components/Table.vue';
+import CPageProgress from './components/PageProgress.vue';
+import CPage from './components/Page.vue';
+import CSection from './components/Section.vue';
+import CField from './components/Field.vue';
+import CCheckbox from './components/Checkbox.vue';
+import CText from './components/Text.vue';
+import CAddress from './components/Address.vue';
+import CRatingScale from './components/RatingScale.vue';
+import CToggle from './components/Toggle.vue';
+import CSpinner from './components/Spinner.vue';
+import CButtonSection from './components/ButtonSection.vue';
+import CDatePicker from './components/DatePicker.vue';
+import CSelect from './components/Select.vue';
+import CTable from './components/Table.vue';
 
-	export default {
-		name: 'c-form',
-		components: {
-			CPageProgress,
-			CPage,
-			CSection,
-			CField,
-			CCheckbox,
-			CText,
-			CAddress,
-			CButtonSection,
-			CRatingScale,
-			CToggle,
-			CSpinner,
-			CDatePicker,
-			CSelect,
-			CTable
-		}
+export default {
+	name: 'c-form',
+	props: ['eid'],
+	data: function() {
+		return Cognito.Forms.FormEntry.meta.get(this.eid);
+	},
+	components: {
+		CPageProgress,
+		CPage,
+		CSection,
+		CField,
+		CCheckbox,
+		CText,
+		CAddress,
+		CButtonSection,
+		CRatingScale,
+		CToggle,
+		CSpinner,
+		CDatePicker,
+		CSelect,
+		CTable
 	}
+}
 </script>
-
 
 <style lang="scss">
 	@import './sass/_theme';

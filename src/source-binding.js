@@ -1,4 +1,4 @@
-import VueModel from "../ref/vuemodel.cjs";
+import { VueModel } from "./imports";
 
 export function install(Vue) {
     console.log("Source binding install called...");
