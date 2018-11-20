@@ -8,10 +8,47 @@ export function createModel() {
 
             var formType = model.addType("Cognito.Forms.FormEntry");
 
+            formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
+            formType.addProperty("Email4", String, false, false, { label: 'Email 4' });
+            formType.addProperty("Checkbox2", Boolean, false, false, { label: 'Checkbox 2' });
+
+            Cognito.Forms.FormEntry.$Name3.required();
+            Cognito.Forms.FormEntry.$Name3.stringLength(3, 100);
+
+            Cognito.Forms.FormEntry.$Email4.stringFormat("Must be an email", "^.+@.+\..+$");
+            Cognito.Forms.FormEntry.$Email4.requiredIf({
+                isRequired: function() {
+                    return this.Name3;
+                },
+                category: "Error",
+                name: "RequiredIfName",
+                message: "You must provide an email in order to sign up.",
+                onInitNew: true,
+                onInitExisting: true,
+                onChangeOf: ["Name3", "Email4"]
+            });
+
+            Cognito.Forms.FormEntry.$Checkbox2.conditionIf({
+                isValid: function(entry, prop, val) {
+                    if (!entry.Name3) {
+                        return;
+                    }
+                    if (!entry.Email4) {
+                        return;
+                    }
+                    return entry.Checkbox2;
+                },
+                category: "Error",
+                name: "AgreeToSignUp",
+                message: "You must agree to terms in order to sign up.",
+                onInitNew: true,
+                onInitExisting: true,
+                onChangeOf: ["Name3", "Email4", "Checkbox2"]
+            });
+
             formType.addProperty("DatePicker1", String, false, false, { label: 'Date Picker 1' });
             formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
             formType.addProperty("Select1", String, false, false, { label: 'Select 1' });
-            formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
             formType.addProperty("Toggle1", Boolean, false, false, { label: 'Toggle 1' });
             formType.addProperty("RatingScale2", Object, false, false, { label: 'Rating Scale 2' });
             formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });
@@ -19,21 +56,19 @@ export function createModel() {
             var formRepeatingSection1ItemType = model.addType("Cognito.Forms.FormEntryRepeatingSection1Item");
         
             formType.addProperty("RepeatingSection1", Cognito.Forms.FormEntryRepeatingSection1Item, true, false, { label: 'Repeating Section 1' });
+
+            Cognito.Forms.FormEntry.$RepeatingSection1.listLength(0, 2);
         
             formRepeatingSection1ItemType.addProperty("Checkbox1", Boolean, false, false, { label: 'Checkbox 1' });
             formRepeatingSection1ItemType.addProperty("Email1", String, false, false, { label: 'Email 1' });
 
-            /*
-            formRepeatingSection1ItemType.addRule({
-                execute: (entity) => {
-                    entity.Checkbox1 = !!entity.Email1;
+            Cognito.Forms.FormEntryRepeatingSection1Item.$Checkbox1.calculated({
+                calculate: function() {
+                    return !!this.Email1;
                 },
                 onInit: true,
-                onChangeOf: ["Email1"],
-                returns: ["Checkbox1"]
+                onChangeOf: ["Email1"]
             });
-            formRepeatingSection1ItemType.ctor.$Checkbox1.isCalculated = true;
-            */
 
             var formSection1Type = model.addType("Cognito.Forms.FormEntrySection1");
         
@@ -42,8 +77,6 @@ export function createModel() {
             formSection1Type.addProperty("Email2", String, false, false, { label: 'Email 2' });
             formSection1Type.addProperty("Email3", String, false, false, { label: 'Email 3' });
 
-            formType.addProperty("Checkbox2", Boolean, false, false, { label: 'Checkbox 2' });
-            formType.addProperty("Email4", String, false, false, { label: 'Email 4' });
             formType.addProperty("Name1", String, false, false, { label: 'Name 1' });
             formType.addProperty("Name2", String, false, false, { label: 'Name 2' });
         
@@ -57,6 +90,49 @@ export function createModel() {
             formTableType.addProperty("Toggle2", Boolean, false, false, { label: 'Toggle 2' });
             formTableType.addProperty("Text2", String, false, false, { label: 'Text 2' });
          
+            var formSection2Type = model.addType("Cognito.Forms.FormEntrySection2");
+        
+            formType.addProperty("Section2", Cognito.Forms.FormEntrySection2, false, false, { label: 'Section 2' });
+
+            formSection2Type.addProperty("AllSideDishes", String, true, false, { label: "All Side Dishes" });
+            formSection2Type.addProperty("SideDish", String, false, false, { label: "Side Dish" });
+            formSection2Type.addProperty("Vegetarian", Boolean, false, false, { label: "Vegetarian (V)" });
+            formSection2Type.addProperty("GlutenFree", Boolean, false, false, { label: "Gluten Free (GF)" });
+            formSection2Type.addProperty("DairyFree", Boolean, false, false, { label: "Dairy Free (DF)" });
+            formSection2Type.addProperty("RelevantSideDishes", String, true, false, { label: "Relevant Side Dishes" });
+
+            Cognito.Forms.FormEntrySection2.$SideDish.allowedValues("RelevantSideDishes");
+
+            Cognito.Forms.FormEntrySection2.$RelevantSideDishes.calculated({
+                calculate: function() {
+                    var _this = this;
+                    return this.AllSideDishes.filter(function(sd) {
+                        if (sd === "Vegetable Medley") {
+                            // All good!
+                        } else if (sd === "Loaded Baked Potato") {
+                            if (_this.Vegetarian || _this.DairyFree) {
+                                return false;
+                            }
+                        } else if (sd === "Pita & Hummus") {
+                            if (_this.GlutenFree) {
+                                return false;
+                            }
+                        } else if (sd === "Cheesy Grits") {
+                            if (_this.DairyFree) {
+                                return false;
+                            }
+                        } else if (sd === "Asparagus") {
+                            // All good!
+                        }
+
+                        return true;
+                    });
+                },
+                // onInitNew: true,
+                // onInitExisting: true,
+                onChangeOf: ["Vegetarian", "GlutenFree", "DairyFree"]
+            });
+
         }
     });
 

@@ -39,7 +39,7 @@ export default {
 					sourceValue = this.$source.value;
 				}
 
-				return this.hasFocus ? this.selfModel : (sourceValue || this.selfModel);
+				return this.hasFocus ? this.selfModel : (sourceValue != null ? sourceValue : this.selfModel);
 			},
 			set: function (val) {
 				// console.log("Received 'c-text' inputModel.set()");

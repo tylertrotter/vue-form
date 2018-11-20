@@ -63,12 +63,12 @@ export default {
 		addItem: function(event) {
 			let list = this.$source.value;
 			let jstype = this.$source.property.propertyType;
-			list.add(new jstype());
+			list.push(new jstype());
 		},
 		removeItem: function(event, index) {
 			let list = this.$source.value;
 			let item = list[index];
-			list.remove(item);
+			list.splice(index, 1);
 		}
 	},
 	computed: {

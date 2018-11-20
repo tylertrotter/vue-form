@@ -4,7 +4,7 @@
 			<h1>Form Title</h1>
 		</header>
 		<div class="c-body c-wrapper">
-			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Rating Scale', 'Address', 'Miscellaneous']" />
+			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Menu', 'Rating Scale', 'Address', 'Miscellaneous']" />
 			<c-page :page="1">
 				<c-field source="Name3" label="Your Name" column="7" colspan="18">
 					<c-text type="text" />
@@ -45,6 +45,22 @@
 				</c-section>
 			</c-page>
 			<c-page :page="4">
+				<c-section source="Section2" type="section" title="Menu" helptext="Place your order" column="13" colspan="12">
+					<c-field source="Vegetarian" label="" column="1" colspan="4">
+						<c-checkbox />
+					</c-field>
+					<c-field source="GlutenFree" label="" column="4" colspan="4">
+						<c-checkbox />
+					</c-field>
+					<c-field source="DairyFree" label="" column="8" colspan="4">
+						<c-checkbox />
+					</c-field>
+					<c-field source="SideDish" label="Side" column="1" colspan="12">
+						<c-select />
+					</c-field>
+				</c-section>
+			</c-page>
+			<c-page :page="5">
 				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
 					<c-rating-scale />
 				</c-field>
@@ -52,13 +68,13 @@
 					<c-rating-scale />
 				</c-field>
 			</c-page>
-			<c-page :page="5">
+			<c-page :page="6">
 				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
 					<c-address />
 				</c-field>
 				<c-button-section />
 			</c-page>
-			<c-page :page="6">
+			<c-page :page="7">
 				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
 					<c-date-picker />
 				</c-field>

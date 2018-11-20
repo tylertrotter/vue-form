@@ -5,7 +5,8 @@ import Form from "./CognitoForm.vue";
 import {
 	Button,
 	DatePicker,
-	Select,
+  Select,
+  Option,
 	Dialog,
 	Input,
 	InputNumber,
@@ -26,6 +27,7 @@ locale.use(lang);
 Vue.use(Button);
 Vue.use(DatePicker);
 Vue.use(Select);
+Vue.use(Option);
 Vue.use(Dialog);
 Vue.use(Input);
 Vue.use(InputNumber);
@@ -52,8 +54,9 @@ Cognito.Forms.model.perform(function() {
 
   let formEntry = new Cognito.Forms.FormEntry();
   formEntry.Section1 = new Cognito.Forms.FormEntrySection1();
-  formEntry.RepeatingSection1.add(new Cognito.Forms.FormEntryRepeatingSection1Item());
-  formEntry.RepeatingSection1.add(new Cognito.Forms.FormEntryRepeatingSection1Item());
+  formEntry.Section2 = new Cognito.Forms.FormEntrySection2();
+  formEntry.RepeatingSection1.push(new Cognito.Forms.FormEntryRepeatingSection1Item());
+  formEntry.RepeatingSection1.push(new Cognito.Forms.FormEntryRepeatingSection1Item());
 
   formEntry.DatePicker1 = "2018-11-14";
   formEntry.Spinner1 = 3;
@@ -66,6 +69,12 @@ Cognito.Forms.model.perform(function() {
   formEntry.Section1.Email3 = "bryan@cognitoforms.com";
   formEntry.Checkbox2 = true;
   formEntry.Email4 = "tyler@cognitoforms.com";
+
+  formEntry.Section2.AllSideDishes.push("Vegetable Medley");
+  formEntry.Section2.AllSideDishes.push("Loaded Baked Potato");
+  formEntry.Section2.AllSideDishes.push("Pita & Hummus");
+  formEntry.Section2.AllSideDishes.push("Cheesy Grits");
+  formEntry.Section2.AllSideDishes.push("Asparagus");
   
   Cognito.Forms.model.entry = formEntry;
 

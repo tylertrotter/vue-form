@@ -1,575 +1,174 @@
 /*!
- * VueModel.js v0.0.12
+ * VueModel.js v0.0.19
  * (c) 2018 Cognito LLC
  * Released under the MIT License.
  */
 'use strict';
 
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
+var VueInternals = {
+    Vue: null,
+    Observer: null,
+    Dep: null,
+};
+// NOTE: Based on Webpack generated code
+var __extendsDeferred = (function () {
+    var called = false;
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b)
+                if (b.hasOwnProperty(p))
+                    d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    function __extends(d, b) {
+        extendStatics(d, b);
+        var __ = function __() { this.constructor = d; };
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
+    return function __extendsDeferred(d, b) {
+        if (!called) {
+            __extends(d, b);
+            called = true;
+        }
+    };
+}());
+var ObserverConstructor = (function () {
+    return function Observer(value) {
+        __extendsDeferred(Observer, VueInternals.Observer);
+        return VueInternals.Observer.call(this, value) || this;
+    };
+}());
+var Observer = ObserverConstructor;
+function ensureVueInternalTypes(Vue) {
+    if (VueInternals.Vue != null) {
+        return VueInternals;
+    }
+    var component = new Vue({
+        data: function () {
+            return {};
+        },
+    });
+    var data = component.$data;
+    var observer = data.__ob__;
+    var observerCtor = data.__ob__.constructor;
+    var depCtor = observer.dep.constructor;
+    VueInternals.Vue = Vue;
+    VueInternals.Observer = observerCtor;
+    VueInternals.Dep = depCtor;
+    return VueInternals;
 }
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-var management = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Allows the user to interact with the event.
- *
- * @class EventManagement
- * @implements {IEventManagement}
- */
-var EventManagement = /** @class */ (function () {
-    function EventManagement(unsub) {
-        this.unsub = unsub;
-        this.propagationStopped = false;
-    }
-    EventManagement.prototype.stopPropagation = function () {
-        this.propagationStopped = true;
-    };
-    return EventManagement;
-}());
-exports.EventManagement = EventManagement;
-});
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-unwrapExports(management);
-var management_1 = management.EventManagement;
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
 
-var subscription = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Stores a handler. Manages execution meta data.
- * @class Subscription
- * @template TEventHandler
- */
-var Subscription = /** @class */ (function () {
-    /**
-     * Creates an instance of Subscription.
-     *
-     * @param {TEventHandler} handler The handler for the subscription.
-     * @param {boolean} isOnce Indicates if the handler should only be executed once.
-     */
-    function Subscription(handler, isOnce) {
-        this.handler = handler;
-        this.isOnce = isOnce;
-        /**
-         * Indicates if the subscription has been executed before.
-         */
-        this.isExecuted = false;
-    }
-    /**
-     * Executes the handler.
-     *
-     * @param {boolean} executeAsync True if the even should be executed async.
-     * @param {*} scope The scope the scope of the event.
-     * @param {IArguments} args The arguments for the event.
-     */
-    Subscription.prototype.execute = function (executeAsync, scope, args) {
-        if (!this.isOnce || !this.isExecuted) {
-            this.isExecuted = true;
-            var fn = this.handler;
-            if (executeAsync) {
-                setTimeout(function () {
-                    fn.apply(scope, args);
-                }, 1);
-            }
-            else {
-                fn.apply(scope, args);
-            }
-        }
-    };
-    return Subscription;
-}());
-exports.Subscription = Subscription;
-});
-
-unwrapExports(subscription);
-var subscription_1 = subscription.Subscription;
-
-var dispatching = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/**
- * Base class for implementation of the dispatcher. It facilitates the subscribe
- * and unsubscribe methods based on generic handlers. The TEventType specifies
- * the type of event that should be exposed. Use the asEvent to expose the
- * dispatcher as event.
- */
-var DispatcherBase = /** @class */ (function () {
-    function DispatcherBase() {
-        this._wrap = new DispatcherWrapper(this);
-        this._subscriptions = new Array();
-    }
-    /**
-     * Subscribe to the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     * @returns A function that unsubscribes the event handler from the event.
-     */
-    DispatcherBase.prototype.subscribe = function (fn) {
-        var _this = this;
-        if (fn) {
-            this._subscriptions.push(new subscription.Subscription(fn, false));
-        }
-        return function () {
-            _this.unsubscribe(fn);
-        };
-    };
-    /**
-     * Subscribe to the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     * @returns A function that unsubscribes the event handler from the event.
-     */
-    DispatcherBase.prototype.sub = function (fn) {
-        return this.subscribe(fn);
-    };
-    /**
-     * Subscribe once to the event with the specified name.
-     * @param fn The event handler that is called when the event is dispatched.
-     * @returns A function that unsubscribes the event handler from the event.
-     */
-    DispatcherBase.prototype.one = function (fn) {
-        var _this = this;
-        if (fn) {
-            this._subscriptions.push(new subscription.Subscription(fn, true));
-        }
-        return function () {
-            _this.unsubscribe(fn);
-        };
-    };
-    /**
-     * Checks it the event has a subscription for the specified handler.
-     * @param fn The event handler.
-     */
-    DispatcherBase.prototype.has = function (fn) {
-        if (!fn)
-            return false;
-        return this._subscriptions.some(function (sub) { return sub.handler == fn; });
-    };
-    /**
-     * Unsubscribes the handler from the dispatcher.
-     * @param fn The event handler.
-     */
-    DispatcherBase.prototype.unsubscribe = function (fn) {
-        if (!fn)
-            return;
-        for (var i = 0; i < this._subscriptions.length; i++) {
-            if (this._subscriptions[i].handler == fn) {
-                this._subscriptions.splice(i, 1);
-                break;
-            }
-        }
-    };
-    /**
-     * Unsubscribes the handler from the dispatcher.
-     * @param fn The event handler.
-     */
-    DispatcherBase.prototype.unsub = function (fn) {
-        this.unsubscribe(fn);
-    };
-    /**
-     * Generic dispatch will dispatch the handlers with the given arguments.
-     *
-     * @protected
-     * @param {boolean} executeAsync True if the even should be executed async.
-     * @param {*} The scope the scope of the event. The scope becomes the "this" for handler.
-     * @param {IArguments} args The arguments for the event.
-     */
-    DispatcherBase.prototype._dispatch = function (executeAsync, scope, args) {
-        var _this = this;
-        var _loop_1 = function (sub) {
-            var ev = new management.EventManagement(function () { return _this.unsub(sub.handler); });
-            var nargs = Array.prototype.slice.call(args);
-            nargs.push(ev);
-            sub.execute(executeAsync, scope, nargs);
-            //cleanup subs that are no longer needed
-            this_1.cleanup(sub);
-            if (!executeAsync && ev.propagationStopped) {
-                return "break";
-            }
-        };
-        var this_1 = this;
-        //execute on a copy because of bug #9
-        for (var _i = 0, _a = this._subscriptions.slice(); _i < _a.length; _i++) {
-            var sub = _a[_i];
-            var state_1 = _loop_1(sub);
-            if (state_1 === "break")
-                break;
-        }
-    };
-    /**
-     * Cleans up subs that ran and should run only once.
-     */
-    DispatcherBase.prototype.cleanup = function (sub) {
-        if (sub.isOnce && sub.isExecuted) {
-            var i = this._subscriptions.indexOf(sub);
-            if (i > -1) {
-                this._subscriptions.splice(i, 1);
-            }
-        }
-    };
-    /**
-     * Creates an event from the dispatcher. Will return the dispatcher
-     * in a wrapper. This will prevent exposure of any dispatcher methods.
-     */
-    DispatcherBase.prototype.asEvent = function () {
-        return this._wrap;
-    };
-    /**
-     * Clears all the subscriptions.
-     */
-    DispatcherBase.prototype.clear = function () {
-        this._subscriptions.splice(0, this._subscriptions.length);
-    };
-    return DispatcherBase;
-}());
-exports.DispatcherBase = DispatcherBase;
-/**
- * Base class for event lists classes. Implements the get and remove.
- */
-var EventListBase = /** @class */ (function () {
-    function EventListBase() {
-        this._events = {};
-    }
-    /**
-     * Gets the dispatcher associated with the name.
-     * @param name The name of the event.
-     */
-    EventListBase.prototype.get = function (name) {
-        var event = this._events[name];
-        if (event) {
-            return event;
-        }
-        event = this.createDispatcher();
-        this._events[name] = event;
-        return event;
-    };
-    /**
-     * Removes the dispatcher associated with the name.
-     * @param name The name of the event.
-     */
-    EventListBase.prototype.remove = function (name) {
-        delete this._events[name];
-    };
-    return EventListBase;
-}());
-exports.EventListBase = EventListBase;
-/**
- * Hides the implementation of the event dispatcher. Will expose methods that
- * are relevent to the event.
- */
-var DispatcherWrapper = /** @class */ (function () {
-    /**
-     * Creates a new EventDispatcherWrapper instance.
-     * @param dispatcher The dispatcher.
-     */
-    function DispatcherWrapper(dispatcher) {
-        this._subscribe = function (fn) { return dispatcher.subscribe(fn); };
-        this._unsubscribe = function (fn) { return dispatcher.unsubscribe(fn); };
-        this._one = function (fn) { return dispatcher.one(fn); };
-        this._has = function (fn) { return dispatcher.has(fn); };
-        this._clear = function () { return dispatcher.clear(); };
-    }
-    /**
-     * Subscribe to the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     * @returns A function that unsubscribes the event handler from the event.
-     */
-    DispatcherWrapper.prototype.subscribe = function (fn) {
-        return this._subscribe(fn);
-    };
-    /**
-     * Subscribe to the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     * @returns A function that unsubscribes the event handler from the event.
-     */
-    DispatcherWrapper.prototype.sub = function (fn) {
-        return this.subscribe(fn);
-    };
-    /**
-     * Unsubscribe from the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     */
-    DispatcherWrapper.prototype.unsubscribe = function (fn) {
-        this._unsubscribe(fn);
-    };
-    /**
-     * Unsubscribe from the event dispatcher.
-     * @param fn The event handler that is called when the event is dispatched.
-     */
-    DispatcherWrapper.prototype.unsub = function (fn) {
-        this.unsubscribe(fn);
-    };
-    /**
-     * Subscribe once to the event with the specified name.
-     * @param fn The event handler that is called when the event is dispatched.
-     */
-    DispatcherWrapper.prototype.one = function (fn) {
-        return this._one(fn);
-    };
-    /**
-     * Checks it the event has a subscription for the specified handler.
-     * @param fn The event handler.
-     */
-    DispatcherWrapper.prototype.has = function (fn) {
-        return this._has(fn);
-    };
-    /**
-     * Clears all the subscriptions.
-     */
-    DispatcherWrapper.prototype.clear = function () {
-        this._clear();
-    };
-    return DispatcherWrapper;
-}());
-exports.DispatcherWrapper = DispatcherWrapper;
-});
-
-unwrapExports(dispatching);
-var dispatching_1 = dispatching.DispatcherBase;
-var dispatching_2 = dispatching.EventListBase;
-var dispatching_3 = dispatching.DispatcherWrapper;
-
-var dist = createCommonjsModule(function (module, exports) {
-/*!
- * Strongly Typed Events for TypeScript - Core
- * https://github.com/KeesCBakker/StronlyTypedEvents/
- * http://keestalkstech.com
- *
- * Copyright Kees C. Bakker / KeesTalksTech
- * Released under the MIT license
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-
-exports.DispatcherBase = dispatching.DispatcherBase;
-exports.DispatcherWrapper = dispatching.DispatcherWrapper;
-exports.EventListBase = dispatching.EventListBase;
-
-exports.Subscription = subscription.Subscription;
-});
-
-unwrapExports(dist);
-var dist_1 = dist.DispatcherBase;
-var dist_2 = dist.DispatcherWrapper;
-var dist_3 = dist.EventListBase;
-var dist_4 = dist.Subscription;
-
-var events = createCommonjsModule(function (module, exports) {
-var __extends = (commonjsGlobal && commonjsGlobal.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
+    return extendStatics(d, b);
+};
 
-/**
- * Dispatcher implementation for events. Can be used to subscribe, unsubscribe
- * or dispatch events. Use the ToEvent() method to expose the event.
- */
-var EventDispatcher = /** @class */ (function (_super) {
-    __extends(EventDispatcher, _super);
-    /**
-     * Creates a new EventDispatcher instance.
-     */
-    function EventDispatcher() {
-        return _super.call(this) || this;
-    }
-    /**
-     * Dispatches the event.
-     * @param sender The sender.
-     * @param args The arguments object.
-     */
-    EventDispatcher.prototype.dispatch = function (sender, args) {
-        this._dispatch(false, this, arguments);
-    };
-    /**
-     * Dispatches the events thread.
-     * @param sender The sender.
-     * @param args The arguments object.
-     */
-    EventDispatcher.prototype.dispatchAsync = function (sender, args) {
-        this._dispatch(true, this, arguments);
-    };
-    /**
-     * Creates an event from the dispatcher. Will return the dispatcher
-     * in a wrapper. This will prevent exposure of any dispatcher methods.
-     */
-    EventDispatcher.prototype.asEvent = function () {
-        return _super.prototype.asEvent.call(this);
-    };
-    return EventDispatcher;
-}(dist.DispatcherBase));
-exports.EventDispatcher = EventDispatcher;
-/**
- * Storage class for multiple events that are accessible by name.
- * Events dispatchers are automatically created.
- */
-var EventList = /** @class */ (function (_super) {
-    __extends(EventList, _super);
-    /**
-     * Creates a new EventList instance.
-     */
-    function EventList() {
-        return _super.call(this) || this;
-    }
-    /**
-     * Creates a new dispatcher instance.
-     */
-    EventList.prototype.createDispatcher = function () {
-        return new EventDispatcher();
-    };
-    return EventList;
-}(dist.EventListBase));
-exports.EventList = EventList;
-/**
- * Extends objects with event handling capabilities.
- */
-var EventHandlingBase = /** @class */ (function () {
-    function EventHandlingBase() {
-        this._events = new EventList();
-    }
-    Object.defineProperty(EventHandlingBase.prototype, "events", {
-        /**
-         * Gets the list with all the event dispatchers.
-         */
-        get: function () {
-            return this._events;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Subscribes to the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.subscribe = function (name, fn) {
-        this._events.get(name).subscribe(fn);
-    };
-    /**
-     * Subscribes to the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.sub = function (name, fn) {
-        this.subscribe(name, fn);
-    };
-    /**
-     * Unsubscribes from the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.unsubscribe = function (name, fn) {
-        this._events.get(name).unsubscribe(fn);
-    };
-    /**
-     * Unsubscribes from the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.unsub = function (name, fn) {
-        this.unsubscribe(name, fn);
-    };
-    /**
-     * Subscribes to once the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.one = function (name, fn) {
-        this._events.get(name).one(fn);
-    };
-    /**
-     * Subscribes to once the event with the specified name.
-     * @param name The name of the event.
-     * @param fn The event handler.
-     */
-    EventHandlingBase.prototype.has = function (name, fn) {
-        return this._events.get(name).has(fn);
-    };
-    return EventHandlingBase;
-}());
-exports.EventHandlingBase = EventHandlingBase;
-});
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
 
-unwrapExports(events);
-var events_1 = events.EventDispatcher;
-var events_2 = events.EventList;
-var events_3 = events.EventHandlingBase;
-
-var dist$1 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-
-exports.EventDispatcher = events.EventDispatcher;
-exports.EventHandlingBase = events.EventHandlingBase;
-exports.EventList = events.EventList;
-});
-
-unwrapExports(dist$1);
-var dist_1$1 = dist$1.EventDispatcher;
-var dist_2$1 = dist$1.EventHandlingBase;
-var dist_3$1 = dist$1.EventList;
-
-var ObjectMeta = /** @class */ (function () {
-    function ObjectMeta(type, entity, id, isNew) {
-        // Public read-only properties
-        Object.defineProperty(this, "type", { enumerable: true, value: type });
-        Object.defineProperty(this, "entity", { enumerable: true, value: entity });
-        // Public settable properties that are simple values with no side-effects or logic
-        Object.defineProperty(this, "_id", { enumerable: false, value: id, writable: true });
-        Object.defineProperty(this, "_isNew", { enumerable: false, value: isNew, writable: true });
-    }
-    Object.defineProperty(ObjectMeta.prototype, "id", {
-        get: function () {
-            // TODO: Obfuscate backing field name?
-            return this._id;
-        },
-        set: function (value) {
-            // TODO: Implement logic to change object ID?
-            this._id = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ObjectMeta.prototype, "isNew", {
-        get: function () {
-            // TODO: Obfuscate backing field name?
-            // TODO: Implement logic to mark object as no longer new?
-            return this._isNew;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ObjectMeta.prototype, "legacyId", {
-        get: function () {
-            // TODO: Obfuscate backing field name?
-            return this._legacyId;
-        },
-        set: function (value) {
-            // TODO: Don't allow setting legacy ID if already set
-            this._legacyId = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    // TODO: Should this be a method on the entity itself, or a static method on Entity?
-    ObjectMeta.prototype.destroy = function () {
-        this.type.unregister(this.entity);
-        // Raise the destroy event on this type and all base types
-        for (var t = this.type; t; t = t.baseType) {
-            Type$_getEventDispatchers(t).destroyEvent.dispatch(t, { entity: this.entity });
+function Functor$create(returns) {
+    if (returns === void 0) { returns = false; }
+    var funcs = [];
+    // TODO: Detect functor invocation resulting in continually adding subscribers
+    function Functor$fn() {
+        var returnsArray;
+        if (returns) {
+            returnsArray = [];
         }
-    };
-    return ObjectMeta;
-}());
+        for (var i = 0; i < funcs.length; ++i) {
+            var item = funcs[i];
+            // Don't re-run one-time subscriptions that have already been applied.
+            if (item.applied === true) {
+                continue;
+            }
+            // Ensure that there is either no filter or the filter passes.
+            if (!item.filter || item.filter.apply(this, arguments) === true) {
+                // If handler is set to execute once,
+                // remove the handler before calling.
+                if (item.once === true) {
+                    // Mark as applied but leave item in array to avoid potential
+                    // problems due to re-entry into event invalidating iteration
+                    // index. In some cases re-entry would be a red-flag, but for
+                    // "global" events, where the context of the event is derived
+                    // from the arguments, the event could easily be re-entered
+                    // in a different context with different arguments.
+                    item.applied = true;
+                }
+                // Call the handler function.
+                var returnValue = item.fn.apply(this, arguments);
+                if (returns) {
+                    returnsArray.push(returnValue);
+                }
+            }
+        }
+        if (returns) {
+            return returnsArray;
+        }
+    }
+    var f = Functor$fn;
+    f._funcs = funcs;
+    f.add = Functor$add;
+    f.remove = Functor$remove;
+    f.isEmpty = Functor$isEmpty;
+    f.clear = Functor$clear;
+    return f;
+}
+function FunctorItem$new(fn, filter, once) {
+    if (filter === void 0) { filter = null; }
+    if (once === void 0) { once = false; }
+    var item = { fn: fn };
+    if (filter != null) {
+        item.filter = filter;
+    }
+    if (once != null) {
+        item.once = once;
+    }
+    return item;
+}
+function Functor$add(fn, filter, once) {
+    if (filter === void 0) { filter = null; }
+    if (once === void 0) { once = false; }
+    var item = FunctorItem$new(fn, filter, once);
+    this._funcs.push(item);
+}
+function Functor$remove(fn) {
+    for (var i = this._funcs.length - 1; i >= 0; --i) {
+        if (this._funcs[i].fn === fn) {
+            this._funcs.splice(i, 1);
+            return true;
+        }
+    }
+    return false;
+}
+function Functor$isEmpty(args) {
+    if (args === void 0) { args = null; }
+    return !this._funcs.some(function (item) { return item.applied !== true && (!args || !item.filter || item.filter.apply(this, args)); }, this);
+}
+function Functor$clear() {
+    this._funcs.length = 0;
+}
 
 function ensureNamespace(name, parentNamespace) {
     var result, nsTokens, target = parentNamespace;
@@ -628,19 +227,23 @@ function getDefaultValue(isList, jstype) {
         return 0;
     return null;
 }
-function randomInteger(min, max) {
+function randomInt(min, max) {
     if (min === void 0) { min = 0; }
     if (max === void 0) { max = 9; }
     var rand = Math.random();
     return rand === 1 ? max : Math.floor(rand * (max - min + 1)) + min;
 }
-function randomText(len, includeDigits) {
-    if (includeDigits === void 0) { includeDigits = false; }
+function randomText(len, includeLetters, includeDigits) {
+    if (includeLetters === void 0) { includeLetters = true; }
+    if (includeDigits === void 0) { includeDigits = true; }
+    if (!includeLetters && !includeDigits) {
+        return;
+    }
     var result = "";
     for (var i = 0; i < len; i++) {
-        var min = 0;
+        var min = includeLetters ? 0 : 26;
         var max = includeDigits ? 35 : 25;
-        var rand = randomInteger(min, max);
+        var rand = randomInt(min, max);
         var charCode;
         if (rand <= 25) {
             // Alpha: add 97 for 'a'
@@ -701,286 +304,196 @@ function merge(obj1) {
     }
     return target;
 }
-function getEventSubscriptions(dispatcher) {
-    var disp = dispatcher;
-    var subs = disp._subscriptions;
-    return subs;
-}
-
-var internalState = {
-    secrets: {}
-};
-function createSecret(key, len, includeLetters, includeDigits, prefix) {
-    if (len === void 0) { len = 8; }
-    if (includeLetters === void 0) { includeLetters = true; }
-    if (includeDigits === void 0) { includeDigits = false; }
-    if (prefix === void 0) { prefix = null; }
-    var secret;
-    if (internalState.secrets.hasOwnProperty(key)) {
-        secret = internalState.secrets[key];
-        if (secret.indexOf(prefix) !== 0) ;
-    }
-    else {
-        var rand = "";
-        if (includeLetters) {
-            rand = randomText(len, includeDigits);
-        }
-        else if (includeDigits) {
-            for (var i = 0; i < len; i++) {
-                rand += randomInteger(0, 9).toString();
-            }
-        }
-        if (prefix) {
-            secret = prefix + rand;
+function getEventSubscriptions(event) {
+    var func = event._func;
+    if (func) {
+        var funcs = func._funcs;
+        if (funcs.length > 0) {
+            var subs = funcs.map(function (f) { return { handler: f.fn, isExecuted: f.applied, isOnce: f.once }; });
+            return subs;
         }
         else {
-            secret = rand;
+            return null;
         }
-        internalState.secrets[key] = secret;
     }
-    return secret;
+}
+function mixin(ctor, methods) {
+    for (var key in methods) {
+        if (hasOwnProperty(methods, key) && methods[key] instanceof Function) {
+            ctor.prototype[key] = methods[key];
+        }
+    }
 }
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-var observableListMarkerField = createSecret('ObservableList.markerField', 3, false, true, "_oL");
-var ObservableListMethods = /** @class */ (function () {
-    function ObservableListMethods() {
+var EventObject = /** @class */ (function () {
+    function EventObject() {
     }
-    /**
-     * Add an item and raise the list changed event.
-     * @param item The item to add
-     */
-    ObservableListMethods.add = function (list, item) {
-        var added = [item];
-        var newLength = Array.prototype.push.apply(list, added);
-        var addedIndex = newLength - 1;
-        list._changedEvent.dispatch(list, { added: added, addedIndex: addedIndex, removed: [], removedIndex: -1 });
+    EventObject.prototype.stopPropagation = function () {
+        // TODO: Implement 'stopPropagation()'?
+        throw new Error("Method 'stopPropagation' is not implemented.");
     };
-    /**
-     * Remove an item and raise the list changed event.
-     * @param item The item to remove
-     * @returns True if removed, otherwise false.
-     */
-    ObservableListMethods.remove = function (list, item) {
-        var removedIndex = Array.prototype.indexOf.call(list, item);
-        if (removedIndex !== -1) {
-            var removed = Array.prototype.splice.call(list, removedIndex, 1);
-            list._changedEvent.dispatch(list, { added: [], addedIndex: -1, removed: removed, removedIndex: removedIndex });
-            return true;
-        }
-    };
-    return ObservableListMethods;
+    return EventObject;
 }());
-var ObservableList = /** @class */ (function (_super) {
-    __extends(ObservableList, _super);
-    /**
-     * Creates a new observable list
-     * @param items The array of initial items
-     */
-    function ObservableList(items) {
-        if (items === void 0) { items = null; }
-        return _super.apply(this, items) || this;
-    }
-    ObservableList.isObservableList = function (array) {
-        return Object.prototype.hasOwnProperty.call(array, observableListMarkerField) && array[observableListMarkerField] === true;
-    };
-    ObservableList._markObservable = function (target) {
-        Object.defineProperty(target, observableListMarkerField, {
-            configurable: false,
-            enumerable: false,
-            value: true,
-            writable: false
-        });
-    };
-    ObservableList.ensureObservable = function (array) {
-        // Check to see if the array is already an observable list
-        if (this.isObservableList(array)) {
-            var implementation = array;
-            return implementation;
+function createEventObject(args) {
+    var eventObject = new EventObject();
+    for (var prop in args) {
+        if (hasOwnProperty(args, prop)) {
+            eventObject[prop] = args[prop];
         }
-        return ObservableListImplementation.implementObservableList(array);
-    };
-    ObservableList.create = function (items) {
-        if (items === void 0) { items = null; }
-        var implementation = new ObservableListImplementation(items);
-        var list = ObservableListImplementation.ensureObservable(implementation);
-        return list;
-    };
-    return ObservableList;
-}(Array));
-var ObservableListImplementation = /** @class */ (function (_super) {
-    __extends(ObservableListImplementation, _super);
-    /**
-     * Creates a new observable list
-     * @param items The array of initial items
-     */
-    function ObservableListImplementation(items) {
-        if (items === void 0) { items = null; }
-        var _this = _super.call(this, items) || this;
-        ObservableListImplementation._initFields(_this);
-        ObservableList._markObservable(_this);
-        return _this;
     }
-    ObservableListImplementation._initFields = function (target, changedEvent) {
-        if (changedEvent === void 0) { changedEvent = null; }
-        if (changedEvent == null) {
-            changedEvent = new dist_1$1();
+    return eventObject;
+}
+var EventSubWrapper = /** @class */ (function () {
+    function EventSubWrapper(event) {
+        Object.defineProperty(this, "_event", { value: event });
+    }
+    EventSubWrapper.prototype.subscribe = function (handler) {
+        this._event.subscribe(handler);
+    };
+    EventSubWrapper.prototype.subscribeOne = function (handler) {
+        this._event.subscribeOne(handler);
+    };
+    EventSubWrapper.prototype.unsubscribe = function (handler) {
+        this._event.unsubscribe(handler);
+    };
+    EventSubWrapper.prototype.hasSubscribers = function (handler) {
+        return this._event.hasSubscribers(handler);
+    };
+    EventSubWrapper.prototype.clear = function () {
+        this._event.clear();
+    };
+    return EventSubWrapper;
+}());
+var Event = /** @class */ (function () {
+    function Event() {
+    }
+    Event.prototype.asEventSubscriber = function () {
+        if (!this._subscriber) {
+            Object.defineProperty(this, "_subscriber", { value: new EventSubWrapper(this) });
         }
-        // Define the `_changedEvent` readonly property
-        Object.defineProperty(target, "_changedEvent", {
-            configurable: false,
-            enumerable: false,
-            value: changedEvent,
-            writable: false
-        });
+        return this._subscriber;
     };
-    ObservableListImplementation.implementObservableList = function (array) {
-        ObservableListImplementation._initFields(array);
-        array["add"] = (function (item) { ObservableListMethods.add(this, item); });
-        array["remove"] = (function (item) { return ObservableListMethods.remove(this, item); });
-        Object.defineProperty(array, 'changed', {
-            get: function () {
-                return this._changedEvent.asEvent();
-            }
-        });
-        ObservableListImplementation._markObservable(array);
-        return array;
+    Event.prototype.publish = function (thisObject, args) {
+        if (!this._func) {
+            // No subscribers
+            return;
+        }
+        var eventObject = createEventObject(args);
+        this._func.call(thisObject, eventObject);
     };
-    /**
-     * Add an item and raise the list changed event.
-     * @param item The item to add
-     */
-    ObservableListImplementation.prototype.add = function (item) {
-        ObservableListMethods.add(this, item);
+    Event.prototype.subscribe = function (handler) {
+        if (!this._func) {
+            Object.defineProperty(this, "_func", { value: Functor$create() });
+        }
+        this._func.add(handler);
     };
-    /**
-     * Removes the specified item from the list.
-     * @param item The item to remove.
-     * @returns True if removed, otherwise false.
-     */
-    ObservableListImplementation.prototype.remove = function (item) {
-        return ObservableListMethods.remove(this, item);
+    Event.prototype.subscribeOne = function (handler) {
+        if (!this._func) {
+            Object.defineProperty(this, "_func", { value: Functor$create() });
+        }
+        this._func.add(handler, null, true);
     };
-    Object.defineProperty(ObservableListImplementation.prototype, "changed", {
-        /** Expose the changed event */
+    Event.prototype.hasSubscribers = function (handler) {
+        if (!this._func) {
+            return false;
+        }
+        var functorItems = (this._func._funcs);
+        return functorItems.some(function (i) { return i.fn === handler; });
+    };
+    Event.prototype.unsubscribe = function (handler) {
+        if (!this._func) {
+            // No subscribers
+            return;
+        }
+        this._func.remove(handler);
+    };
+    Event.prototype.clear = function () {
+        if (!this._func) {
+            // No subscribers
+            return;
+        }
+        this._func.clear();
+    };
+    return Event;
+}());
+
+var Entity = /** @class */ (function () {
+    function Entity() {
+        Object.defineProperty(this, "_events", { value: new EntityEvents() });
+    }
+    Object.defineProperty(Entity.prototype, "accessed", {
         get: function () {
-            return this._changedEvent.asEvent();
+            return this._events.accessedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    return ObservableListImplementation;
-}(ObservableList));
-
-function Functor$create(functions, returns) {
-    if (functions === void 0) { functions = null; }
-    if (returns === void 0) { returns = false; }
-    var funcs = [];
-    if (functions) {
-        Array.prototype.push.apply(funcs, functions.map(function (f) { return FunctorItem$new(f); }));
-    }
-    function Functor$fn() {
-        var returnsArray;
-        if (returns) {
-            returnsArray = [];
+    Object.defineProperty(Entity.prototype, "changed", {
+        get: function () {
+            return this._events.changedEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Entity.prototype.init = function (property, value) {
+        var properties;
+        // Convert property/value pair to a property dictionary
+        if (typeof property == "string") {
+            properties = {};
+            properties[property] = value;
         }
-        for (var i = 0; i < funcs.length; ++i) {
-            var item = funcs[i];
-            // Don't re-run one-time subscriptions that have already been applied.
-            if (item.applied === true) {
-                continue;
-            }
-            // Ensure that there is either no filter or the filter passes.
-            if (!item.filter || item.filter.apply(this, arguments) === true) {
-                // If handler is set to execute once,
-                // remove the handler before calling.
-                if (item.once === true) {
-                    // Mark as applied but leave item in array to avoid potential
-                    // problems due to re-entry into event invalidating iteration
-                    // index. In some cases re-entry would be a red-flag, but for
-                    // "global" events, where the context of the event is derived
-                    // from the arguments, the event could easily be re-entered
-                    // in a different context with different arguments.
-                    item.applied = true;
-                }
-                // Call the handler function.
-                var returnValue = item.fn.apply(this, arguments);
-                returnsArray.push(returnValue);
+        else {
+            properties = property;
+        }
+        // Initialize the specified properties
+        for (var name in properties) {
+            if (properties.hasOwnProperty(name)) {
+                var prop = this.meta.type.getProperty(name);
+                if (!prop)
+                    throw new Error("Could not find property \"" + name + "\" on type \"" + this.meta.type.fullName + "\".");
+                // Set the property
+                prop.value(this, value);
             }
         }
-        if (returns) {
-            return returnsArray;
+    };
+    Entity.prototype.set = function (property, value) {
+        var properties;
+        // Convert property/value pair to a property dictionary
+        if (typeof property == "string") {
+            properties = {};
+            properties[property] = value;
         }
-    }
-    var f = Functor$fn;
-    f._funcs = funcs;
-    f.add = Functor$add;
-    f.remove = Functor$remove;
-    f.isEmpty = Functor$isEmpty;
-    f.clear = Functor$clear;
-    return f;
-}
-function FunctorItem$new(fn, filter, once) {
-    if (filter === void 0) { filter = null; }
-    if (once === void 0) { once = false; }
-    var item = { fn: fn };
-    if (filter != null) {
-        item.filter = filter;
-    }
-    if (once != null) {
-        item.once = once;
-    }
-    return item;
-}
-function Functor$add(fn, filter, once) {
-    if (filter === void 0) { filter = null; }
-    if (once === void 0) { once = false; }
-    var item = FunctorItem$new(fn, filter, once);
-    this._funcs.push(item);
-}
-function Functor$remove(fn) {
-    for (var i = this._funcs.length - 1; i >= 0; --i) {
-        if (this._funcs[i].fn === fn) {
-            this._funcs.splice(i, 1);
-            return true;
+        else {
+            properties = property;
         }
+        // Set the specified properties
+        for (var name in properties) {
+            if (properties.hasOwnProperty(name)) {
+                var prop = this.meta.type.getProperty(name);
+                if (!prop)
+                    throw new Error("Could not find property \"" + name + "\" on type \"" + this.meta.type.fullName + "\".");
+                prop.value(this, value);
+            }
+        }
+    };
+    Entity.prototype.get = function (property) {
+        return this.meta.type.getProperty(property).value(this);
+    };
+    Entity.prototype.toString = function (format) {
+        return Entity$toIdString(this);
+    };
+    return Entity;
+}());
+var EntityEvents = /** @class */ (function () {
+    function EntityEvents() {
+        this.accessedEvent = new Event();
+        this.changedEvent = new Event();
     }
-    return false;
-}
-function Functor$isEmpty(args) {
-    if (args === void 0) { args = null; }
-    return !this._funcs.some(function (item) { return item.applied !== true && (!args || !item.filter || item.filter.apply(this, args)); }, this);
-}
-function Functor$clear() {
-    this._funcs.length = 0;
+    return EntityEvents;
+}());
+// Gets the typed string id suitable for roundtripping via fromIdString
+function Entity$toIdString(obj) {
+    return obj.meta.type.fullName + "|" + obj.meta.id;
 }
 
 var pendingSignalTimeouts = null;
@@ -1092,13 +605,6 @@ function generateSignalPendingCallback(signal, callback, thisPtr, executeImmedia
     };
 }
 
-var PropertyChainEventDispatchers = /** @class */ (function () {
-    function PropertyChainEventDispatchers() {
-        this.changedEvent = new dist_1$1();
-        this.accessedEvent = new dist_1$1();
-    }
-    return PropertyChainEventDispatchers;
-}());
 /**
  * Encapsulates the logic required to work with a chain of properties and
  * a root object, allowing interaction with the chain as if it were a
@@ -1112,19 +618,21 @@ var PropertyChain = /** @class */ (function () {
         Object.defineProperty(this, "_properties", { value: properties });
         Object.defineProperty(this, "_propertyFilters", { value: filters || new Array(properties.length) });
         Object.defineProperty(this, "_propertyAccessSubscriptions", { value: [] });
+        Object.defineProperty(this, "_propertyChainAccessSubscriptions", { value: [] });
         Object.defineProperty(this, "_propertyChangeSubscriptions", { value: [] });
-        Object.defineProperty(this, "_eventDispatchers", { value: new PropertyChainEventDispatchers() });
+        Object.defineProperty(this, "_propertyChainChangeSubscriptions", { value: [] });
+        Object.defineProperty(this, "_events", { value: new PropertyChainEvents() });
     }
-    Object.defineProperty(PropertyChain.prototype, "changedEvent", {
+    Object.defineProperty(PropertyChain.prototype, "changed", {
         get: function () {
-            return this._eventDispatchers.changedEvent.asEvent();
+            return this._events.changedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PropertyChain.prototype, "accessedEvent", {
+    Object.defineProperty(PropertyChain.prototype, "accessed", {
         get: function () {
-            return this._eventDispatchers.accessedEvent.asEvent();
+            return this._events.accessedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
@@ -1133,7 +641,7 @@ var PropertyChain = /** @class */ (function () {
         if (prop === null || prop === undefined) {
             return;
         }
-        if (Property$isProperty(prop)) {
+        if (prop instanceof Property) {
             return this._properties.length === 1 && this._properties[0] === prop;
         }
         if (prop instanceof PropertyChain) {
@@ -1249,12 +757,18 @@ var PropertyChain = /** @class */ (function () {
     PropertyChain.prototype.toPropertyArray = function () {
         return this._properties.slice();
     };
-    PropertyChain.prototype.getLastTarget = function (obj) {
+    PropertyChain.prototype.getLastTarget = function (obj, exitEarly) {
+        if (exitEarly === void 0) { exitEarly = false; }
         for (var p = 0; p < this._properties.length - 1; p++) {
             var prop = this._properties[p];
             // exit early on null or undefined
             if (obj === undefined || obj === null) {
-                return obj;
+                if (exitEarly) {
+                    return obj;
+                }
+                else {
+                    throw new Error("Property chain is not complete.");
+                }
             }
             obj = prop.value(obj);
         }
@@ -1264,7 +778,7 @@ var PropertyChain = /** @class */ (function () {
         // TODO: Validate that the property or property chain is valid to append?
         var newProps = this._properties.slice();
         var newFilters = this._propertyFilters ? this._propertyFilters.slice() : new Array(this._properties.length);
-        if (Property$isProperty(prop)) {
+        if (prop instanceof Property) {
             newProps.push(prop);
             newFilters.push(null);
         }
@@ -1282,7 +796,7 @@ var PropertyChain = /** @class */ (function () {
         var newProps;
         var newRootType;
         var newFilters;
-        if (Property$isProperty(prop)) {
+        if (prop instanceof Property) {
             newProps = this._properties.slice();
             newFilters = this._propertyFilters.slice();
             newRootType = prop.containingType;
@@ -1324,11 +838,11 @@ var PropertyChain = /** @class */ (function () {
         for (var i = 0; i < this._properties.length; i++) {
             if (rootType.hasModelProperty(this._properties[i])) {
                 var path = getPropertyChainPathFromIndex(this, i);
-                return this._properties[i].isStatic ? this._properties[i].containingType.fullName + "." + path : path;
+                return this._properties[i].isStatic ? this._properties[i].containingType + "." + path : path;
             }
         }
     };
-    Object.defineProperty(PropertyChain.prototype, "containingType", {
+    Object.defineProperty(PropertyChain.prototype, "propertyType", {
         // TODO: is this needed?
         // starts listening for the get event of the last property in the chain on any known instances. Use obj argument to
         // optionally filter the events to a specific object
@@ -1340,13 +854,6 @@ var PropertyChain = /** @class */ (function () {
         // 	// Return the property to support method chaining
         // 	return this;
         // }
-        get: function () {
-            return this.rootType;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(PropertyChain.prototype, "propertyType", {
         get: function () {
             return this.lastProperty.propertyType;
         },
@@ -1367,15 +874,10 @@ var PropertyChain = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PropertyChain.prototype, "isStatic", {
-        get: function () {
-            // TODO
-            return this.lastProperty.isStatic;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(PropertyChain.prototype, "label", {
+        // get isStatic(): boolean {
+        // 	return this.lastProperty.isStatic;
+        // }
         get: function () {
             return this.lastProperty.label;
         },
@@ -1389,13 +891,9 @@ var PropertyChain = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PropertyChain.prototype, "name", {
-        get: function () {
-            return this.lastProperty.name;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    // get name() {
+    // 	return this.lastProperty.name;
+    // }
     // rules(filter) {
     // 	return this.lastProperty().rules(filter);
     // }
@@ -1444,23 +942,15 @@ var PropertyChain = /** @class */ (function () {
         }, this, null, obj, fromIndex, fromProp);
         return allInited && (!enforceCompleteness || initedProperties.length === expectedProps);
     };
+    PropertyChain.prototype.getPath = function () {
+        return this.path;
+    };
     PropertyChain.prototype.toString = function () {
-        if (this.isStatic) {
-            return this.path;
-        }
-        else {
-            var path = this._properties.map(function (e) { return e.name; }).join(".");
-            return "this<" + this.containingType + ">." + path;
-        }
+        var path = this._properties.map(function (e) { return e.name; }).join(".");
+        return "this<" + this.rootType + ">." + path;
     };
     return PropertyChain;
 }());
-function PropertyChain$isPropertyChain(obj) {
-    return obj instanceof PropertyChain;
-}
-function PropertyChain$_getEventDispatchers(chain) {
-    return chain._eventDispatchers;
-}
 function PropertyChain$create(rootType, pathTokens /*, forceLoadTypes: boolean, success: Function, fail: Function */) {
     /// <summary>
     /// Attempts to synchronously or asynchronously create a property chain for the specified 
@@ -1489,13 +979,13 @@ function PropertyChain$create(rootType, pathTokens /*, forceLoadTypes: boolean, 
         // get the property for the step 
         var prop = type.getProperty(step.property);
         if (!prop) {
-            fail("Path '" + pathTokens.expression + "' references an unknown property: \"" + type.fullName + "." + step.property + "\".");
+            fail("Path '" + pathTokens.expression + "' references unknown property \"" + step.property + "\" on type \"" + type + "\".");
             // return null if the property does not exist
             return null;
         }
         // ensure the property is not static because property chains are not valid for static properties
         if (prop.isStatic) {
-            fail("Path '" + pathTokens.expression + "' references a static property: \"" + type.fullName + "." + step.property + "\".");
+            fail("Path '" + pathTokens.expression + "' references static property \"" + step.property + "\" on type \"" + type + "\".");
             // return null to indicate that the path references a static property
             return null;
         }
@@ -1504,7 +994,7 @@ function PropertyChain$create(rootType, pathTokens /*, forceLoadTypes: boolean, 
         // handle optional type filters
         if (step.cast) {
             // determine the filter type
-            type = Model$getJsType(step.cast, true).meta;
+            type = Model$getJsType(step.cast, rootType.model._allTypesRoot, true).meta;
             if (!type) {
                 fail("Path '" + pathTokens.expression + "' references an invalid type: \"" + step.cast + "\".");
                 return null;
@@ -1559,6 +1049,13 @@ function PropertyChain$create(rootType, pathTokens /*, forceLoadTypes: boolean, 
     // begin processing steps in the path
     return Model$whenTypeAvailable(type, forceLoadTypes, processStep);
 }
+var PropertyChainEvents = /** @class */ (function () {
+    function PropertyChainEvents() {
+        this.changedEvent = new Event();
+        this.accessedEvent = new Event();
+    }
+    return PropertyChainEvents;
+}());
 function getPropertyChainPathFromIndex(chain, startIndex) {
     var steps = [];
     var props = chain.toPropertyArray();
@@ -1577,32 +1074,32 @@ function getPropertyChainPathFromIndex(chain, startIndex) {
     });
     return steps.join(".");
 }
-function onPropertyChainStepAccessed(chain, priorProp, sender, args) {
+function onPropertyChainStepAccessed(chain, priorProp, entity, args) {
     // scan all known objects of this type and raise event for any instance connected
     // to the one that sent the event.
     chain.rootType.known().forEach(function (known) {
-        if (chain.testConnection(known, sender, priorProp)) {
+        if (chain.testConnection(known, args.property, priorProp)) {
             // Copy the original arguments so that we don't affect other code
             var newArgs = {
                 property: args.property,
                 value: args.value,
             };
             // Reset property to be the chain, but store the original property as "triggeredBy"
-            newArgs.originalSender = sender;
-            newArgs.triggeredBy = newArgs.property;
+            newArgs.originalEntity = args.entity;
+            newArgs.originalProperty = newArgs.property;
             newArgs.property = chain;
             // Call the handler, passing through the arguments
-            PropertyChain$_getEventDispatchers(chain).accessedEvent.dispatch(known, newArgs);
+            chain._events.accessedEvent.publish(known, newArgs);
         }
     });
 }
 function updatePropertyAccessSubscriptions(chain, props, subscriptions) {
-    var chainEventSubscriptions = getEventSubscriptions(PropertyChain$_getEventDispatchers(chain).accessedEvent);
+    var chainEventSubscriptions = getEventSubscriptions(chain._events.accessedEvent);
     var chainEventSubscriptionsExist = chainEventSubscriptions && chainEventSubscriptions.length > 0;
     var subscribedToPropertyChanges = subscriptions !== null && subscriptions.length > 0;
     if (!chainEventSubscriptionsExist && subscribedToPropertyChanges) {
         // If there are no more subscribers then unsubscribe from property-level events
-        props.forEach(function (prop, index) { return subscriptions[index].unsubscribe(); });
+        props.forEach(function (prop, index) { return prop.accessed.unsubscribe(subscriptions[index].handler); });
         subscriptions.length = 0;
     }
     if (chainEventSubscriptionsExist && !subscribedToPropertyChanges) {
@@ -1610,33 +1107,38 @@ function updatePropertyAccessSubscriptions(chain, props, subscriptions) {
         subscriptions.length = 0;
         props.forEach(function (prop, index) {
             var priorProp = (index === 0) ? undefined : props[index - 1];
-            var handler = function (sender, args) { return onPropertyChainStepAccessed(chain, priorProp, sender, args); };
-            var unsubscribe = Property$_getEventDispatchers(prop).accessedEvent.subscribe(handler);
-            subscriptions.push({ handler: handler, unsubscribe: unsubscribe });
+            var handler = function (args) { onPropertyChainStepAccessed(chain, priorProp, this, args); };
+            prop._events.accessedEvent.subscribe(handler);
+            subscriptions.push({ registeredHandler: handler, handler: handler });
         }, chain);
     }
 }
 function PropertyChain$_addAccessedHandler(chain, handler, obj, toleratePartial) {
     if (obj === void 0) { obj = null; }
-    var propertyAccessFilters = Functor$create(null, true);
+    var propertyAccessFilters = Functor$create(true);
+    var context = null;
+    var filteredHandler = null;
     if (obj) {
-        propertyAccessFilters.add(function (sender) { return sender === obj; });
+        propertyAccessFilters.add(function (entity) { return entity === obj; });
+        context = obj;
     }
     // TODO: Implement partial access tolerance if implementing lazy loading...
-    propertyAccessFilters.add(function (sender) { return chain.isInited(sender, true); });
+    propertyAccessFilters.add(function (entity) { return chain.isInited(entity, true); });
     updatePropertyAccessSubscriptions(chain, chain._properties, chain._propertyAccessSubscriptions);
-    return PropertyChain$_getEventDispatchers(chain).accessedEvent.subscribe(function (sender, args) {
-        var filterResults = propertyAccessFilters(sender);
+    filteredHandler = function (args) {
+        var filterResults = propertyAccessFilters(args.entity);
         if (!filterResults.some(function (b) { return !b; })) {
-            handler(sender, args);
+            handler.call(this, args);
         }
-    });
+    };
+    chain._events.accessedEvent.subscribe(filteredHandler);
+    chain._propertyChainAccessSubscriptions.push({ registeredHandler: filteredHandler, handler: handler, context: context });
 }
-function onPropertyChainStepChanged(chain, priorProp, sender, args) {
+function onPropertyChainStepChanged(chain, priorProp, entity, args) {
     // scan all known objects of this type and raise event for any instance connected
     // to the one that sent the event.
     chain.rootType.known().forEach(function (known) {
-        if (chain.testConnection(known, sender, priorProp)) {
+        if (chain.testConnection(known, args.property, priorProp)) {
             // Copy the original arguments so that we don't affect other code
             var newArgs = {
                 property: args.property,
@@ -1644,22 +1146,22 @@ function onPropertyChainStepChanged(chain, priorProp, sender, args) {
                 newValue: args.newValue,
             };
             // Reset property to be the chain, but store the original property as "triggeredBy"
-            newArgs.originalSender = sender;
-            newArgs.triggeredBy = newArgs.property;
+            newArgs.originalEntity = args.entity;
+            newArgs.originalProperty = args.property;
             newArgs.property = chain;
             // Call the handler, passing through the arguments
-            PropertyChain$_getEventDispatchers(chain).changedEvent.dispatch(known, newArgs);
+            chain._events.changedEvent.publish(known, newArgs);
         }
     });
 }
 function updatePropertyChangeSubscriptions(chain, props, subscriptions) {
     if (props === void 0) { props = null; }
-    var chainEventSubscriptions = getEventSubscriptions(PropertyChain$_getEventDispatchers(chain).changedEvent);
+    var chainEventSubscriptions = getEventSubscriptions(chain._events.changedEvent);
     var chainEventSubscriptionsExist = chainEventSubscriptions && chainEventSubscriptions.length > 0;
     var subscribedToPropertyChanges = subscriptions !== null && subscriptions.length > 0;
     if (!chainEventSubscriptionsExist && subscribedToPropertyChanges) {
         // If there are no more subscribers then unsubscribe from property-level events
-        props.forEach(function (prop, index) { return subscriptions[index].unsubscribe(); });
+        props.forEach(function (prop, index) { return prop.changed.unsubscribe(subscriptions[index].registeredHandler); });
         subscriptions.length = 0;
     }
     if (chainEventSubscriptionsExist && !subscribedToPropertyChanges) {
@@ -1667,9 +1169,9 @@ function updatePropertyChangeSubscriptions(chain, props, subscriptions) {
         subscriptions.length = 0;
         props.forEach(function (prop, index) {
             var priorProp = (index === 0) ? undefined : props[index - 1];
-            var handler = function (sender, args) { return onPropertyChainStepChanged(chain, priorProp, sender, args); };
-            var unsubscribe = prop.changedEvent.subscribe(handler);
-            subscriptions.push({ handler: handler, unsubscribe: unsubscribe });
+            var handler = function (args) { onPropertyChainStepChanged(chain, priorProp, this, args); };
+            prop.changed.subscribe(handler);
+            subscriptions.push({ registeredHandler: handler, handler: handler });
         }, chain);
     }
 }
@@ -1677,9 +1179,12 @@ function updatePropertyChangeSubscriptions(chain, props, subscriptions) {
 // optionally filter the events to a specific object
 function PropertyChain$_addChangedHandler(chain, handler, obj, toleratePartial) {
     if (obj === void 0) { obj = null; }
-    var propertyChangeFilters = Functor$create(null, true);
+    var propertyChangeFilters = Functor$create(true);
+    var context;
+    var filteredHandler = null;
     if (obj) {
-        propertyChangeFilters.add(function (sender) { return sender === obj; });
+        propertyChangeFilters.add(function (entity) { return entity === obj; });
+        context = obj;
     }
     /*
     // TODO: Implement partial access tolerance if implementing lazy loading...
@@ -1713,103 +1218,554 @@ function PropertyChain$_addChangedHandler(chain, handler, obj, toleratePartial) 
         ...
     }
     */
-    propertyChangeFilters.add(function (sender) { return chain.isInited(sender, true); });
+    propertyChangeFilters.add(function (entity) { return chain.isInited(entity, true); });
     updatePropertyChangeSubscriptions(chain, chain._properties, chain._propertyChangeSubscriptions);
-    return PropertyChain$_getEventDispatchers(chain).changedEvent.subscribe(function (sender, args) {
-        var filterResults = propertyChangeFilters(sender);
+    filteredHandler = function (args) {
+        var filterResults = propertyChangeFilters(args.entity);
         if (!filterResults.some(function (b) { return !b; })) {
-            handler(sender, args);
+            handler.call(this, args);
+        }
+    };
+    chain._events.changedEvent.subscribe(filteredHandler);
+    chain._propertyChainChangeSubscriptions.push({ registeredHandler: filteredHandler, handler: handler, context: context });
+}
+function PropertyChain$_removeChangedHandler(chain, handler, obj, toleratePartial) {
+    if (obj === void 0) { obj = null; }
+    chain._propertyChangeSubscriptions.forEach(function (sub) {
+        if (handler === sub.handler && ((!obj && !sub.context) || (obj && obj === sub.context))) {
+            chain._events.changedEvent.unsubscribe(sub.registeredHandler);
         }
     });
 }
 
-var EntityEventDispatchersImplementation = /** @class */ (function () {
-    function EntityEventDispatchersImplementation() {
-        this.accessedEvent = new dist_1$1();
-        this.changedEvent = new dist_1$1();
-    }
-    return EntityEventDispatchersImplementation;
-}());
-var Entity = /** @class */ (function () {
-    function Entity() {
-        Object.defineProperty(this, "_eventDispatchers", { value: new EntityEventDispatchersImplementation() });
-    }
-    Object.defineProperty(Entity.prototype, "accessedEvent", {
-        get: function () {
-            return this._eventDispatchers.accessedEvent.asEvent();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Entity.prototype, "changedEvent", {
-        get: function () {
-            return this._eventDispatchers.changedEvent.asEvent();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Entity.prototype.init = function (property, value) {
-        var properties;
-        // Convert property/value pair to a property dictionary
-        if (typeof property == "string") {
-            properties = {};
-            properties[property] = value;
-        }
-        else {
-            properties = property;
-        }
-        // Initialize the specified properties
-        for (var name in properties) {
-            if (properties.hasOwnProperty(name)) {
-                var prop = this.meta.type.getProperty(name);
-                if (!prop)
-                    throw new Error("Could not find property \"" + name + "\" on type \"" + this.meta.type.fullName + "\".");
-                // Set the property
-                prop.value(this, value);
-            }
-        }
-    };
-    Entity.prototype.set = function (property, value) {
-        var properties;
-        // Convert property/value pair to a property dictionary
-        if (typeof property == "string") {
-            properties = {};
-            properties[property] = value;
-        }
-        else {
-            properties = property;
-        }
-        // Set the specified properties
-        for (var name in properties) {
-            if (properties.hasOwnProperty(name)) {
-                var prop = this.meta.type.getProperty(name);
-                if (!prop)
-                    throw new Error("Could not find property \"" + name + "\" on type \"" + this.meta.type.fullName + "\".");
-                prop.value(this, value);
-            }
-        }
-    };
-    Entity.prototype.get = function (property) {
-        return this.meta.type.getProperty(property).value(this);
-    };
-    Entity.prototype.toString = function (format) {
-        return Entity$toIdString(this);
-    };
-    return Entity;
-}());
-// Gets the typed string id suitable for roundtripping via fromIdString
-function Entity$toIdString(obj) {
-    return obj.meta.type.fullName + "|" + obj.meta.id;
-}
-function Entity$_getEventDispatchers(prop) {
-    return prop._eventDispatchers;
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics$1 = function(d, b) {
+    extendStatics$1 = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics$1(d, b);
+};
+
+function __extends$1(d, b) {
+    extendStatics$1(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
-var fieldNamePrefix = createSecret('Property.fieldNamePrefix', 3, false, true, "_fN");
+var ObservableArray = /** @class */ (function () {
+    function ObservableArray() {
+    }
+    /**
+     * Returns a value indicating whether the given array is observable
+     * @param array The array to check for observability
+     */
+    ObservableArray.isObservableArray = function (array) {
+        return hasOwnProperty(array, "__ob__") && array.__ob__.constructor === ArrayObserver;
+    };
+    /**
+     * Makes the given array observable, if not already
+     * @param array The array to make observable
+     */
+    ObservableArray.ensureObservable = function (array) {
+        if (this.isObservableArray)
+            // Check to see if the array is already an observable list
+            if (ObservableArray.isObservableArray(array)) {
+                return array;
+            }
+        if (hasOwnProperty(array, '__ob__')) {
+            // TODO: Warn about invalid '__ob__' property?
+            return;
+        }
+        Object.defineProperty(array, "__ob__", {
+            configurable: false,
+            enumerable: false,
+            value: new ArrayObserver(array),
+            writable: false
+        });
+        Object.defineProperty(array, 'changed', {
+            configurable: false,
+            enumerable: true,
+            get: function () {
+                return this.__ob__.changedEvent.asEventSubscriber();
+            }
+        });
+        array["batchUpdate"] = ObservableArray$batchUpdate;
+        ObservableArray$_overrideNativeMethods.call(array);
+        return array;
+    };
+    /**
+     * Creates a new observable array
+     * @param items The initial array items
+     */
+    ObservableArray.create = function (items) {
+        if (items === void 0) { items = null; }
+        var array = new (ObservableArrayImplementation.bind.apply(ObservableArrayImplementation, [void 0].concat(items)))();
+        ObservableArray.ensureObservable(array);
+        return array;
+    };
+    return ObservableArray;
+}());
+var ArrayChangeType;
+(function (ArrayChangeType) {
+    ArrayChangeType[ArrayChangeType["remove"] = 0] = "remove";
+    ArrayChangeType[ArrayChangeType["add"] = 1] = "add";
+    ArrayChangeType[ArrayChangeType["replace"] = 2] = "replace";
+    ArrayChangeType[ArrayChangeType["reorder"] = 4] = "reorder";
+})(ArrayChangeType || (ArrayChangeType = {}));
+var ObservableArrayImplementation = /** @class */ (function (_super) {
+    __extends$1(ObservableArrayImplementation, _super);
+    /**
+     * Creates a new observable array
+     * @param items The array of initial items
+     */
+    function ObservableArrayImplementation() {
+        var items = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            items[_i] = arguments[_i];
+        }
+        var _this = _super.apply(this, items) || this;
+        Object.defineProperty(_this, "__ob__", {
+            configurable: false,
+            enumerable: false,
+            value: new ArrayObserver(_this),
+            writable: false
+        });
+        Object.defineProperty(_this, 'changed', {
+            get: function () {
+                return this.__ob__.changedEvent.asEventSubscriber();
+            }
+        });
+        if (_this.constructor !== ObservableArrayImplementation) {
+            _this["batchUpdate"] = (function (fn) { ObservableArray$batchUpdate.call(this, fn); });
+            ObservableArray$_overrideNativeMethods.call(_this);
+        }
+        return _this;
+    }
+    Object.defineProperty(ObservableArrayImplementation.prototype, "changed", {
+        /** Expose the changed event */
+        get: function () {
+            return this.__ob__.changedEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Begin queueing changes to the array, make changes in the given callback function, then stop queueing and raise events
+     */
+    ObservableArrayImplementation.prototype.batchUpdate = function (fn) {
+        ObservableArray$batchUpdate.call(this, fn);
+    };
+    /**
+     * The copyWithin() method shallow copies part of an array to another location in the same array and returns it, without modifying its size.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin
+     * @param target Zero based index at which to copy the sequence to. If negative, target will be counted from the end. If target is at or greater than arr.length, nothing will be copied. If target is positioned after start, the copied sequence will be trimmed to fit arr.length.
+     * @param start Zero based index at which to start copying elements from. If negative, start will be counted from the end. If start is omitted, copyWithin will copy from the start (defaults to 0).
+     * @param end Zero based index at which to end copying elements from. copyWithin copies up to but not including end. If negative, end will be counted from the end. If end is omitted, copyWithin will copy until the end (default to arr.length).
+     * @returns The modified array.
+     */
+    ObservableArrayImplementation.prototype.copyWithin = function (target, start, end) {
+        return ObservableArray$copyWithin.apply(this, arguments);
+    };
+    /**
+     * The fill() method fills all the elements of an array from a start index to an end index with a static value. The end index is not included.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+     * @param value Value to fill an array.
+     * @param start Start index, defaults to 0.
+     * @param end End index, defaults to this.length.
+     * @returns The modified array.
+     */
+    ObservableArrayImplementation.prototype.fill = function (value, start, end) {
+        return ObservableArray$fill.apply(this, arguments);
+    };
+    /**
+     * The pop() method removes the last element from an array and returns that element. This method changes the length of the array.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop
+     * @returns The removed element from the array; undefined if the array is empty.
+     */
+    ObservableArrayImplementation.prototype.pop = function () {
+        return ObservableArray$pop.apply(this, arguments);
+    };
+    /**
+     * The push() method adds one or more elements to the end of an array and returns the new length of the array.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push
+     * @param items The elements to add to the end of the array.
+     * @returns The new length property of the object upon which the method was called.
+     */
+    ObservableArrayImplementation.prototype.push = function () {
+        var elements = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            elements[_i] = arguments[_i];
+        }
+        return ObservableArray$push.apply(this, arguments);
+    };
+    /**
+     * The reverse() method reverses an array in place. The first array element becomes the last, and the last array element becomes the first.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse
+     * @returns The reversed array.
+     */
+    ObservableArrayImplementation.prototype.reverse = function () {
+        return ObservableArray$reverse.apply(this, arguments);
+    };
+    /**
+     * The shift() method removes the first element from an array and returns that removed element. This method changes the length of the array.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift
+     * @returns The removed element from the array; undefined if the array is empty.
+     */
+    ObservableArrayImplementation.prototype.shift = function () {
+        return ObservableArray$shift.apply(this, arguments);
+    };
+    /**
+     * The sort() method sorts the elements of an array in place and returns the array. Javascript sort algorithm on V8 is now stable. The default sort order is according to string Unicode code points.
+     * The time and space complexity of the sort cannot be guaranteed as it is implementation dependent.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+     * @param compareFunction Specifies a function that defines the sort order. If omitted, the array is sorted according to each character's Unicode code point value, according to the string conversion of each element.
+     * @returns The sorted array. Note that the array is sorted in place, and no copy is made.
+     */
+    ObservableArrayImplementation.prototype.sort = function (compareFunction) {
+        return ObservableArray$sort.apply(this, arguments);
+    };
+    /**
+     * The splice() method changes the contents of an array by removing existing elements and/or adding new elements.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+     * @param start  Index at which to start changing the array (with origin 0). If greater than the length of the array, actual starting index will be set to the length of the array. If negative, will begin that many elements from the end of the array (with origin -1) and will be set to 0 if absolute value is greater than the length of the array.
+     * @param deleteCount An integer indicating the number of old array elements to remove. If deleteCount is omitted, or if its value is larger than array.length - start (that is, if it is greater than the number of elements left in the array, starting at start), then all of the elements from start through the end of the array will be deleted. If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+     * @param items The elements to add to the array, beginning at the start index. If you don't specify any elements, splice() will only remove elements from the array.
+     * @returns An array containing the deleted elements. If only one element is removed, an array of one element is returned. If no elements are removed, an empty array is returned.
+     */
+    ObservableArrayImplementation.prototype.splice = function (start, deleteCount) {
+        var items = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            items[_i - 2] = arguments[_i];
+        }
+        return ObservableArray$splice.apply(this, arguments);
+    };
+    /**
+     * The unshift() method adds one or more elements to the beginning of an array and returns the new length of the array.
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift
+     * @param items The elements to add to the front of the array.
+     * @returns The new length property of the object upon which the method was called.
+     */
+    ObservableArrayImplementation.prototype.unshift = function () {
+        var items = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            items[_i] = arguments[_i];
+        }
+        return ObservableArray$unshift.apply(this, arguments);
+    };
+    return ObservableArrayImplementation;
+}(Array));
+/**
+ * Override's native Array methods that manipulate the array
+ * @param array The array to extend
+ */
+function ObservableArray$_overrideNativeMethods() {
+    this["copyWithin"] = ObservableArray$copyWithin;
+    this["fill"] = ObservableArray$fill;
+    this["pop"] = ObservableArray$pop;
+    this["push"] = ObservableArray$push;
+    this["reverse"] = ObservableArray$reverse;
+    this["shift"] = ObservableArray$shift;
+    this["sort"] = ObservableArray$sort;
+    this["splice"] = ObservableArray$splice;
+    this["unshift"] = ObservableArray$unshift;
+}
+/**
+ * Begin queueing changes to the array, make changes in the given callback function, then stop queueing and raise events
+ */
+function ObservableArray$batchUpdate(fn) {
+    this.__ob__.startQueueingChanges();
+    try {
+        fn(this);
+        this.__ob__.stopQueueingChanges(true);
+    }
+    finally {
+        if (this.__ob__._isQueuingChanges) {
+            this.__ob__.stopQueueingChanges(false);
+        }
+    }
+}
+/**
+ * The copyWithin() method shallow copies part of an array to another location in the same array and returns it, without modifying its size.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin
+ * @param array The observable array
+ * @param target Zero based index at which to copy the sequence to. If negative, target will be counted from the end. If target is at or greater than arr.length, nothing will be copied. If target is positioned after start, the copied sequence will be trimmed to fit arr.length.
+ * @param start Zero based index at which to start copying elements from. If negative, start will be counted from the end. If start is omitted, copyWithin will copy from the start (defaults to 0).
+ * @param end Zero based index at which to end copying elements from. copyWithin copies up to but not including end. If negative, end will be counted from the end. If end is omitted, copyWithin will copy until the end (default to arr.length).
+ */
+function ObservableArray$copyWithin(target, start, end) {
+    Array.prototype.copyWithin.apply(this, arguments);
+    // TODO: Warn about non-observable manipulation of observable array?
+    this.__ob__.raiseEvents({ type: ArrayChangeType.replace, startIndex: start, endIndex: end });
+    return this;
+}
+/**
+ * The fill() method fills all the elements of an array from a start index to an end index with a static value. The end index is not included.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill
+ * @param array The observable array
+ * @param value Value to fill an array.
+ * @param start Start index, defaults to 0.
+ * @param end End index, defaults to this.length.
+ */
+function ObservableArray$fill(value, start, end) {
+    Array.prototype.fill.apply(this, arguments);
+    // TODO: Warn about non-observable manipulation of observable array?
+    this.__ob__.raiseEvents({ type: ArrayChangeType.replace, startIndex: start, endIndex: end });
+    return this;
+}
+/**
+ * The pop() method removes the last element from an array and returns that element. This method changes the length of the array.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop
+ * @param array The observable array
+ * @returns The removed element from the array; undefined if the array is empty.
+ */
+function ObservableArray$pop() {
+    var originalLength = this.length;
+    var removed = Array.prototype.pop.apply(this, arguments);
+    if (this.length !== originalLength) {
+        var removedIndex = originalLength - 1;
+        this.__ob__.raiseEvents({ type: ArrayChangeType.remove, startIndex: removedIndex, endIndex: removedIndex, items: [removed] });
+    }
+    return removed;
+}
+/**
+ * The push() method adds one or more elements to the end of an array and returns the new length of the array.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push
+ * @param array The observable array
+ * @param items The elements to add to the end of the array.
+ * @returns The new length property of the object upon which the method was called.
+ */
+function ObservableArray$push() {
+    var items = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        items[_i] = arguments[_i];
+    }
+    var addedIndex = this.length;
+    var addedCount = Array.prototype.push.apply(this, arguments);
+    if (addedCount > 0) {
+        this.__ob__.raiseEvents({ type: ArrayChangeType.add, startIndex: addedIndex, endIndex: addedIndex + addedCount, items: items });
+    }
+    return addedCount;
+}
+/**
+ * The reverse() method reverses an array in place. The first array element becomes the last, and the last array element becomes the first.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse
+ * @param array The observable array
+ * @returns The reversed array.
+ */
+function ObservableArray$reverse() {
+    Array.prototype.reverse.apply(this, arguments);
+    // TODO: Warn about non-observable manipulation of observable array?
+    this.__ob__.raiseEvents({ type: ArrayChangeType.reorder, startIndex: 0, endIndex: this.length - 1 });
+    return this;
+}
+/**
+ * The shift() method removes the first element from an array and returns that removed element. This method changes the length of the array.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift
+ * @param array The observable array
+ * @returns The removed element from the array; undefined if the array is empty.
+ */
+function ObservableArray$shift() {
+    var originalLength = this.length;
+    var removed = Array.prototype.shift.apply(this, arguments);
+    if (this.length !== originalLength) {
+        this.__ob__.raiseEvents({ type: ArrayChangeType.remove, startIndex: 0, endIndex: 0, items: [removed] });
+    }
+    return removed;
+}
+/**
+ * The sort() method sorts the elements of an array in place and returns the array. Javascript sort algorithm on V8 is now stable. The default sort order is according to string Unicode code points.
+ * The time and space complexity of the sort cannot be guaranteed as it is implementation dependent.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+ * @param array The observable array
+ * @param compareFunction Specifies a function that defines the sort order. If omitted, the array is sorted according to each character's Unicode code point value, according to the string conversion of each element.
+ * @returns The sorted array. Note that the array is sorted in place, and no copy is made.
+ */
+function ObservableArray$sort(compareFunction) {
+    var result = Array.prototype.sort.apply(this, arguments);
+    // TODO: Warn about non-observable manipulation of observable array?
+    this.__ob__.raiseEvents({ type: ArrayChangeType.reorder, startIndex: 0, endIndex: this.length - 1 });
+    return this;
+}
+/**
+ * The splice() method changes the contents of an array by removing existing elements and/or adding new elements.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+ * @param array The observable array
+ * @param start  Index at which to start changing the array (with origin 0). If greater than the length of the array, actual starting index will be set to the length of the array. If negative, will begin that many elements from the end of the array (with origin -1) and will be set to 0 if absolute value is greater than the length of the array.
+ * @param deleteCount An integer indicating the number of old array elements to remove. If deleteCount is omitted, or if its value is larger than array.length - start (that is, if it is greater than the number of elements left in the array, starting at start), then all of the elements from start through the end of the array will be deleted. If deleteCount is 0 or negative, no elements are removed. In this case, you should specify at least one new element (see below).
+ * @param items The elements to add to the array, beginning at the start index. If you don't specify any elements, splice() will only remove elements from the array.
+ * @returns An array containing the deleted elements. If only one element is removed, an array of one element is returned. If no elements are removed, an empty array is returned.
+ */
+function ObservableArray$splice(start, deleteCount) {
+    var items = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        items[_i - 2] = arguments[_i];
+    }
+    var removed = Array.prototype.splice.apply(this, arguments);
+    if (removed.length > 0 || items.length > 0) {
+        var changeEvents = [];
+        if (removed.length > 0) {
+            changeEvents.push({ type: ArrayChangeType.remove, startIndex: start, endIndex: start + removed.length - 1, items: removed });
+        }
+        if (items.length > 0) {
+            changeEvents.push({ type: ArrayChangeType.add, startIndex: start, endIndex: start + items.length - 1, items: items });
+        }
+        this.__ob__.raiseEvents(changeEvents);
+    }
+    return removed;
+}
+/**
+ * The unshift() method adds one or more elements to the beginning of an array and returns the new length of the array.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift
+ * @param array The observable array
+ * @param items The elements to add to the front of the array.
+ * @returns The new length property of the object upon which the method was called.
+ */
+function ObservableArray$unshift() {
+    var items = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        items[_i] = arguments[_i];
+    }
+    var originalLength = this.length;
+    var newLength = Array.prototype.unshift.apply(this, arguments);
+    if (newLength !== originalLength) {
+        this.__ob__.raiseEvents({ type: ArrayChangeType.add, startIndex: 0, endIndex: items.length - 1, items: items });
+    }
+    return newLength;
+}
+var ArrayObserver = /** @class */ (function () {
+    function ArrayObserver(array) {
+        this.array = array;
+        this.changedEvent = new Event();
+        this._isQueuingChanges = false;
+    }
+    ArrayObserver.prototype.raiseEvents = function (changes) {
+        if (this._isQueuingChanges) {
+            if (!this._queuedChanges) {
+                this._queuedChanges = [];
+            }
+            if (Array.isArray(changes)) {
+                Array.prototype.push.apply(this._queuedChanges, changes);
+            }
+            else {
+                this._queuedChanges.push(changes);
+            }
+        }
+        else if (Array.isArray(changes)) {
+            this.changedEvent.publish(this.array, { changes: changes });
+        }
+        else {
+            this.changedEvent.publish(this.array, { changes: [changes] });
+        }
+    };
+    ArrayObserver.prototype.startQueueingChanges = function () {
+        this._isQueuingChanges = true;
+        if (!this._queuedChanges) {
+            this._queuedChanges = [];
+        }
+    };
+    ArrayObserver.prototype.stopQueueingChanges = function (raiseEvents) {
+        this._isQueuingChanges = false;
+        if (raiseEvents) {
+            this.raiseEvents(this._queuedChanges);
+            delete this._queuedChanges;
+        }
+    };
+    return ArrayObserver;
+}());
+function observableSplice(arr, events, index, removeCount, addItems) {
+    var removedItems;
+    var arr2 = arr;
+    if (removeCount) {
+        if (removeCount > 1 && arr2.removeRange) {
+            removedItems = arr2.removeRange(index, removeCount);
+        }
+        else if (removeCount === 1 && arr2.remove) {
+            removedItems = [arr2.removeAt(index)];
+        }
+        else {
+            removedItems = arr.splice(index, removeCount);
+        }
+        if (events) {
+            events.push({
+                action: 'remove',
+                oldStartingIndex: index,
+                oldItems: removedItems,
+                newStartingIndex: null,
+                newItems: null
+            });
+        }
+    }
+    if (addItems.length > 0) {
+        if (addItems.length > 1 && arr2.insertRange) {
+            arr2.insertRange(index, addItems);
+        }
+        else if (addItems.length === 1 && arr2.insert) {
+            arr2.insert(index, addItems[0]);
+        }
+        else {
+            var addItemsArgs = addItems.slice();
+            addItemsArgs.splice(0, 0, index, 0);
+            arr.splice.apply(arr, addItemsArgs);
+        }
+        if (events) {
+            events.push({
+                action: 'add',
+                oldStartingIndex: null,
+                oldItems: null,
+                newStartingIndex: index,
+                newItems: addItems
+            });
+        }
+    }
+}
+function updateArray(array, values /*, trackEvents */) {
+    var trackEvents = arguments[2], events = trackEvents ? [] : null, pointer = 0, srcSeek = 0, tgtSeek = 0;
+    while (srcSeek < array.length) {
+        if (array[srcSeek] === values[tgtSeek]) {
+            if (pointer === srcSeek && pointer === tgtSeek) {
+                // items match, so advance
+                pointer = srcSeek = tgtSeek = pointer + 1;
+            }
+            else {
+                // remove range from source and add range from target
+                observableSplice(array, events, pointer, srcSeek - pointer, values.slice(pointer, tgtSeek));
+                // reset to index follow target seek location since arrays match up to that point
+                pointer = srcSeek = tgtSeek = tgtSeek + 1;
+            }
+        }
+        else if (tgtSeek >= values.length) {
+            // reached the end of the target array, so advance the src pointer and test again
+            tgtSeek = pointer;
+            srcSeek += 1;
+        }
+        else {
+            // advance to the next target item to test
+            tgtSeek += 1;
+        }
+    }
+    observableSplice(array, events, pointer, srcSeek - pointer, values.slice(pointer, Math.max(tgtSeek, values.length)));
+    return events;
+}
+
 var Property = /** @class */ (function () {
     function Property(containingType, name, jstype, label, helptext, format, isList, isStatic, isPersisted, isCalculated, defaultValue, origin) {
         if (defaultValue === void 0) { defaultValue = undefined; }
-        if (origin === void 0) { origin = containingType.originForNewProperties; }
+        if (origin === void 0) { origin = "client"; }
         // Public read-only properties
         Object.defineProperty(this, "containingType", { enumerable: true, value: containingType });
         Object.defineProperty(this, "name", { enumerable: true, value: name });
@@ -1826,42 +1782,53 @@ var Property = /** @class */ (function () {
         if (format)
             Object.defineProperty(this, "_format", { enumerable: false, value: format, writable: true });
         if (origin)
-            Object.defineProperty(this, "_origin", { enumerable: false, value: containingType.originForNewProperties, writable: true });
+            Object.defineProperty(this, "_origin", { enumerable: false, value: origin, writable: true });
         if (defaultValue)
             Object.defineProperty(this, "_defaultValue", { enumerable: false, value: defaultValue, writable: true });
+        Object.defineProperty(this, "_events", { value: new PropertyEvents() });
         Object.defineProperty(this, "_propertyAccessSubscriptions", { value: [] });
         Object.defineProperty(this, "_propertyChangeSubscriptions", { value: [] });
-        Object.defineProperty(this, "_eventDispatchers", { value: new PropertyEventDispatchersImplementation() });
+        Object.defineProperty(this, "_rules", { value: [] });
         Object.defineProperty(this, "getter", { value: Property$_makeGetter(this, Property$_getter) });
         Object.defineProperty(this, "setter", { value: Property$_makeSetter(this, Property$_setter) });
         if (this.origin === "client" && this.isPersisted) ;
     }
     Object.defineProperty(Property.prototype, "fieldName", {
         get: function () {
-            return fieldNamePrefix + "_" + this.name;
+            return this.containingType.model._fieldNamePrefix + "_" + this.name;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Property.prototype, "changedEvent", {
+    Object.defineProperty(Property.prototype, "changed", {
         get: function () {
-            return this._eventDispatchers.changedEvent.asEvent();
+            return this._events.changedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Property.prototype, "accessedEvent", {
+    Object.defineProperty(Property.prototype, "accessed", {
         get: function () {
-            return this._eventDispatchers.accessedEvent.asEvent();
+            return this._events.accessedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Property.prototype, "ruleRegistered", {
+        get: function () {
+            return this._events.ruleRegisteredEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Property.prototype.getPath = function () {
+        return this.isStatic ? (this.containingType + "." + this.name) : this.name;
+    };
     Property.prototype.equals = function (prop) {
         if (prop === null || prop === undefined) {
             return;
         }
-        if (PropertyChain$isPropertyChain(prop)) {
+        if (prop instanceof PropertyChain) {
             return prop.equals(this);
         }
         if (prop instanceof Property) {
@@ -1870,7 +1837,7 @@ var Property = /** @class */ (function () {
     };
     Property.prototype.toString = function () {
         if (this.isStatic) {
-            return this.getPath();
+            return this.containingType + "." + this.name;
         }
         else {
             return "this<" + this.containingType + ">." + this.name;
@@ -1893,7 +1860,7 @@ var Property = /** @class */ (function () {
     });
     Object.defineProperty(Property.prototype, "origin", {
         get: function () {
-            return this._origin ? this._origin : this.containingType.origin;
+            return this._origin;
         },
         enumerable: true,
         configurable: true
@@ -1916,9 +1883,6 @@ var Property = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Property.prototype.getPath = function () {
-        return this.isStatic ? (this.containingType.fullName + "." + this.name) : this.name;
-    };
     Property.prototype.canSetValue = function (obj, val) {
         // NOTE: only allow values of the correct data type to be set in the model
         if (val === undefined) {
@@ -1981,7 +1945,7 @@ var Property = /** @class */ (function () {
         if (additionalArgs === void 0) { additionalArgs = null; }
         var target = (this.isStatic ? this.containingType.ctor : obj);
         if (target === undefined || target === null) {
-            throw new Error("Cannot " + (arguments.length > 1 ? "set" : "get") + " value for " + (this.isStatic ? "" : "non-") + "static property \"" + this.getPath() + "\" on type \"" + this.containingType.fullName + "\": target is null or undefined.");
+            throw new Error("Cannot " + (arguments.length > 1 ? "set" : "get") + " value for " + (this.isStatic ? "" : "non-") + "static property \"" + this.name + "\" on type \"" + this.containingType + "\": target is null or undefined.");
         }
         if (arguments.length > 1) {
             Property$_setter(this, obj, val, additionalArgs);
@@ -2015,42 +1979,50 @@ var Property = /** @class */ (function () {
     };
     return Property;
 }());
-var PropertyEventDispatchersImplementation = /** @class */ (function () {
-    function PropertyEventDispatchersImplementation() {
-        this.changedEvent = new dist_1$1();
-        this.accessedEvent = new dist_1$1();
+var PropertyEvents = /** @class */ (function () {
+    function PropertyEvents() {
+        this.changedEvent = new Event();
+        this.accessedEvent = new Event();
+        this.ruleRegisteredEvent = new Event();
     }
-    return PropertyEventDispatchersImplementation;
+    return PropertyEvents;
 }());
-function Property$isProperty(obj) {
-    return obj instanceof Property;
+function Property$format(prop, val) {
+    if (prop.format) {
+        return prop.format.convert(val);
+    }
 }
-function Property$_generateShortcuts(property, target, recurse, overwrite) {
-    if (recurse === void 0) { recurse = true; }
+// export function Property$equals(prop1: Property | IPropertyChain, prop2: Property | IPropertyChain): boolean {
+// 	if (prop1 === null || prop1 === undefined || prop2 === null || prop2 === undefined) {
+// 		return;
+// 	}
+// 	if (PropertyChain$isPropertyChain(prop1)) {
+// 		return (prop1 as PropertyChain).equals(prop2);
+// 	}
+// 	if (PropertyChain$isPropertyChain(prop2)) {
+// 		return (prop2 as PropertyChain).equals(prop1);
+// 	}
+// 	if (Property$isProperty(prop1) && Property$isProperty(prop2)) {
+// 		return prop1 === prop2;
+// 	}
+// }
+function Property$_generateShortcuts(property, target, overwrite) {
     if (overwrite === void 0) { overwrite = null; }
     var shortcutName = "$" + property.name;
     if (!(Object.prototype.hasOwnProperty.call(target, shortcutName)) || overwrite) {
         target[shortcutName] = property;
     }
-    if (recurse) {
-        if (overwrite == null) {
-            overwrite = false;
-        }
-        property.containingType.derivedTypes.forEach(function (t) {
-            Property$_generateShortcuts(property, t, true, overwrite);
-        });
-    }
 }
-function Property$_generateStaticProperty(property) {
-    Object.defineProperty(property.containingType.ctor, property.name, {
+function Property$_generateStaticProperty(property, target) {
+    Object.defineProperty(target, property.name, {
         configurable: false,
         enumerable: true,
         get: property.getter,
         set: property.setter
     });
 }
-function Property$_generatePrototypeProperty(property) {
-    Object.defineProperty(property.containingType.ctor.prototype, property.name, {
+function Property$_generatePrototypeProperty(property, target) {
+    Object.defineProperty(target, property.name, {
         configurable: false,
         enumerable: true,
         get: property.getter,
@@ -2065,12 +2037,22 @@ function Property$_generateOwnProperty(property, obj) {
         set: property.setter
     });
 }
-function Property$_getEventDispatchers(prop) {
-    return prop._eventDispatchers;
+function Property$getRules(property) {
+    var prop = property;
+    var propRules;
+    if (prop._rules) {
+        propRules = prop._rules;
+    }
+    else {
+        propRules = [];
+        Object.defineProperty(prop, "_rules", { enumerable: false, value: propRules, writable: false });
+    }
+    return propRules;
 }
-function Property$pendingInit(target, prop, value) {
+function Property$pendingInit(obj, prop, value) {
     if (value === void 0) { value = null; }
     var pendingInit;
+    var target = (prop.isStatic ? prop.containingType.ctor : obj);
     if (Object.prototype.hasOwnProperty.call(target, "_pendingInit")) {
         pendingInit = target._pendingInit;
     }
@@ -2086,38 +2068,35 @@ function Property$pendingInit(target, prop, value) {
         }
     }
     else {
-        var storage = void 0;
-        if (Type$isType(target)) {
-            storage = target.ctor;
+        var storageTarget = void 0;
+        if (prop.isStatic) {
+            storageTarget = prop.containingType.ctor;
         }
-        else if (target instanceof ObjectMeta) {
-            storage = target.entity;
+        else {
+            storageTarget = obj;
         }
-        var currentValue = storage[prop.fieldName];
+        var currentValue = storageTarget[prop.fieldName];
         return currentValue === undefined || pendingInit[prop.name] === true;
     }
 }
-function Property$_subListEvents(obj, property, list) {
-    list.changed.subscribe(function (sender, args) {
-        if ((args.added && args.added.length > 0) || (args.removed && args.removed.length > 0)) {
-            // NOTE: property change should be broadcast before rules are run so that if 
-            // any rule causes a roundtrip to the server these changes will be available
-            // TODO: Implement notifyListChanged?
-            // property.containingType.model.notifyListChanged(target, property, changes);
-            // NOTE: oldValue is not currently implemented for lists
-            var eventArgs = { property: property, newValue: list, oldValue: undefined };
-            eventArgs['changes'] = [{ newItems: args.added, oldItems: args.removed }];
-            eventArgs['collectionChanged'] = true;
-            Property$_getEventDispatchers(property).changedEvent.dispatch(obj, eventArgs);
-            // TODO: Implement observer?
-            Entity$_getEventDispatchers(obj).changedEvent.dispatch(property, { entity: obj, property: property });
-        }
+function Property$_subArrayEvents(obj, property, array) {
+    array.changed.subscribe(function (args) {
+        // NOTE: property change should be broadcast before rules are run so that if 
+        // any rule causes a roundtrip to the server these changes will be available
+        // TODO: Implement notifyListChanged?
+        // property.containingType.model.notifyListChanged(target, property, changes);
+        // NOTE: oldValue is not currently implemented for lists
+        var eventArgs = { entity: obj, property: property, newValue: array };
+        eventArgs['changes'] = args.changes;
+        eventArgs['collectionChanged'] = true;
+        property._events.changedEvent.publish(obj, eventArgs);
+        obj._events.changedEvent.publish(obj, { entity: obj, property: property });
     });
 }
 function Property$_getInitialValue(property) {
     var val = property.defaultValue;
     if (Array.isArray(val)) {
-        val = ObservableList.ensureObservable(val);
+        val = ObservableArray.ensureObservable(val);
         // Override the default toString on arrays so that we get a comma-delimited list
         // TODO: Implement toString on observable list?
         // val.toString = Property$_arrayToString.bind(val);
@@ -2129,27 +2108,27 @@ function Property$_ensureInited(property, obj) {
     // Determine if the property has been initialized with a value
     // and initialize the property if necessary
     if (!obj.hasOwnProperty(property.fieldName)) {
-        // Do not initialize calculated properties. Calculated properties should be initialized using a property get rule.  
-        if (!property.isCalculated) {
-            Property$pendingInit(target.meta, property, false);
-            var val = Property$_getInitialValue(property);
-            Object.defineProperty(target, property.fieldName, { value: val, writable: true });
-            if (Array.isArray(val)) {
-                Property$_subListEvents(obj, property, val);
-            }
-            // TODO: Implement observable?
-            Entity$_getEventDispatchers(obj).changedEvent.dispatch(property, { entity: obj, property: property });
+        // // Do not initialize calculated properties. Calculated properties should be initialized using a property get rule.  
+        // if (!property.isCalculated) {
+        Property$pendingInit(target, property, false);
+        var val = Property$_getInitialValue(property);
+        Object.defineProperty(target, property.fieldName, { value: val, writable: true });
+        if (Array.isArray(val)) {
+            Property$_subArrayEvents(obj, property, val);
         }
+        // TODO: Implement observable?
+        obj._events.changedEvent.publish(obj, { entity: obj, property: property });
         // Mark the property as pending initialization
-        Property$pendingInit(target.meta, property, true);
+        Property$pendingInit(target, property, true);
+        // }
     }
 }
 function Property$_getter(property, obj) {
     // Ensure that the property has an initial (possibly default) value
     Property$_ensureInited(property, obj);
     // Raise access events
-    Property$_getEventDispatchers(property).accessedEvent.dispatch(obj, { property: property, value: obj[property.fieldName] });
-    Entity$_getEventDispatchers(obj).accessedEvent.dispatch(property, { entity: obj, property: property });
+    property._events.accessedEvent.publish(obj, { entity: obj, property: property, value: obj[property.fieldName] });
+    obj._events.accessedEvent.publish(obj, { entity: obj, property: property });
     // Return the property value
     return obj[property.fieldName];
 }
@@ -2182,25 +2161,30 @@ function Property$_shouldSetValue(property, obj, old, val, skipTypeCheck) {
         return (oldValue !== newValue && !(property.propertyType === Number && isNaN(oldValue) && isNaN(newValue)));
     }
 }
-function Property$_setValue(property, obj, old, val, additionalArgs) {
+function Property$_setValue(property, obj, currentValue, newValue, additionalArgs) {
     if (additionalArgs === void 0) { additionalArgs = null; }
     // Update lists as batch remove/add operations
     if (property.isList) {
-        // TODO: Implement observable array update
-        // old.beginUpdate();
-        // update(old, val);
-        // old.endUpdate();
-        throw new Error("Property set on lists is not implemented.");
+        var currentArray = currentValue;
+        currentArray.batchUpdate(function (array) {
+            updateArray(array, newValue);
+        });
     }
     else {
-        // Set the backing field value
-        obj[property.fieldName] = val;
-        Property$pendingInit(obj.meta, property, false);
+        var oldValue = currentValue;
+        // Set or create the backing field value
+        if (obj.hasOwnProperty(property.fieldName)) {
+            obj[property.fieldName] = newValue;
+        }
+        else {
+            Object.defineProperty(obj, property.fieldName, { value: newValue, writable: true });
+        }
+        Property$pendingInit(obj, property, false);
         // Do not raise change if the property has not been initialized. 
-        if (old !== undefined) {
-            var eventArgs = { property: property, newValue: val, oldValue: old };
-            Property$_getEventDispatchers(property).changedEvent.dispatch(obj, additionalArgs ? merge(eventArgs, additionalArgs) : eventArgs);
-            Entity$_getEventDispatchers(obj).changedEvent.dispatch(property, { entity: obj, property: property });
+        if (oldValue !== undefined) {
+            var eventArgs = { entity: obj, property: property, newValue: newValue, oldValue: oldValue };
+            property._events.changedEvent.publish(obj, additionalArgs ? merge(eventArgs, additionalArgs) : eventArgs);
+            obj._events.changedEvent.publish(obj, { entity: obj, property: property });
         }
     }
 }
@@ -2236,30 +2220,27 @@ function Property$_makeSetter(prop, setter, skipTypeCheck) {
 }
 function Property$_addAccessedHandler(prop, handler, obj) {
     if (obj === void 0) { obj = null; }
-    var property = prop;
-    var unsubscribe;
-    var sender = null;
+    var context = null;
+    var filteredHandler = null;
     if (obj) {
-        var innerHandler_1 = handler;
-        handler = function (sender, args) {
-            if (sender === obj) {
-                innerHandler_1(sender, args);
+        filteredHandler = function (args) {
+            if (args.entity === obj) {
+                handler.call(this, args);
             }
         };
-        sender = obj;
+        context = obj;
     }
-    unsubscribe = property._eventDispatchers.accessedEvent.subscribe(handler);
-    property._propertyAccessSubscriptions.push({ handler: handler, sender: sender, unsubscribe: unsubscribe });
-    return unsubscribe;
+    prop._events.accessedEvent.subscribe(filteredHandler || handler);
+    prop._propertyAccessSubscriptions.push({ registeredHandler: filteredHandler || handler, handler: handler, context: context });
 }
 function Property$addAccessed(prop, handler, obj, toleratePartial) {
     if (obj === void 0) { obj = null; }
     if (toleratePartial === void 0) { toleratePartial = false; }
     if (prop instanceof Property) {
-        return Property$_addAccessedHandler(prop, handler, obj);
+        Property$_addAccessedHandler(prop, handler, obj);
     }
-    else if (PropertyChain$isPropertyChain(prop)) {
-        return PropertyChain$_addAccessedHandler(prop, handler, obj, toleratePartial);
+    else if (prop instanceof PropertyChain) {
+        PropertyChain$_addAccessedHandler(prop, handler, obj, toleratePartial);
     }
     else {
         throw new Error("Invalid property passed to `Property$addAccessed(prop)`.");
@@ -2267,21 +2248,26 @@ function Property$addAccessed(prop, handler, obj, toleratePartial) {
 }
 function Property$_addChangedHandler(prop, handler, obj) {
     if (obj === void 0) { obj = null; }
-    var property = prop;
-    var unsubscribe;
-    var sender = null;
+    var context = null;
+    var filteredHandler = null;
     if (obj) {
-        var innerHandler_2 = handler;
-        handler = function (sender, args) {
-            if (sender === obj) {
-                innerHandler_2(sender, args);
+        filteredHandler = function (args) {
+            if (args.entity === obj) {
+                handler.call(this, args);
             }
         };
-        sender = obj;
+        context = obj;
     }
-    unsubscribe = property._eventDispatchers.changedEvent.subscribe(handler);
-    prop._propertyChangeSubscriptions.push({ handler: handler, sender: sender, unsubscribe: unsubscribe });
-    return unsubscribe;
+    prop._events.changedEvent.subscribe(filteredHandler || handler);
+    prop._propertyChangeSubscriptions.push({ registeredHandler: filteredHandler || handler, handler: handler, context: context });
+}
+function Property$_removeChangedHandler(prop, handler, obj) {
+    if (obj === void 0) { obj = null; }
+    prop._propertyChangeSubscriptions.forEach(function (sub) {
+        if (handler === sub.handler && ((!obj && !sub.context) || (obj && obj === sub.context))) {
+            prop._events.changedEvent.unsubscribe(sub.registeredHandler);
+        }
+    });
 }
 // starts listening for change events along the property chain on any known instances. Use obj argument to
 // optionally filter the events to a specific object
@@ -2289,10 +2275,23 @@ function Property$addChanged(prop, handler, obj, toleratePartial) {
     if (obj === void 0) { obj = null; }
     if (toleratePartial === void 0) { toleratePartial = false; }
     if (prop instanceof Property) {
-        return Property$_addChangedHandler(prop, handler, obj);
+        Property$_addChangedHandler(prop, handler, obj);
     }
-    else if (PropertyChain$isPropertyChain(prop)) {
-        return PropertyChain$_addChangedHandler(prop, handler, obj, toleratePartial);
+    else if (prop instanceof PropertyChain) {
+        PropertyChain$_addChangedHandler(prop, handler, obj, toleratePartial);
+    }
+    else {
+        throw new Error("Invalid property passed to `Property$addChanged(prop)`.");
+    }
+}
+function Property$removeChanged(prop, handler, obj, toleratePartial) {
+    if (obj === void 0) { obj = null; }
+    if (toleratePartial === void 0) { toleratePartial = false; }
+    if (prop instanceof Property) {
+        Property$_removeChangedHandler(prop, handler, obj);
+    }
+    else if (prop instanceof PropertyChain) {
+        PropertyChain$_removeChangedHandler(prop, handler, obj, toleratePartial);
     }
     else {
         throw new Error("Invalid property passed to `Property$addChanged(prop)`.");
@@ -2301,194 +2300,7 @@ function Property$addChanged(prop, handler, obj, toleratePartial) {
 function hasPropertyChangedSubscribers(prop, obj) {
     var property = prop;
     var subscriptions = property._propertyChangeSubscriptions;
-    return subscriptions.length > 0 && subscriptions.some(function (s) { return s.sender === obj; });
-}
-
-var RuleInvocationType;
-(function (RuleInvocationType) {
-    /** Occurs when an existing instance is initialized.*/
-    RuleInvocationType[RuleInvocationType["InitExisting"] = 2] = "InitExisting";
-    /** Occurs when a new instance is initialized. */
-    RuleInvocationType[RuleInvocationType["InitNew"] = 4] = "InitNew";
-    /** Occurs when a property value is retrieved. */
-    RuleInvocationType[RuleInvocationType["PropertyGet"] = 8] = "PropertyGet";
-    /** Occurs when a property value is changed. */
-    RuleInvocationType[RuleInvocationType["PropertyChanged"] = 16] = "PropertyChanged";
-})(RuleInvocationType || (RuleInvocationType = {}));
-
-var EventScope$current = null;
-// TODO: Make `nonExitingScopeNestingCount` an editable configuration value
-// Controls the maximum number of times that a child event scope can transfer events
-// to its parent while the parent scope is exiting. A large number indicates that
-// rules are not reaching steady-state. Technically something other than rules could
-// cause this scenario, but in practice they are the primary use-case for event scope. 
-var nonExitingScopeNestingCount = 100;
-var EventScopeEventDispatchers = /** @class */ (function () {
-    function EventScopeEventDispatchers() {
-        this.exitEvent = new dist_1$1();
-        this.abortEvent = new dist_1$1();
-    }
-    return EventScopeEventDispatchers;
-}());
-var EventScope = /** @class */ (function () {
-    function EventScope() {
-        // If there is a current event scope
-        // then it will be the parent of the new event scope
-        var parent = EventScope$current;
-        // Public read-only properties
-        Object.defineProperty(this, "parent", { enumerable: true, value: parent });
-        // Backing fields for properties
-        Object.defineProperty(this, "_isActive", { enumerable: false, value: true, writable: true });
-        Object.defineProperty(this, "_eventDispatchers", { value: new EventScopeEventDispatchers() });
-        EventScope$current = this;
-    }
-    Object.defineProperty(EventScope.prototype, "isActive", {
-        get: function () {
-            return this._isActive;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(EventScope.prototype, "exitEvent", {
-        get: function () {
-            return this._eventDispatchers.exitEvent.asEvent();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(EventScope.prototype, "abortEvent", {
-        get: function () {
-            return this._eventDispatchers.abortEvent.asEvent();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    EventScope.prototype.abort = function (maxNestingExceeded) {
-        if (maxNestingExceeded === void 0) { maxNestingExceeded = false; }
-        if (!this.isActive) {
-            throw new Error("The event scope cannot be aborted because it is not active.");
-        }
-        try {
-            // TODO: Don't raise event if nothing is subscribed
-            this._eventDispatchers.abortEvent.dispatch(this, { maxNestingExceeded: maxNestingExceeded });
-            // Clear the events to ensure that they aren't
-            // inadvertantly raised again through this scope
-            this._eventDispatchers.abortEvent.clear();
-            this._eventDispatchers.exitEvent.clear();
-        }
-        finally {
-            // The event scope is no longer active
-            this._isActive = false;
-            if (EventScope$current && EventScope$current === this) {
-                // Roll back to the closest active scope
-                while (EventScope$current && !EventScope$current.isActive) {
-                    EventScope$current = EventScope$current.parent;
-                }
-            }
-        }
-    };
-    EventScope.prototype.exit = function () {
-        var _this = this;
-        if (!this.isActive) {
-            throw new Error("The event scope cannot be exited because it is not active.");
-        }
-        try {
-            var exitSubscriptions = getEventSubscriptions(this._eventDispatchers.exitEvent);
-            if (exitSubscriptions && exitSubscriptions.length > 0) {
-                // If there is no parent scope, then go ahead and execute the 'exit' event
-                if (this.parent === null || !this.parent.isActive) {
-                    // Record the initial version and initial number of subscribers
-                    this._exitEventVersion = 0;
-                    this._exitEventHandlerCount = exitSubscriptions.length;
-                    // Invoke all subscribers
-                    this._eventDispatchers.exitEvent.dispatch(this, {});
-                    // Delete the fields to indicate that raising the exit event suceeded
-                    delete this._exitEventHandlerCount;
-                    delete this._exitEventVersion;
-                }
-                else {
-                    // if (typeof ...config.nonExitingScopeNestingCount === "number") { ...
-                    var maxNesting = nonExitingScopeNestingCount - 1;
-                    if (this.parent.hasOwnProperty("_exitEventVersion") && this.parent._exitEventVersion >= maxNesting) {
-                        this.abort(true);
-                        // TODO: Warn... "Event scope 'exit' subscribers were discarded due to non-exiting."
-                        return;
-                    }
-                    // Move subscribers to the parent scope
-                    exitSubscriptions.forEach(function (sub) {
-                        if (!sub.isOnce || !sub.isExecuted) {
-                            _this.parent._eventDispatchers.exitEvent.subscribe(sub.handler);
-                        }
-                    });
-                    if (this.parent.hasOwnProperty("_exitEventVersion")) {
-                        this.parent._exitEventVersion++;
-                    }
-                }
-                // Clear the events to ensure that they aren't
-                // inadvertantly raised again through this scope
-                this._eventDispatchers.abortEvent.clear();
-                this._eventDispatchers.exitEvent.clear();
-            }
-        }
-        finally {
-            // The event scope is no longer active
-            this._isActive = false;
-            if (EventScope$current && EventScope$current === this) {
-                // Roll back to the closest active scope
-                while (EventScope$current && !EventScope$current.isActive) {
-                    EventScope$current = EventScope$current.parent;
-                }
-            }
-        }
-    };
-    return EventScope;
-}());
-function EventScope$onExit(callback, thisPtr) {
-    if (thisPtr === void 0) { thisPtr = null; }
-    if (EventScope$current === null) {
-        // Immediately invoke the callback
-        if (thisPtr) {
-            callback.call(thisPtr);
-        }
-        else {
-            callback();
-        }
-    }
-    else if (!EventScope$current.isActive) {
-        throw new Error("The current event scope cannot be inactive.");
-    }
-    else {
-        // Subscribe to the exit event
-        EventScope$current._eventDispatchers.exitEvent.subscribe(callback.bind(thisPtr));
-    }
-}
-function EventScope$onAbort(callback, thisPtr) {
-    if (thisPtr === void 0) { thisPtr = null; }
-    if (EventScope$current !== null) {
-        if (!EventScope$current.isActive) {
-            throw new Error("The current event scope cannot be inactive.");
-        }
-        // Subscribe to the abort event
-        EventScope$current._eventDispatchers.abortEvent.subscribe(callback.bind(thisPtr));
-    }
-}
-function EventScope$perform(callback, thisPtr) {
-    if (thisPtr === void 0) { thisPtr = null; }
-    // Create an event scope
-    var scope = new EventScope();
-    try {
-        // Invoke the callback
-        if (thisPtr) {
-            callback.call(thisPtr);
-        }
-        else {
-            callback();
-        }
-    }
-    finally {
-        // Exit the event scope
-        scope.exit();
-    }
+    return subscriptions.length > 0 && subscriptions.some(function (s) { return s.context === obj; });
 }
 
 var PathTokens = /** @class */ (function () {
@@ -2533,7 +2345,7 @@ function PathTokens$normalizePaths(paths) {
     if (paths) {
         paths.forEach(function (p) {
             // coerce property and property chains into string paths
-            var path = Property$isProperty(p) ? p.name : PropertyChain$isPropertyChain(p) ? p.path : p;
+            var path = p instanceof Property ? p.name : p instanceof PropertyChain ? p.path : p;
             var stack = [];
             var parent;
             var start = 0;
@@ -2573,6 +2385,602 @@ function PathTokens$normalizePaths(paths) {
     return result;
 }
 
+/** Represents the association of a condition to a specific target entity. */
+var ConditionTarget = /** @class */ (function () {
+    /**
+    * Creates the association of a condition to a specific target entity.
+    * @param condition The condition the target is for.
+    * @param target The target entity the condition is associated with.
+    * @param properties The set of properties on the target entity the condition is related to.
+    */
+    function ConditionTarget(condition, target, properties) {
+        this.condition = condition;
+        this.target = target;
+        this.properties = properties;
+        // Attach the condition target to the target entity.
+        target.meta.setCondition(this);
+    }
+    return ConditionTarget;
+}());
+
+var Condition = /** @class */ (function () {
+    /**
+        * Creates a condition of a specific type associated with one or more entities in a model.
+        * @param type The type of condition, which usually is an instance of a subclass like Error, Warning or Permission.
+        * @param message The optional message to use for the condition, which will default to the condition type message if not specified.
+        * @param target The root target entity the condition is associated with.
+        * @param properties The set of property paths specifying which properties and entities the condition should be attached to.
+        * @param origin The original source of the condition, either "client" or "server".
+        */
+    function Condition(type, message, target, properties, origin) {
+        if (origin === void 0) { origin = null; }
+        this.type = type;
+        this.message = message || (type ? type.message : undefined);
+        this.origin = origin;
+        var targets = [];
+        // create targets if a root was specified
+        if (target) {
+            // set the properties to an empty array if not specified and normalize the paths to expand {} syntax if used
+            var paths = PathTokens$normalizePaths(properties || []);
+            // create a single condition target if the specified properties are all on the root
+            if (paths.every(function (p) { return p.steps.length === 1; }))
+                targets.push(new ConditionTarget(this, target, paths.map(function (path) { return target.meta.type.getProperty(path.expression); })));
+            // otherwise, process the property paths to create the necessary sources
+            else {
+                // process each property path to build up the condition sources
+                for (var p = paths.length - 1; p >= 0; p--) {
+                    var steps = paths[p].steps;
+                    var instances = [target];
+                    var leaf = steps.length - 1;
+                    // iterate over each step along the path
+                    for (var s_1 = 0; s_1 < steps.length; s_1++) {
+                        var step = steps[s_1].property;
+                        var childInstances = [];
+                        // create condition targets for all instances for the current step along the path
+                        for (var i = instances.length - 1; i >= 0; i--) {
+                            var instance = instances[i];
+                            // get the property for the current step and instance type and skip if the property cannot be found
+                            var property = instance.meta.type.getProperty(step);
+                            if (!property) {
+                                continue;
+                            }
+                            // only create conditions on the last step, the leaf node
+                            if (s_1 === leaf) {
+                                // see if a target already exists for the current instance
+                                var conditionTarget = null;
+                                for (var t_1 = targets.length - 1; t_1 >= 0; t_1--) {
+                                    if (targets[t_1].target === instance) {
+                                        conditionTarget = targets[t_1];
+                                        break;
+                                    }
+                                }
+                                // create the condition target if it does not already exist
+                                if (!conditionTarget) {
+                                    conditionTarget = new ConditionTarget(this, instance, [property]);
+                                    targets.push(conditionTarget);
+                                }
+                                // otherwise, just ensure it references the current step
+                                else if (conditionTarget.properties.indexOf(property) < 0)
+                                    conditionTarget.properties.push(property);
+                            }
+                            // get the value of the current step
+                            var child = property.value(instance);
+                            // add the children, if any, to the set of child instances to process for the next step
+                            if (child instanceof Entity)
+                                childInstances.push(child);
+                            else if (child instanceof Array && child.length > 0 && child[0] instanceof Entity)
+                                childInstances = childInstances.concat(child);
+                        }
+                        // assign the set of instances to process for the next step
+                        instances = childInstances;
+                    }
+                }
+            }
+        }
+        // store the condition targets
+        Object.defineProperty(this, "targets", { value: targets });
+        // raise events for the new condition
+        if (type != FormatError$getConditionType()) {
+            var conditionType = type;
+            // raise events on condition targets
+            for (var t = targets.length - 1; t >= 0; t--) {
+                var conditionTarget = targets[t];
+                var objectMeta = conditionTarget.target.meta;
+                // instance events
+                objectMeta._events.conditionsChangedEvent.publish(objectMeta, { conditionTarget: conditionTarget, add: true });
+                // type events
+                for (var objectType = conditionTarget.target.meta.type; objectType != null; objectType = objectType.baseType) {
+                    objectType._events.conditionsChangedEvent.publish(objectType, { conditionTarget: conditionTarget, add: true });
+                }
+            }
+            // Add the condition to the corresponding condition type
+            conditionType.conditions.push(this);
+            conditionType._events.conditionsChangedEvent.publish(this.type, { condition: this, add: true });
+            // Add the condition to relevant condition type sets
+            if (this.type.sets) {
+                for (var s = this.type.sets.length - 1; s >= 0; s--) {
+                    var set = this.type.sets[s];
+                    set.conditions.push(this);
+                    set._events.conditionsChangedEvent.publish(set, { condition: this, add: true });
+                }
+            }
+        }
+    }
+    Condition.prototype.destroy = function () {
+        /// <summary>Removes the condition targets from all target instances and raises condition change events.</summary>
+        // raise events on condition type sets
+        if (this.type.sets) {
+            for (var s = this.type.sets.length - 1; s >= 0; s--) {
+                var set = this.type.sets[s];
+                var idx_1 = set.conditions.indexOf(this);
+                if (idx_1 >= 0) {
+                    set.conditions.splice(idx_1, 1);
+                }
+            }
+        }
+        // raise events on condition types
+        var idx = this.type.conditions.indexOf(this);
+        if (idx >= 0) {
+            this.type.conditions.splice(idx, 1);
+        }
+        for (var t = this.targets.length - 1; t >= 0; t--) {
+            var conditionTarget = this.targets[t];
+            var objectMeta = conditionTarget.target.meta;
+            objectMeta.clearCondition(conditionTarget.condition.type);
+            // instance events
+            objectMeta._events.conditionsChangedEvent.publish(conditionTarget.target.meta, { conditionTarget: conditionTarget, remove: true });
+            // type events
+            for (var objectType = conditionTarget.target.meta.type; objectType != null; objectType = objectType.baseType) {
+                objectType._events.conditionsChangedEvent.publish(objectType, { conditionTarget: conditionTarget, add: false, remove: true });
+            }
+        }
+        // remove references to all condition targets
+        this.targets.splice(0);
+    };
+    Condition.prototype.toString = function () {
+        return this.message;
+    };
+    return Condition;
+}());
+
+var allConditionTypes = {};
+var ConditionType = /** @class */ (function () {
+    /**
+    * Creates a unique type of model condition.
+    * @param code The unique condition type code.
+    * @param category The category of the condition type, such as "Error", "Warning", or "Permission".
+    * @param message The default message to use when the condition is present.
+    * @param origin The origin of the condition, Origin.Client or Origin.Server.
+    */
+    function ConditionType(code, category, message, sets, origin) {
+        // Ensure unique condition type codes
+        if (allConditionTypes[code])
+            throw new Error("A condition type with the code \"" + code + "\" has already been created.");
+        this.code = code;
+        this.category = category;
+        this.message = message;
+        // this.rules = [];
+        this.conditions = ObservableArray.create();
+        this.sets = sets || [];
+        this.origin = origin;
+        Object.defineProperty(this, "_events", { value: new ConditionTypeEvents() });
+        // Register with the static dictionary of all condition types
+        allConditionTypes[code] = this;
+    }
+    Object.defineProperty(ConditionType.prototype, "conditionsChanged", {
+        get: function () {
+            return this._events.conditionsChangedEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+    * Adds or removes a condition from the model for the specified target if necessary.
+    * @param condition The condition to add/remove
+    * @param target The target instance
+    * @param properties The properties to attach the condition to
+    * @param message The condition message (or a function to generate the message)
+    */
+    ConditionType.prototype.when = function (condition, target, properties, message) {
+        // get the current condition if it exists
+        var conditionTarget = target.meta.getCondition(this);
+        // add the condition on the target if it does not exist yet
+        if (condition) {
+            // if the message is a function, invoke to get the actual message
+            message = message instanceof Function ? message(target) : message;
+            // create a new condition if one does not exist
+            if (!conditionTarget) {
+                return new Condition(this, message, target, properties, "client");
+            }
+            // replace the condition if the message has changed
+            else if (message && message != conditionTarget.condition.message) {
+                // destroy the existing condition
+                conditionTarget.condition.destroy();
+                // create a new condition with the updated message
+                return new Condition(this, message, target, properties, "client");
+            }
+            // otherwise, just return the existing condition
+            else {
+                return conditionTarget.condition;
+            }
+        }
+        // Destroy the condition if it exists on the target and is no longer valid
+        if (conditionTarget != null)
+            conditionTarget.condition.destroy();
+        // Return null to indicate that no condition was created
+        return null;
+    };
+    /**
+        * Gets all condition types that have been created.
+        * @returns Array of all condition types.
+        * */
+    ConditionType.all = function () {
+        var all = [];
+        for (var type in allConditionTypes.keys) {
+            all.push(allConditionTypes[type]);
+        }
+        return all;
+    };
+    /**
+        * Returns the condition type with the given code, if it exists.
+        * @param code The unique code of the condition type to find.
+        */
+    ConditionType.get = function (code) {
+        return allConditionTypes[code];
+    };
+    return ConditionType;
+}());
+var ConditionTypeEvents = /** @class */ (function () {
+    function ConditionTypeEvents() {
+        this.conditionsChangedEvent = new Event();
+    }
+    return ConditionTypeEvents;
+}());
+var ErrorConditionType = /** @class */ (function (_super) {
+    __extends$1(ErrorConditionType, _super);
+    function ErrorConditionType(code, message, sets, origin) {
+        if (origin === void 0) { origin = null; }
+        return _super.call(this, code, "Error", message, sets, origin) || this;
+    }
+    return ErrorConditionType;
+}(ConditionType));
+var WarningConditionType = /** @class */ (function (_super) {
+    __extends$1(WarningConditionType, _super);
+    function WarningConditionType(code, message, sets, origin) {
+        if (origin === void 0) { origin = null; }
+        return _super.call(this, code, "Warning", message, sets, origin) || this;
+    }
+    return WarningConditionType;
+}(ConditionType));
+var PermissionConditionType = /** @class */ (function (_super) {
+    __extends$1(PermissionConditionType, _super);
+    function PermissionConditionType(code, message, sets, isAllowed, origin) {
+        if (origin === void 0) { origin = null; }
+        var _this = _super.call(this, code, "Warning", message, sets, origin) || this;
+        _this.isAllowed = isAllowed;
+        return _this;
+    }
+    return PermissionConditionType;
+}(ConditionType));
+(function (ConditionType) {
+    ConditionType.Error = ErrorConditionType;
+    ConditionType.Warning = WarningConditionType;
+    ConditionType.Permission = PermissionConditionType;
+})(ConditionType || (ConditionType = {}));
+
+var FormatError = /** @class */ (function () {
+    function FormatError(message, invalidValue) {
+        Object.defineProperty(this, "message", { value: message });
+        Object.defineProperty(this, "invalidValue", { value: invalidValue });
+    }
+    FormatError.prototype.createCondition = function (target, prop) {
+        return new Condition(FormatError$getConditionType(), this.message.replace("{property}", prop.label), target, [prop.name], "client");
+    };
+    FormatError.prototype.toString = function () {
+        return this.invalidValue;
+    };
+    return FormatError;
+}());
+function FormatError$getConditionType() {
+    if (!FormatError._conditionType) {
+        FormatError._conditionType = new ErrorConditionType("FormatError", "The value is not properly formatted.", []);
+    }
+    return FormatError._conditionType;
+}
+
+var ObjectMeta = /** @class */ (function () {
+    function ObjectMeta(type, entity, id, isNew) {
+        // Public read-only properties
+        Object.defineProperty(this, "type", { enumerable: true, value: type });
+        Object.defineProperty(this, "entity", { enumerable: true, value: entity });
+        // Public settable properties that are simple values with no side-effects or logic
+        Object.defineProperty(this, "_id", { enumerable: false, value: id, writable: true });
+        Object.defineProperty(this, "_isNew", { enumerable: false, value: isNew, writable: true });
+        Object.defineProperty(this, "_conditions", { enumerable: false, value: {}, writable: true });
+        Object.defineProperty(this, "_events", { value: new ObjectMetaEvents() });
+    }
+    Object.defineProperty(ObjectMeta.prototype, "id", {
+        get: function () {
+            // TODO: Obfuscate backing field name?
+            return this._id;
+        },
+        set: function (value) {
+            // TODO: Implement logic to change object ID?
+            this._id = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ObjectMeta.prototype, "isNew", {
+        get: function () {
+            // TODO: Obfuscate backing field name?
+            // TODO: Implement logic to mark object as no longer new?
+            return this._isNew;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ObjectMeta.prototype, "legacyId", {
+        get: function () {
+            // TODO: Obfuscate backing field name?
+            return this._legacyId;
+        },
+        set: function (value) {
+            // TODO: Don't allow setting legacy ID if already set
+            this._legacyId = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ObjectMeta.prototype, "conditionsChanged", {
+        get: function () {
+            return this._events.conditionsChangedEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    // gets the condition target with the specified condition type
+    ObjectMeta.prototype.getCondition = function (conditionType) {
+        return this._conditions[conditionType.code];
+    };
+    // stores the condition target for the current instance
+    ObjectMeta.prototype.setCondition = function (conditionTarget) {
+        if (conditionTarget.condition.type != FormatError$getConditionType()) {
+            this._conditions[conditionTarget.condition.type.code] = conditionTarget;
+        }
+    };
+    // clears the condition for the current instance with the specified condition type
+    ObjectMeta.prototype.clearCondition = function (conditionType) {
+        delete this._conditions[conditionType.code];
+    };
+    // determines if the set of permissions are allowed for the current instance
+    ObjectMeta.prototype.isAllowed = function ( /*codes*/) {
+        if (arguments.length === 0) {
+            return undefined;
+        }
+        // ensure each condition type is allowed for the current instance
+        for (var c = arguments.length - 1; c >= 0; c--) {
+            var code = arguments[c];
+            var conditionType = ConditionType.get(code);
+            // return undefined if the condition type does not exist
+            if (conditionType === undefined) {
+                return undefined;
+            }
+            // throw an exception if the condition type is not a permission
+            if (!(conditionType instanceof PermissionConditionType)) {
+                throw new Error("Condition type \"" + code + "\" should be a Permission.");
+            }
+            // return false if a condition of the current type exists and is a deny permission or does not exist and is a grant permission
+            if (this._conditions[conditionType.code] ? !conditionType.isAllowed : conditionType.isAllowed) {
+                return false;
+            }
+        }
+        return true;
+    };
+    // TODO: Should this be a method on the entity itself, or a static method on Entity?
+    ObjectMeta.prototype.destroy = function () {
+        this.type.unregister(this.entity);
+        // Raise the destroy event on this type and all base types
+        for (var t = this.type; t; t = t.baseType) {
+            t._events.destroyEvent.publish(t, { entity: this.entity });
+        }
+    };
+    return ObjectMeta;
+}());
+var ObjectMetaEvents = /** @class */ (function () {
+    function ObjectMetaEvents() {
+        this.conditionsChangedEvent = new Event();
+    }
+    return ObjectMetaEvents;
+}());
+
+var RuleInvocationType;
+(function (RuleInvocationType) {
+    /** Occurs when an existing instance is initialized.*/
+    RuleInvocationType[RuleInvocationType["InitExisting"] = 2] = "InitExisting";
+    /** Occurs when a new instance is initialized. */
+    RuleInvocationType[RuleInvocationType["InitNew"] = 4] = "InitNew";
+    /** Occurs when a property value is retrieved. */
+    RuleInvocationType[RuleInvocationType["PropertyGet"] = 8] = "PropertyGet";
+    /** Occurs when a property value is changed. */
+    RuleInvocationType[RuleInvocationType["PropertyChanged"] = 16] = "PropertyChanged";
+})(RuleInvocationType || (RuleInvocationType = {}));
+
+var EventScope$current = null;
+// TODO: Make `nonExitingScopeNestingCount` an editable configuration value
+// Controls the maximum number of times that a child event scope can transfer events
+// to its parent while the parent scope is exiting. A large number indicates that
+// rules are not reaching steady-state. Technically something other than rules could
+// cause this scenario, but in practice they are the primary use-case for event scope. 
+var nonExitingScopeNestingCount = 100;
+var EventScope = /** @class */ (function () {
+    function EventScope() {
+        // If there is a current event scope
+        // then it will be the parent of the new event scope
+        var parent = EventScope$current;
+        // Public read-only properties
+        Object.defineProperty(this, "parent", { enumerable: true, value: parent });
+        // Backing fields for properties
+        Object.defineProperty(this, "_isActive", { enumerable: false, value: true, writable: true });
+        Object.defineProperty(this, "_events", { value: new EventScopeEvents() });
+        EventScope$current = this;
+    }
+    Object.defineProperty(EventScope.prototype, "isActive", {
+        get: function () {
+            return this._isActive;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(EventScope.prototype, "exitEvent", {
+        get: function () {
+            return this._events.exitEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(EventScope.prototype, "abortEvent", {
+        get: function () {
+            return this._events.abortEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EventScope.prototype.abort = function (maxNestingExceeded) {
+        if (maxNestingExceeded === void 0) { maxNestingExceeded = false; }
+        if (!this.isActive) {
+            throw new Error("The event scope cannot be aborted because it is not active.");
+        }
+        try {
+            // TODO: Don't raise event if nothing is subscribed
+            this._events.abortEvent.publish(this, { maxNestingExceeded: maxNestingExceeded });
+            // Clear the events to ensure that they aren't
+            // inadvertantly raised again through this scope
+            this._events.abortEvent.clear();
+            this._events.exitEvent.clear();
+        }
+        finally {
+            // The event scope is no longer active
+            this._isActive = false;
+            if (EventScope$current && EventScope$current === this) {
+                // Roll back to the closest active scope
+                while (EventScope$current && !EventScope$current.isActive) {
+                    EventScope$current = EventScope$current.parent;
+                }
+            }
+        }
+    };
+    EventScope.prototype.exit = function () {
+        var _this = this;
+        if (!this.isActive) {
+            throw new Error("The event scope cannot be exited because it is not active.");
+        }
+        try {
+            var exitSubscriptions = getEventSubscriptions(this._events.exitEvent);
+            if (exitSubscriptions && exitSubscriptions.length > 0) {
+                // If there is no parent scope, then go ahead and execute the 'exit' event
+                if (this.parent === null || !this.parent.isActive) {
+                    // Record the initial version and initial number of subscribers
+                    this._exitEventVersion = 0;
+                    this._exitEventHandlerCount = exitSubscriptions.length;
+                    // Invoke all subscribers
+                    this._events.exitEvent.publish(this, {});
+                    // Delete the fields to indicate that raising the exit event suceeded
+                    delete this._exitEventHandlerCount;
+                    delete this._exitEventVersion;
+                }
+                else {
+                    // if (typeof ...config.nonExitingScopeNestingCount === "number") { ...
+                    var maxNesting = nonExitingScopeNestingCount - 1;
+                    if (this.parent.hasOwnProperty("_exitEventVersion") && this.parent._exitEventVersion >= maxNesting) {
+                        this.abort(true);
+                        // TODO: Warn... "Event scope 'exit' subscribers were discarded due to non-exiting."
+                        return;
+                    }
+                    // Move subscribers to the parent scope
+                    exitSubscriptions.forEach(function (sub) {
+                        if (!sub.isOnce || !sub.isExecuted) {
+                            _this.parent._events.exitEvent.subscribe(sub.handler);
+                        }
+                    });
+                    if (this.parent.hasOwnProperty("_exitEventVersion")) {
+                        this.parent._exitEventVersion++;
+                    }
+                }
+                // Clear the events to ensure that they aren't
+                // inadvertantly raised again through this scope
+                this._events.abortEvent.clear();
+                this._events.exitEvent.clear();
+            }
+        }
+        finally {
+            // The event scope is no longer active
+            this._isActive = false;
+            if (EventScope$current && EventScope$current === this) {
+                // Roll back to the closest active scope
+                while (EventScope$current && !EventScope$current.isActive) {
+                    EventScope$current = EventScope$current.parent;
+                }
+            }
+        }
+    };
+    return EventScope;
+}());
+var EventScopeEvents = /** @class */ (function () {
+    function EventScopeEvents() {
+        this.exitEvent = new Event();
+        this.abortEvent = new Event();
+    }
+    return EventScopeEvents;
+}());
+function EventScope$onExit(callback, thisPtr) {
+    if (thisPtr === void 0) { thisPtr = null; }
+    if (EventScope$current === null) {
+        // Immediately invoke the callback
+        if (thisPtr) {
+            callback.call(thisPtr);
+        }
+        else {
+            callback();
+        }
+    }
+    else if (!EventScope$current.isActive) {
+        throw new Error("The current event scope cannot be inactive.");
+    }
+    else {
+        // Subscribe to the exit event
+        EventScope$current._events.exitEvent.subscribe(callback.bind(thisPtr));
+    }
+}
+function EventScope$onAbort(callback, thisPtr) {
+    if (thisPtr === void 0) { thisPtr = null; }
+    if (EventScope$current !== null) {
+        if (!EventScope$current.isActive) {
+            throw new Error("The current event scope cannot be inactive.");
+        }
+        // Subscribe to the abort event
+        EventScope$current._events.abortEvent.subscribe(callback.bind(thisPtr));
+    }
+}
+function EventScope$perform(callback, thisPtr) {
+    if (thisPtr === void 0) { thisPtr = null; }
+    // Create an event scope
+    var scope = new EventScope();
+    try {
+        // Invoke the callback
+        if (thisPtr) {
+            callback.call(thisPtr);
+        }
+        else {
+            callback();
+        }
+    }
+    finally {
+        // Exit the event scope
+        scope.exit();
+    }
+}
+
 // TODO: Make `nonExitingScopeNestingCount` an editable configuration value
 // Controls the maximum number of times that a child event scope can transfer events
 // to its parent while the parent scope is exiting. A large number indicates that
@@ -2586,7 +2994,8 @@ var Rule = /** @class */ (function () {
      * @param rootType The model type the rule is for.
      * @param options The options for the rule.
      */
-    function Rule(rootType, name, options) {
+    function Rule(rootType, name, options, skipRegistration) {
+        if (skipRegistration === void 0) { skipRegistration = false; }
         this.invocationTypes = 0;
         this.predicates = [];
         this.returnValues = [];
@@ -2595,23 +3004,30 @@ var Rule = /** @class */ (function () {
         this.name = name || (options ? options.name : null) || (rootType.fullName + ".Custom." + (++Rule$customRuleIndex));
         // Configure the rule based on the specified options
         if (options) {
-            options = normalizeRuleOptions(options);
-            if (options.onInit)
+            var thisOptions = extractRuleOptions(options);
+            if (thisOptions.onInit)
                 this.onInit();
-            if (options.onInitNew)
+            if (thisOptions.onInitNew)
                 this.onInitNew();
-            if (options.onInitExisting)
+            if (thisOptions.onInitExisting)
                 this.onInitExisting();
-            if (options.onChangeOf)
-                this.onChangeOf(options.onChangeOf);
-            if (options.returns)
-                this.returns(options.returns);
-            if (options.execute instanceof Function)
-                this.execute = options.execute;
+            if (thisOptions.onChangeOf)
+                this.onChangeOf(thisOptions.onChangeOf);
+            if (thisOptions.returns)
+                this.returns(thisOptions.returns);
+            if (thisOptions.execute instanceof Function)
+                this.executeFn = thisOptions.execute;
         }
-        // Register the rule after loading has completed
-        rootType.model.registerRule(this);
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(this);
+        }
     }
+    Rule.prototype.execute = function (entity) {
+        if (this.executeFn) {
+            this.executeFn(entity);
+        }
+    };
     // Indicates that the rule should run only for new instances when initialized
     Rule.prototype.onInitNew = function () {
         // ensure the rule has not already been registered
@@ -2683,19 +3099,18 @@ var Rule = /** @class */ (function () {
     };
     return Rule;
 }());
-function Rule$create(rootType, optionsOrFunction) {
-    var options;
-    if (optionsOrFunction) {
-        // The options are the function to execute
-        if (optionsOrFunction instanceof Function) {
-            options = { execute: optionsOrFunction };
-        }
-        else {
-            options = optionsOrFunction;
-        }
-    }
-    return new Rule(rootType, options.name, options);
-}
+// export function Rule$create(rootType: Type & Type, optionsOrFunction: ((entity: Entity) => void) | RuleOptions): Rule {
+// 	let options: RuleOptions;
+// 	if (optionsOrFunction) {
+// 		// The options are the function to execute
+// 		if (optionsOrFunction instanceof Function) {
+// 			options = { execute: optionsOrFunction };
+// 		} else {
+// 			options = optionsOrFunction as RuleOptions;
+// 		}
+// 	}
+// 	return new Rule(rootType, options.name, options);
+// }
 function pendingInvocation(target, rule, value) {
     if (value === void 0) { value = null; }
     var pendingInvocation;
@@ -2753,7 +3168,7 @@ function prepareRuleForRegistration(rule, callback) {
     // resolve return values, which should all be loaded since the root type is now definitely loaded
     if (rule.returnValues) {
         rule.returnValues.forEach(function (returnValue, i) {
-            if (!Property$isProperty(returnValue)) {
+            if (!(returnValue instanceof Property)) {
                 rule.returnValues[i] = rule.rootType.getProperty(returnValue);
             }
         });
@@ -2772,12 +3187,12 @@ function prepareRuleForRegistration(rule, callback) {
                 var predicateIndex_1 = i;
                 // normalize the paths to accommodate {} hierarchial syntax
                 PathTokens$normalizePaths([predicate]).forEach(function (path) {
-                    Model$getPropertyOrPropertyChain(path, rule.rootType, false, signal.pending(function (propertyChain) {
+                    Model$getPropertyOrPropertyChain(path, rule.rootType, rule.rootType.model._allTypesRoot, false, signal.pending(function (propertyChain) {
                         rule.predicates[predicateIndex_1] = propertyChain;
                     }, this, true), this);
                 }, this_1);
             }
-            else if (!Property$isProperty(predicate) || PropertyChain$isPropertyChain(predicate)) {
+            else if (!(predicate instanceof Property || predicate instanceof PropertyChain)) {
                 // TODO: Remove invalid predicates?
                 rule.predicates.splice(i--, 1);
             }
@@ -2802,23 +3217,23 @@ function prepareRuleForRegistration(rule, callback) {
 function registerRule(rule) {
     // register for init new
     if (rule.invocationTypes & RuleInvocationType.InitNew)
-        rule.rootType.initNewEvent.subscribe(function (sender, args) { return executeRule(rule, args.entity, args); });
+        rule.rootType._events.initNewEvent.subscribe(function (args) { executeRule(rule, args.entity, args); });
     // register for init existing
     if (rule.invocationTypes & RuleInvocationType.InitExisting) {
-        rule.rootType.initExistingEvent.subscribe(function (sender, args) { return executeRule(rule, args.entity, args); });
+        rule.rootType._events.initExistingEvent.subscribe(function (args) { executeRule(rule, args.entity, args); });
     }
     // register for property change
     if (rule.invocationTypes & RuleInvocationType.PropertyChanged) {
         rule.predicates.forEach(function (predicate) {
-            Property$addChanged(predicate, function (sender, args) {
-                if (canExecuteRule(rule, sender, args) && !pendingInvocation(sender.meta, rule)) {
-                    pendingInvocation(sender.meta, rule, true);
+            Property$addChanged(predicate, function (args) {
+                if (canExecuteRule(rule, args.entity, args) && !pendingInvocation(args.entity.meta, rule)) {
+                    pendingInvocation(args.entity.meta, rule, true);
                     EventScope$onExit(function () {
-                        pendingInvocation(sender.meta, rule, false);
-                        executeRule(rule, sender, args);
+                        pendingInvocation(args.entity.meta, rule, false);
+                        executeRule(rule, args.entity, args);
                     });
                     EventScope$onAbort(function () {
-                        pendingInvocation(sender.meta, rule, false);
+                        pendingInvocation(args.entity.meta, rule, false);
                     });
                 }
             }, null, // no object filter
@@ -2831,40 +3246,40 @@ function registerRule(rule) {
     if (rule.invocationTypes & RuleInvocationType.PropertyGet && rule.returnValues) {
         // register for property get events for each return value to calculate the property when accessed
         rule.returnValues.forEach(function (returnValue) {
-            Property$addAccessed(returnValue, function (sender, args) {
+            Property$addAccessed(returnValue, function (args) {
                 // run the rule to initialize the property if it is pending initialization
-                if (canExecuteRule(rule, sender, args) && Property$pendingInit(sender.meta, returnValue)) {
-                    Property$pendingInit(sender.meta, returnValue, false);
-                    executeRule(rule, sender, args);
+                if (canExecuteRule(rule, args.entity, args) && Property$pendingInit(args.entity, returnValue)) {
+                    Property$pendingInit(args.entity, returnValue, false);
+                    executeRule(rule, args.entity, args);
                 }
             });
         });
         // register for property change events for each predicate to invalidate the property value when inputs change
         rule.predicates.forEach(function (predicate) {
-            Property$addChanged(predicate, function (sender, args) {
-                if (rule.returnValues.some(function (returnValue) { return hasPropertyChangedSubscribers(returnValue, sender); })) {
+            Property$addChanged(predicate, function (args) {
+                if (rule.returnValues.some(function (returnValue) { return hasPropertyChangedSubscribers(returnValue, args.entity); })) {
                     // Immediately execute the rule if there are explicit event subscriptions for the property
-                    if (canExecuteRule(rule, sender, args) && !pendingInvocation(sender.meta, rule)) {
-                        pendingInvocation(sender.meta, rule, true);
+                    if (canExecuteRule(rule, args.entity, args) && !pendingInvocation(args.entity.meta, rule)) {
+                        pendingInvocation(args.entity.meta, rule, true);
                         EventScope$onExit(function () {
-                            pendingInvocation(sender.meta, rule, false);
-                            executeRule(rule, sender, args);
+                            pendingInvocation(args.entity.meta, rule, false);
+                            executeRule(rule, args.entity, args);
                         });
                         EventScope$onAbort(function () {
-                            pendingInvocation(sender.meta, rule, false);
+                            pendingInvocation(args.entity.meta, rule, false);
                         });
                     }
                 }
                 else {
                     // Otherwise, just mark the property as pending initialization and raise property change for UI subscribers
                     rule.returnValues.forEach(function (returnValue) {
-                        Property$pendingInit(sender.meta, returnValue, true);
+                        Property$pendingInit(args.entity, returnValue, true);
                     });
                     // Defer change notification until the scope of work has completed
                     EventScope$onExit(function () {
                         rule.returnValues.forEach(function (returnValue) {
                             // TODO: Implement observable?
-                            Entity$_getEventDispatchers(sender).changedEvent.dispatch(returnValue, { entity: sender, property: returnValue });
+                            args.entity._events.changedEvent.publish(args.entity, { entity: args.entity, property: returnValue });
                         });
                     });
                 }
@@ -2879,73 +3294,115 @@ function registerRule(rule) {
         rule.onRegister();
     }
 }
-function normalizeRuleOptions(obj) {
+// registers a rule with a specific property
+function registerPropertyRule(rule) {
+    var propRules = Property$getRules(rule.property);
+    propRules.push(rule);
+    // Raise events if registered.
+    var subscriptions = getEventSubscriptions(rule.property._events.ruleRegisteredEvent);
+    if (subscriptions && subscriptions.length > 0) {
+        rule.property._events.ruleRegisteredEvent.publish(rule.property, { rule: rule });
+    }
+}
+function extractRuleOptions(obj) {
     if (!obj) {
         return;
     }
     var options = {};
     var keys = Object.keys(obj);
-    var values = keys.map(function (key) {
+    keys.filter(function (key) {
         var value = obj[key];
         if (key === 'onInit') {
             if (typeof value === "boolean") {
-                return options.onInit = value;
+                options.onInit = value;
+                return true;
             }
         }
         else if (key === 'onInitNew') {
             if (typeof value === "boolean") {
-                return options.onInitNew = value;
+                options.onInitNew = value;
+                return true;
             }
         }
         else if (key === 'onInitExisting') {
             if (typeof value === "boolean") {
-                return options.onInitExisting = value;
+                options.onInitExisting = value;
+                return true;
             }
         }
         else if (key === 'onChangeOf') {
             if (Array.isArray(value)) {
-                return options.onChangeOf = value.filter(function (p) {
-                    if (typeof p === "string" || PropertyChain$isPropertyChain(p) || Property$isProperty(p)) {
+                var invalidOnChangeOf_1 = null;
+                options.onChangeOf = value.filter(function (p) {
+                    if (typeof p === "string" || p instanceof PropertyChain || p instanceof Property) {
                         return true;
                     }
                     else {
                         // TODO: Warn about invalid 'onChangeOf' item?
+                        if (!invalidOnChangeOf_1) {
+                            invalidOnChangeOf_1 = [];
+                        }
+                        invalidOnChangeOf_1.push(p);
                         return false;
                     }
                 });
+                if (invalidOnChangeOf_1) {
+                    obj.onChangeOf = invalidOnChangeOf_1;
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             else if (typeof value === "string") {
-                return options.onChangeOf = [value];
+                options.onChangeOf = [value];
+                return true;
             }
-            else if (PropertyChain$isPropertyChain(value)) {
-                return options.onChangeOf = [value];
+            else if (value instanceof PropertyChain) {
+                options.onChangeOf = [value];
+                return true;
             }
-            else if (Property$isProperty(value)) {
-                return options.onChangeOf = [value];
+            else if (value instanceof Property) {
+                options.onChangeOf = [value];
+                return true;
             }
         }
         else if (key === 'returns') {
             if (Array.isArray(value)) {
-                return options.returns = value.filter(function (p) {
-                    if (typeof p === "string" || PropertyChain$isPropertyChain(p) || Property$isProperty(p)) {
+                var invalidReturns_1 = null;
+                options.returns = value.filter(function (p) {
+                    if (typeof p === "string" || p instanceof PropertyChain || p instanceof Property) {
                         return true;
                     }
                     else {
                         // TODO: Warn about invalid 'returns' item?
+                        if (!invalidReturns_1) {
+                            invalidReturns_1 = [];
+                        }
                         return false;
                     }
                 });
+                if (invalidReturns_1) {
+                    obj.returns = invalidReturns_1;
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             else if (typeof value === "string") {
-                return options.returns = [value];
+                options.returns = [value];
+                return true;
             }
-            else if (Property$isProperty(value)) {
-                return options.returns = [value];
+            else if (value instanceof Property) {
+                options.returns = [value];
+                return true;
             }
         }
         else if (key === 'execute') {
             if (value instanceof Function) {
-                return options.execute = value;
+                options.execute = value;
+                return true;
             }
         }
         else {
@@ -2954,19 +3411,34 @@ function normalizeRuleOptions(obj) {
         }
         // TODO: Warn about invalid rule option value?
         return;
+    }).forEach(function (key) {
+        delete obj[key];
     });
     return options;
 }
-
-var newIdPrefix = "+c";
-var TypeEventDispatchers = /** @class */ (function () {
-    function TypeEventDispatchers() {
-        this.initNewEvent = new dist_1$1();
-        this.initExistingEvent = new dist_1$1();
-        this.destroyEvent = new dist_1$1();
+function Rule$ensureConditionType(ruleName, typeOrProp, category) {
+    if (category === void 0) { category = "Error"; }
+    var generatedCode = typeOrProp instanceof Property ? typeOrProp.containingType.fullName + "." + typeOrProp.name + "." + ruleName :
+        typeOrProp instanceof Type ? typeOrProp + "." + ruleName :
+            ruleName;
+    var counter = "";
+    while (ConditionType.get(generatedCode + counter))
+        counter = (typeof counter === "string" ? 0 : counter) + 1;
+    var DesiredConditionType;
+    if (category === "Error") {
+        DesiredConditionType = ErrorConditionType;
     }
-    return TypeEventDispatchers;
-}());
+    else if (category === "Warning") {
+        DesiredConditionType = WarningConditionType;
+    }
+    else {
+        throw new Error("Cannot create condition type for unsupported category '" + category + "'.");
+    }
+    // return a new client condition type of the specified category
+    return new DesiredConditionType(generatedCode + counter, "Generated condition type for " + ruleName + " rule.", null, "client");
+}
+
+var Type$newIdPrefix = "+c";
 var Type = /** @class */ (function () {
     function Type(model, fullName, baseType, origin) {
         if (baseType === void 0) { baseType = null; }
@@ -2985,30 +3457,37 @@ var Type = /** @class */ (function () {
         Object.defineProperty(this, "_legacyPool", { enumerable: false, value: {}, writable: false });
         Object.defineProperty(this, "_properties", { enumerable: false, value: {}, writable: false });
         Object.defineProperty(this, '_derivedTypes', { enumerable: false, value: [], writable: false });
-        Object.defineProperty(this, "_eventDispatchers", { value: new TypeEventDispatchers() });
+        Object.defineProperty(this, "_events", { value: new TypeEvents() });
         // Object.defineProperty(this, "rules", { value: [] });
         // TODO: Is self-reference to type needed?
         // Add self-reference to decrease the likelihood of errors
         // due to an absence of the necessary type vs. entity.
         // this.type = this;
     }
-    Object.defineProperty(Type.prototype, "destroyEvent", {
+    Object.defineProperty(Type.prototype, "destroy", {
         get: function () {
-            return this._eventDispatchers.destroyEvent.asEvent();
+            return this._events.destroyEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Type.prototype, "initNewEvent", {
+    Object.defineProperty(Type.prototype, "initNew", {
         get: function () {
-            return this._eventDispatchers.initNewEvent.asEvent();
+            return this._events.initNewEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Type.prototype, "initExistingEvent", {
+    Object.defineProperty(Type.prototype, "initExisting", {
         get: function () {
-            return this._eventDispatchers.initExistingEvent.asEvent();
+            return this._events.initExistingEvent.asEventSubscriber();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Type.prototype, "conditionsChanged", {
+        get: function () {
+            return this._events.conditionsChangedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
@@ -3032,13 +3511,13 @@ var Type = /** @class */ (function () {
             type._lastId = nextId;
         }
         // Return the new id.
-        return newIdPrefix + nextId;
+        return Type$newIdPrefix + nextId;
     };
     Type.prototype.register = function (obj, id, suppressModelEvent) {
         if (suppressModelEvent === void 0) { suppressModelEvent = false; }
         // register is called with single argument from default constructor
         if (arguments.length === 2) {
-            Type$_validateId(this, id);
+            Type$_validateId.call(this, id);
         }
         var isNew;
         if (!id) {
@@ -3053,7 +3532,7 @@ var Type = /** @class */ (function () {
             }
             t._pool[key] = obj;
             if (t._known) {
-                t._known.add(obj);
+                t._known.push(obj);
             }
         }
         if (this.model.settings.createOwnProperties === true) {
@@ -3067,12 +3546,12 @@ var Type = /** @class */ (function () {
             }
         }
         if (!suppressModelEvent) {
-            Model$_getEventDispatchers(this.model).entityRegisteredEvent.dispatch(this.model, { entity: obj });
+            this.model._events.entityRegisteredEvent.publish(this.model, { entity: obj });
         }
     };
     Type.prototype.changeObjectId = function (oldId, newId) {
-        Type$_validateId(this, oldId);
-        Type$_validateId(this, newId);
+        Type$_validateId.call(this, oldId);
+        Type$_validateId.call(this, newId);
         var oldKey = oldId.toLowerCase();
         var newKey = newId.toLowerCase();
         var obj = this._pool[oldKey];
@@ -3094,10 +3573,13 @@ var Type = /** @class */ (function () {
                 delete t._legacyPool[obj.meta.legacyId.toLowerCase()];
             }
             if (t._known) {
-                t._known.remove(obj);
+                var objIndex = t._known.indexOf(obj);
+                if (objIndex >= 0) {
+                    t._known.splice(objIndex, 1);
+                }
             }
         }
-        Model$_getEventDispatchers(this.model).entityUnregisteredEvent.dispatch(this.model, { entity: obj });
+        this.model._events.entityUnregisteredEvent.publish(this.model, { entity: obj });
     };
     Type.prototype.get = function (id, exactTypeOnly) {
         if (exactTypeOnly === void 0) { exactTypeOnly = false; }
@@ -3125,7 +3607,7 @@ var Type = /** @class */ (function () {
                     list.push(this._pool[id]);
                 }
             }
-            known = this._known = ObservableList.ensureObservable(list);
+            known = this._known = ObservableArray.ensureObservable(list);
         }
         return known;
     };
@@ -3148,7 +3630,7 @@ var Type = /** @class */ (function () {
         // (isStatic ? this._staticProperties : this._instanceProperties)[name] = property;
         Property$_generateShortcuts(property, property.containingType.ctor);
         if (property.isStatic) {
-            Property$_generateStaticProperty(property);
+            Property$_generateStaticProperty(property, this.ctor);
         }
         else if (this.model.settings.createOwnProperties === true) {
             for (var id in this._pool) {
@@ -3158,9 +3640,9 @@ var Type = /** @class */ (function () {
             }
         }
         else {
-            Property$_generatePrototypeProperty(property);
+            Property$_generatePrototypeProperty(property, this.ctor.prototype);
         }
-        Model$_getEventDispatchers(this.model).propertyAddedEvent.dispatch(this.model, { property: property });
+        this.model._events.propertyAddedEvent.publish(this.model, { property: property });
         return property;
     };
     Type.prototype.getProperty = function (name) {
@@ -3188,8 +3670,18 @@ var Type = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Type.prototype.addRule = function (def) {
-        var rule = Rule$create(this, def);
+    Type.prototype.addRule = function (optionsOrFunction) {
+        var options;
+        if (optionsOrFunction) {
+            // The options are the function to execute
+            if (optionsOrFunction instanceof Function) {
+                options = { execute: optionsOrFunction };
+            }
+            else {
+                options = optionsOrFunction;
+            }
+        }
+        var rule = new Rule(this, options.name, options);
         // TODO: Track rules on the type?
         return rule;
     };
@@ -3218,33 +3710,32 @@ var Type = /** @class */ (function () {
     };
     return Type;
 }());
-function Type$_getEventDispatchers(type) {
-    return type._eventDispatchers;
-}
-function Type$create(model, fullName, baseType, origin) {
-    if (baseType === void 0) { baseType = null; }
-    if (origin === void 0) { origin = "client"; }
-    return new Type(model, fullName, baseType ? baseType : null, origin);
-}
-function Type$isType(obj) {
-    return obj instanceof Type;
-}
-function Type$_validateId(type, id) {
+var TypeEvents = /** @class */ (function () {
+    function TypeEvents() {
+        this.initNewEvent = new Event();
+        this.initExistingEvent = new Event();
+        this.destroyEvent = new Event();
+        this.conditionsChangedEvent = new Event();
+    }
+    return TypeEvents;
+}());
+function Type$_validateId(id) {
     if (id === null || id === undefined) {
-        throw new Error("Id cannot be " + (id === null ? "null" : "undefined") + " (entity = " + type.fullName + ").");
+        throw new Error("Id cannot be " + (id === null ? "null" : "undefined") + " (entity = " + this.fullName + ").");
     }
     else if (getTypeName(id) !== "string") {
-        throw new Error("Id must be a string:  encountered id " + id + " of type \"" + parseFunctionName(id.constructor) + "\" (entity = " + type.fullName + ").");
+        throw new Error("Id must be a string:  encountered id " + id + " of type \"" + parseFunctionName(id.constructor) + "\" (entity = " + this.fullName + ").");
     }
     else if (id === "") {
-        throw new Error("Id cannot be a blank string (entity = " + type.fullName + ").");
+        throw new Error("Id cannot be a blank string (entity = " + this.fullName + ").");
     }
 }
+// TODO: Get rid of disableConstruction?
 var disableConstruction = false;
 function Type$_generateConstructor(type, fullName, baseType) {
     if (baseType === void 0) { baseType = null; }
     // Create namespaces as needed
-    var nameTokens = fullName.split("."), token = nameTokens.shift(), namespaceObj = Model$_allTypesRoot, globalObj = window;
+    var nameTokens = fullName.split("."), token = nameTokens.shift(), namespaceObj = type.model._allTypesRoot, globalObj = window;
     while (nameTokens.length > 0) {
         namespaceObj = ensureNamespace(token, namespaceObj);
         globalObj = ensureNamespace(token, globalObj);
@@ -3280,7 +3771,7 @@ function Type$_generateConstructor(type, fullName, baseType) {
                 }
                 // Raise the initExisting event on this type and all base types
                 for (var t = type; t; t = t.baseType) {
-                    t._eventDispatchers.initExistingEvent.dispatch(t, { entity: this });
+                    t._events.initExistingEvent.publish(t, { entity: this });
                 }
             }
             else {
@@ -3296,7 +3787,7 @@ function Type$_generateConstructor(type, fullName, baseType) {
                 }
                 // Raise the initNew event on this type and all base types
                 for (var t = type; t; t = t.baseType) {
-                    Type$_getEventDispatchers(t).initNewEvent.dispatch(t, { entity: this });
+                    t._events.initNewEvent.publish(t, { entity: this });
                 }
             }
         }
@@ -3317,11 +3808,11 @@ function Type$_generateConstructor(type, fullName, baseType) {
         globalObj['$' + finalName] = ctor;
     }
     // Setup inheritance
-    var baseCtor = null;
-    if (baseCtor) {
+    var baseCtor;
+    if (baseType) {
         baseCtor = baseType.ctor;
-        // TODO: Implement `inheritBaseTypePropShortcuts`
-        // inherit all shortcut properties that have aleady been defined
+        // // TODO: Implement `inheritBaseTypePropShortcuts`
+        // // inherit all shortcut properties that have aleady been defined
         // inheritBaseTypePropShortcuts(ctor, baseType);
     }
     else {
@@ -3337,89 +3828,64 @@ function Type$_generateConstructor(type, fullName, baseType) {
 }
 
 var intrinsicJsTypes = ["Object", "String", "Number", "Boolean", "Date", "TimeSpan", "Array"];
-var ModelSettingsImplementation = /** @class */ (function () {
-    function ModelSettingsImplementation(createOwnProperties) {
-        Object.defineProperty(this, "createOwnProperties", { configurable: false, enumerable: true, value: createOwnProperties, writable: false });
-    }
-    return ModelSettingsImplementation;
-}());
-var ModelSettingsDefaults = {
-    // There is a slight speed cost to creating own properties,
-    // which may be noticeable with very large object counts.
-    createOwnProperties: false,
-};
-var ModelEventDispatchers = /** @class */ (function () {
-    function ModelEventDispatchers() {
-        // TODO: Don't construct events by default, only when subscribed (optimization)
-        // TODO: Extend `EventDispatcher` with `any()` function to check for subscribers (optimization)
-        this.typeAddedEvent = new dist_1$1();
-        this.entityRegisteredEvent = new dist_1$1();
-        this.entityUnregisteredEvent = new dist_1$1();
-        this.propertyAddedEvent = new dist_1$1();
-    }
-    return ModelEventDispatchers;
-}());
-var Model$_allTypesRoot = {};
 var Model = /** @class */ (function () {
     function Model(createOwnProperties) {
         if (createOwnProperties === void 0) { createOwnProperties = undefined; }
-        Object.defineProperty(this, "settings", { configurable: false, enumerable: true, value: Model$_createSettingsObject(createOwnProperties), writable: false });
+        Object.defineProperty(this, "settings", { configurable: false, enumerable: true, value: new ModelSettings(createOwnProperties), writable: false });
         Object.defineProperty(this, "_types", { value: {} });
-        Object.defineProperty(this, "_eventDispatchers", { value: new ModelEventDispatchers() });
+        Object.defineProperty(this, "_allTypesRoot", { value: {} });
+        Object.defineProperty(this, "_fieldNamePrefix", { value: ("_fN" + randomText(3, false, true)) });
+        Object.defineProperty(this, "_events", { value: new ModelEvents() });
     }
-    Object.defineProperty(Model.prototype, "typeAddedEvent", {
+    Object.defineProperty(Model.prototype, "typeAdded", {
         get: function () {
-            return this._eventDispatchers.typeAddedEvent.asEvent();
+            return this._events.typeAddedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Model.prototype, "entityRegisteredEvent", {
+    Object.defineProperty(Model.prototype, "entityRegistered", {
         get: function () {
-            return this._eventDispatchers.entityRegisteredEvent.asEvent();
+            return this._events.entityRegisteredEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Model.prototype, "entityUnregisteredEvent", {
+    Object.defineProperty(Model.prototype, "entityUnregistered", {
         get: function () {
-            return this._eventDispatchers.entityUnregisteredEvent.asEvent();
+            return this._events.entityUnregisteredEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Model.prototype, "propertyAddedEvent", {
+    Object.defineProperty(Model.prototype, "propertyAdded", {
         get: function () {
-            return this._eventDispatchers.propertyAddedEvent.asEvent();
+            return this._events.propertyAddedEvent.asEventSubscriber();
         },
         enumerable: true,
         configurable: true
     });
-    Model.prototype.dispose = function () {
-        // TODO: Implement model disposal
-        // for (var key in this._types) {
-        // 	delete window[key];
-        // }
-    };
-    Object.defineProperty(Model.prototype, "types", {
-        get: function () {
-            var typesArray = [];
-            for (var typeName in this._types) {
-                if (this._types.hasOwnProperty(typeName)) {
-                    typesArray.push(this._types[typeName]);
-                }
+    // dispose() {
+    // 	// TODO: Implement model disposal
+    // 	// for (var key in this._types) {
+    // 	// 	delete window[key];
+    // 	// }
+    // }
+    Model.prototype.getTypes = function () {
+        var typesArray = [];
+        for (var typeName in this._types) {
+            if (this._types.hasOwnProperty(typeName)) {
+                typesArray.push(this._types[typeName]);
             }
-            return typesArray;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Model.prototype.addType = function (name, baseType, origin) {
+        }
+        return typesArray;
+    };
+    Model.prototype.addType = function (fullName, baseType, origin) {
         if (baseType === void 0) { baseType = null; }
         if (origin === void 0) { origin = "client"; }
-        var type = Type$create(this, name, baseType, origin);
-        this._types[name] = type;
-        this._eventDispatchers.typeAddedEvent.dispatch(this, { type: type });
+        var type = new Type(this, fullName, baseType ? baseType : null, origin);
+        this._types[fullName] = type;
+        this._events.typeAddedEvent.publish(this, { type: type });
         return type;
     };
     Model.prototype.registerRule = function (rule) {
@@ -3439,13 +3905,27 @@ var Model = /** @class */ (function () {
     };
     return Model;
 }());
-function Model$_createSettingsObject(createOwnProperties) {
-    if (createOwnProperties === void 0) { createOwnProperties = ModelSettingsDefaults.createOwnProperties; }
-    return new ModelSettingsImplementation(createOwnProperties);
-}
-function Model$_getEventDispatchers(model) {
-    return model._eventDispatchers;
-}
+var ModelEvents = /** @class */ (function () {
+    function ModelEvents() {
+        // TODO: Don't construct events by default, only when subscribed (optimization)
+        // TODO: Extend `EventDispatcher` with `any()` function to check for subscribers (optimization)
+        this.typeAddedEvent = new Event();
+        this.entityRegisteredEvent = new Event();
+        this.entityUnregisteredEvent = new Event();
+        this.propertyAddedEvent = new Event();
+    }
+    return ModelEvents;
+}());
+var ModelSettings = /** @class */ (function () {
+    function ModelSettings(createOwnProperties) {
+        if (createOwnProperties === void 0) { createOwnProperties = false; }
+        // There is a slight speed cost to creating own properties,
+        // which may be noticeable with very large object counts.
+        this.createOwnProperties = false;
+        Object.defineProperty(this, "createOwnProperties", { configurable: false, enumerable: true, value: createOwnProperties, writable: false });
+    }
+    return ModelSettings;
+}());
 function Model$whenTypeAvailable(type, forceLoad, callback) {
     // Immediately invoke the callback if no type was specified
     if (!type) {
@@ -3472,17 +3952,18 @@ function Model$whenTypeAvailable(type, forceLoad, callback) {
 /**
  * Retrieves the JavaScript constructor function corresponding to the given full type name.
  * @param fullName The full name of the type, including the namespace
+ * @param allTypesRoot The model namespace that contains all types
  * @param allowUndefined If true, return undefined if the type is not defined
  */
-function Model$getJsType(fullName, allowUndefined) {
+function Model$getJsType(fullName, allTypesRoot, allowUndefined) {
     if (allowUndefined === void 0) { allowUndefined = false; }
     var steps = fullName.split(".");
     if (steps.length === 1 && intrinsicJsTypes.indexOf(fullName) > -1) {
-        return Model$_allTypesRoot[fullName];
+        return allTypesRoot[fullName];
     }
     else {
         var obj = void 0;
-        var ns = Model$_allTypesRoot;
+        var ns = allTypesRoot;
         for (var i = 0; ns !== undefined && i < steps.length - 1; i++) {
             var step = steps[i];
             ns = ns[step];
@@ -3501,9 +3982,9 @@ function Model$getJsType(fullName, allowUndefined) {
         return obj;
     }
 }
-function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, forceLoadTypes, callback, thisPtr) {
-    if (thisType === void 0) { thisType = null; }
+function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, allTypesRoot, forceLoadTypes, callback, thisPtr) {
     if (forceLoadTypes === void 0) { forceLoadTypes = false; }
+    if (callback === void 0) { callback = null; }
     if (thisPtr === void 0) { thisPtr = null; }
     var type, loadProperty, singlePropertyName, path = null, tokens = null;
     // forceLoadTypes = arguments.length >= 3 && arguments[2] && arguments[2].constructor === Boolean ? arguments[2] : false,
@@ -3541,7 +4022,7 @@ function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, forceLoadTypes
     // determine if a typecast was specified for the path to identify a specific subclass to use as the root type
     if (tokens.steps[0].property === "this" && tokens.steps[0].cast) {
         //Try and resolve cast to an actual type in the model
-        type = Model$getJsType(tokens.steps[0].cast, false).meta;
+        type = Model$getJsType(tokens.steps[0].cast, allTypesRoot, false).meta;
         tokens.steps.shift();
     }
     // create a function to lazily load a property 
@@ -3557,7 +4038,7 @@ function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, forceLoadTypes
             loadProperty(type, singlePropertyName, callback);
         }
         else {
-            return type.property(singlePropertyName);
+            return type.getProperty(singlePropertyName);
         }
     }
     // otherwise, first see if the path represents a property chain, and if not, a global property
@@ -3573,7 +4054,7 @@ function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, forceLoadTypes
         // create a function to see if the path is a global property if instance processing fails
         var processGlobal = function (instanceParseError) {
             // Retrieve the javascript type by name.
-            type = Model$getJsType(globalTypeName, true);
+            var jstype = Model$getJsType(globalTypeName, allTypesRoot, true);
             // Handle non-existant or non-loaded type.
             if (!type) {
                 // // TODO: Implement lazy loading of types?
@@ -3585,7 +4066,7 @@ function Model$getPropertyOrPropertyChain(pathOrTokens, thisType, forceLoadTypes
                 throw new Error(instanceParseError ? instanceParseError : ("Error getting type \"" + globalTypeName + "\"."));
             }
             // Get the corresponding meta type.
-            type = type.meta;
+            type = jstype.meta;
             // return the static property
             if (callback) {
                 loadProperty(type, globalPropertyName, callback);
@@ -3614,18 +4095,211 @@ function debug(message) {
     // console.log("%c[DEBUG] " + message, "background-color: #efefef; color: #999;");
 }
 
+/**
+ * A subclass of Vue's internal Observer class that is responsible
+ * for managing its own access/change events for properties rather than
+ * walking the object's own properties
+ */
+var CustomObserver = /** @class */ (function (_super) {
+    __extends(CustomObserver, _super);
+    function CustomObserver(value) {
+        var _this = _super.call(this, value) || this;
+        Object.defineProperty(_this, 'propertyDeps', { configurable: false, enumerable: true, value: {}, writable: false });
+        return _this;
+    }
+    CustomObserver.prototype.walk = function () {
+        // Overwrite the `walk()` method to prevent Vue's default property walking behavior
+        // TODO: Should we allow this to happen?
+    };
+    /**
+     * Gets (or creates) a `Dep` object for a property of the given name
+     * The `Dep` object will be stored internally by the observer, using
+     * the given target property name as a key
+     * @param propertyName The target property name
+     * @param create If true, create the `Dep` object if it doesn't already exist
+     */
+    CustomObserver.prototype.getPropertyDep = function (propertyName, create) {
+        if (create === void 0) { create = false; }
+        var propertyDep;
+        var Dep = VueInternals.Dep;
+        var propertyDeps = this.propertyDeps;
+        if (hasOwnProperty$1(propertyDeps, propertyName) && propertyDeps[propertyName] instanceof Dep) {
+            propertyDep = propertyDeps[propertyName];
+        }
+        else if (create) {
+            propertyDep = new Dep();
+            Object.defineProperty(propertyDeps, propertyName, {
+                configurable: true,
+                enumerable: true,
+                value: propertyDep,
+                writable: true
+            });
+        }
+        return propertyDep;
+    };
+    /**
+     * Emulate's Vue's getter logic in `defineReactive()`
+     * @param propertyName The property being accessed
+     * @param value The current property value
+     */
+    CustomObserver.prototype.onPropertyAccess = function (propertyName, value) {
+        var Dep = VueInternals.Dep;
+        // Attach dependencies if something is watching
+        if (Dep.target) {
+            // Get or initialize the `Dep` object
+            var propertyDep = this.getPropertyDep(propertyName, true);
+            // Let an active observer target know that the property was accessed and is a dependency
+            propertyDep.depend();
+            var childOb = observeEntity(value);
+            if (childOb) {
+                childOb.dep.depend();
+            }
+            if (Array.isArray(value)) {
+                // Track dependency on children as well (creating entity observer as needed)
+                dependChildArray(value);
+            }
+        }
+    };
+    /**
+     * Emulate's Vue's setter logic in `defineReactive()`
+     * @param propertyName The property being accessed
+     * @param newValue The new property value
+     */
+    CustomObserver.prototype.onPropertyChange = function (propertyName, newValue) {
+        // Get or initialize the `Dep` object
+        var propertyDep = this.getPropertyDep(propertyName, true);
+        // Make sure a new value that is an entity is observable
+        if (newValue && newValue instanceof Entity) {
+            observeEntity(newValue).ensureObservable();
+        }
+        // Notify of property change
+        propertyDep.notify();
+    };
+    return CustomObserver;
+}(Observer));
+
+/**
+ * A subclass of Vue's internal `Observer` class for entities, which uses model
+ * metadata to manage property access/change rather than property walking and rewriting
+ */
+var EntityObserver = /** @class */ (function (_super) {
+    __extends(EntityObserver, _super);
+    function EntityObserver(entity) {
+        return _super.call(this, entity) || this;
+    }
+    EntityObserver.prototype.walk = function () {
+        // Overwrite the `walk()` method to prevent Vue's default property walking behavior
+        // TODO: Should we allow this to happen?
+    };
+    EntityObserver.prototype.ensureObservable = function () {
+        if (this._observable === true) {
+            return;
+        }
+        this.value.accessed.subscribe(this._onAccess.bind(this));
+        this.value.changed.subscribe(this._onChange.bind(this));
+        this._observable = true;
+    };
+    EntityObserver.prototype._onAccess = function (args) {
+        // Get the current property value
+        var value = args.entity[args.property.fieldName];
+        // Notify interested observers of the property access in order to track dependencies
+        this.onPropertyAccess(args.property.name, value);
+    };
+    EntityObserver.prototype._onChange = function (args) {
+        // Get the current property value
+        var newValue = args.entity[args.property.fieldName];
+        // Notify interested observers of the property change
+        this.onPropertyChange(args.property.name, newValue);
+    };
+    return EntityObserver;
+}(CustomObserver));
+/**
+ * Based on Vue's internals `dependArray()` function
+ * @param array The child array to track as a dependency
+ */
+function dependChildArray(array) {
+    for (var e, i = 0, l = array.length; i < l; i++) {
+        e = array[i];
+        if (e != null) {
+            if (e instanceof Entity) {
+                var observer = getEntityObserver(e, true);
+                observer.ensureObservable();
+                observer.dep.depend();
+            }
+            else if (hasOwnProperty$1(e, '__ob__')) {
+                e.__ob__.dep.depend();
+            }
+            if (Array.isArray(e)) {
+                dependChildArray(e);
+            }
+        }
+    }
+}
+/**
+ * Gets or creates and `EntityObserver` for the given entity
+ * @param entity The entity begin observed
+ * @param create If true, create the observer if it doesn't already exist
+ */
+function getEntityObserver(entity, create) {
+    if (create === void 0) { create = false; }
+    if (hasOwnProperty$1(entity, '__ob__') && getProp(entity, '__ob__') instanceof EntityObserver) {
+        return getProp(entity, '__ob__');
+    }
+    else if (create) {
+        return new EntityObserver(entity);
+    }
+    else {
+        return null;
+    }
+}
+/**
+ * Based on Vue's internal `observe()` function. Ensures that the given entity
+ * is observable and optionally notes that it is referenced by a component
+ * @param entity The entity to observe
+ * @param asRootData The entity is referenced as a component's data
+ */
+function observeEntity(entity, asRootData) {
+    if (asRootData === void 0) { asRootData = false; }
+    if (entity instanceof Entity) {
+        var ob = getEntityObserver(entity, true);
+        if (asRootData && ob) {
+            ob.vmCount++;
+        }
+        return ob;
+    }
+}
+var vueCompatibleModels = [];
+/**
+ * Make sure that entities in the given model are observable by Vue
+ * By default, entities would not be observable, since model properties
+ * are added to the prototype, Vue will not detect them. So, we use a custom
+ * observer that leverages model metadata to manage property access/change.
+ * @param model The model to augment
+ */
+function makeEntitiesVueObservable(model) {
+    if (!model || !(model instanceof Model)) {
+        // TODO: Warn about missing or non-Model argument?
+        return;
+    }
+    if (vueCompatibleModels.indexOf(model) >= 0 || model._entitiesAreVueObservable === true) {
+        return;
+    }
+    model.entityRegistered.subscribe(function (args) {
+        observeEntity(args.entity);
+    });
+    // Make existing entities observable
+    model.getTypes().forEach(function (type) {
+        type.known().forEach(function (entity) {
+            observeEntity(entity);
+        });
+    });
+    vueCompatibleModels.push(model);
+    model._entitiesAreVueObservable = true;
+}
+
 function Vue$isReserved(str) {
     var c = (str + '').charCodeAt(0);
     return c === 0x24 || c === 0x5F;
-}
-function Vue$dependArray(value) {
-    for (var e, i = 0, l = value.length; i < l; i++) {
-        e = value[i];
-        e && e.__ob__ && e.__ob__.dep.depend();
-        if (Array.isArray(e)) {
-            Vue$dependArray(e);
-        }
-    }
 }
 function Vue$proxy(target, sourceKey, key) {
     Object.defineProperty(target, key, {
@@ -3640,186 +4314,27 @@ function Vue$proxy(target, sourceKey, key) {
     });
 }
 
-function EntityObserver$ensureObservable() {
-    if (this._observable === true) {
-        return;
-    }
-    this.value.accessedEvent.subscribe(EntityObserver$_onAccess.bind(this));
-    this.value.changedEvent.subscribe(EntityObserver$_onChange.bind(this));
-    this._observable = true;
-}
-function EntityObserver$_ensureChildEntitiesObservable(array) {
-    for (var e, i = 0, l = array.length; i < l; i++) {
-        e = array[i];
-        if (Array.isArray(e)) {
-            EntityObserver$_ensureChildEntitiesObservable.call(this, e);
-        }
-        else {
-            var observer = Entity$getObserver(e, this._dependencies, true);
-            observer.ensureObservable();
-        }
-    }
-}
-function EntityObserver$_getPropertyDep(property) {
-    var dependencies = this._dependencies;
-    var Vue$Dep = dependencies.Vue$Dep;
-    var dep;
-    var target = this.value;
-    var depFieldName = property.fieldName + "_Dep";
-    if (hasOwnProperty$1(target, depFieldName) && target[depFieldName] instanceof Vue$Dep) {
-        dep = target[depFieldName];
-    }
-    else {
-        dep = new Vue$Dep();
-        Object.defineProperty(target, depFieldName, {
-            configurable: true,
-            enumerable: false,
-            value: dep,
-            writable: true
-        });
-    }
-    return dep;
-}
-function EntityObserver$_onAccess(sender, args) {
-    var dependencies = this._dependencies;
-    var Vue$Dep = dependencies.Vue$Dep;
-    var Model$Type = dependencies.Model$Type;
-    var VueModel$observeEntity = dependencies.VueModel$observeEntity;
-    // Attach dependencies if something is watching
-    if (Vue$Dep.target) {
-        // Get or initialize the `Dep` object
-        var propertyDep = EntityObserver$_getPropertyDep.call(this, args.property, dependencies);
-        propertyDep.depend();
-        var val = args.entity[args.property.fieldName];
-        var childOb = VueModel$observeEntity(val);
-        if (childOb) {
-            childOb.ensureObservable();
-            childOb.dep.depend();
-        }
-        else if (Array.isArray(val)) {
-            var itemType = args.property.propertyType;
-            if (itemType.meta && itemType.meta instanceof Model$Type) {
-                EntityObserver$_ensureChildEntitiesObservable.call(this, val);
-            }
-            // TODO: set up observability entities in child list if needed? -- ex: if args.property.isEntityList...
-            Vue$dependArray(val);
-        }
-    }
-}
-function EntityObserver$_onChange(sender, args) {
-    var dependencies = this._dependencies;
-    var VueModel$observeEntity = dependencies.VueModel$observeEntity;
-    // Get or initialize the `Dep` object
-    var propertyDep = EntityObserver$_getPropertyDep.call(this, args.property, dependencies);
-    // Make sure a new value that is an entity is observable
-    VueModel$observeEntity(args.entity).ensureObservable();
-    // Notify of property change
-    propertyDep.notify();
-}
-var vueCompatibleModels = [];
-function ensureEntityObserversAreCreated(model, dependencies) {
-    if (model == null || vueCompatibleModels.indexOf(model) >= 0) {
-        return;
-    }
-    var Model$Model = dependencies.Model$Model;
-    var VueModel$observeEntity = dependencies.VueModel$observeEntity;
-    if (!(model instanceof Model$Model)) {
-        // TODO: Warn about non-Model argument?
-        return;
-    }
-    model.entityRegisteredEvent.subscribe(function (sender, args) {
-        VueModel$observeEntity(args.entity);
-    });
-    // Make existing entities observable
-    model.types.forEach(function (type) {
-        type.known().forEach(function (entity) {
-            VueModel$observeEntity(entity);
-        });
-    });
-    vueCompatibleModels.push(model);
-}
-function defineEntityObserver(dependencies) {
-    var Vue$Observer = dependencies.Vue$Observer;
-    var ctor = function EntityObserver(entity) {
-        Vue$Observer.apply(this, arguments);
-        this.ensureObservable = EntityObserver$ensureObservable.bind(this);
-        Object.defineProperty(this, "_dependencies", { configurable: false, enumerable: false, value: dependencies, writable: false });
-    };
-    ctor.prototype = new Vue$Observer({});
-    ctor.prototype.constructor = ctor;
-    // ctor.prototype.onAccess = EntityObserver$onAccess;
-    // ctor.prototype.onChange = EntityObserver$onChange;
-    // Prevent walking of entities
-    // TODO: Should we allow this to happen?
-    ctor.prototype.walk = function EntityObserver$walk() {
-        // Do nothing?
-    };
-    return dependencies.VueModel$EntityObserver = ctor;
-}
-function Entity$getObserver(entity, dependencies, create) {
-    if (create === void 0) { create = false; }
-    var VueModel$EntityObserver = dependencies.VueModel$EntityObserver;
-    if (hasOwnProperty$1(entity, '__ob__') && getProp(entity, '__ob__') instanceof VueModel$EntityObserver) {
-        return getProp(entity, '__ob__');
-    }
-    else if (create) {
-        return new VueModel$EntityObserver(entity);
-    }
-    else {
-        return null;
-    }
-}
-function defineObserveEntity(dependencies) {
-    return dependencies.VueModel$observeEntity = function VueModel$observeEntity(entity, asRootData) {
-        if (asRootData === void 0) { asRootData = false; }
-        var Model$Entity = dependencies.Model$Entity;
-        if (entity instanceof Model$Entity) {
-            var ob = Entity$getObserver(entity, dependencies, true);
-            if (asRootData && ob) {
-                ob.vmCount++;
-            }
-            return ob;
-        }
-    };
-}
-function VueModel$makeEntitiesVueObservable(model, dependencies) {
-    var entitiesAreVueObservable = dependencies.entitiesAreVueObservable;
-    if (entitiesAreVueObservable) {
-        ensureEntityObserversAreCreated(model, dependencies);
-        return dependencies;
-    }
-    defineEntityObserver(dependencies);
-    defineObserveEntity(dependencies);
-    ensureEntityObserversAreCreated(model, dependencies);
-    dependencies.entitiesAreVueObservable = true;
-    return dependencies;
-}
-
-function replaceEntityData(vm, data, dependencies) {
-    var Model$Entity = dependencies.Model$Entity;
+function replaceEntityData(vm, data) {
     var vm$private = vm;
-    if (data != null && data instanceof Model$Entity) {
+    if (data != null && data instanceof Entity) {
         vm$private._entity = data;
         return {};
     }
     return data;
 }
-function preprocessDataToInterceptEntities(vm, dependencies) {
+function preprocessDataToInterceptEntities(vm) {
     if (!vm.$options.data) {
         return;
     }
     if (vm.$options.data instanceof Function) {
         var dataFn = vm.$options.data;
         vm.$options.data = function () {
-            return replaceEntityData(vm, dataFn.apply(this, arguments), dependencies);
+            return replaceEntityData(vm, dataFn.apply(this, arguments));
         };
     }
     else {
-        var entitiesAreVueObservable = dependencies.entitiesAreVueObservable;
-        if (!entitiesAreVueObservable) {
-            // Don't let Vue from getting an Entity prior to setting up Entity observability
-            vm.$options.data = replaceEntityData(vm, vm.$options.data, dependencies);
-        }
+        // Don't let Vue from getting an Entity prior to setting up Entity observability
+        vm.$options.data = replaceEntityData(vm, vm.$options.data);
     }
 }
 function proxyEntityPropertiesOntoComponentInstance(vm, entity) {
@@ -3841,8 +4356,7 @@ function proxyEntityPropertiesOntoComponentInstance(vm, entity) {
         }
     }
 }
-function restoreComponentEntityData(vm, dependencies) {
-    var VueModel$observeEntity = dependencies.VueModel$observeEntity;
+function restoreComponentEntityData(vm) {
     var vm$private = vm;
     // Since the entity is now observable, go ahead and let the component see it
     // TODO: Is it necessary to somehow "merge" the object? Or, just not set the data
@@ -3853,67 +4367,35 @@ function restoreComponentEntityData(vm, dependencies) {
     proxyEntityPropertiesOntoComponentInstance(vm, vm$private._entity);
     // The internal `observe()` method basically makes the given object observable,
     // (entities should already be at this point) but it also updates a `vmCount` counter
-    VueModel$observeEntity(vm$private._entity, true);
+    observeEntity(vm$private._entity, true);
     // Null out the field now that we've finished preparing the entity
     vm$private._entity = null;
 }
 
-function interceptInternalTypes(obj, dependencies) {
-    if (!dependencies.Vue$Observer && obj.__ob__) {
-        dependencies.Vue$Observer = obj.__ob__.constructor;
-    }
-    if (!dependencies.Vue$Dep && obj.__ob__ && obj.__ob__.dep) {
-        dependencies.Vue$Dep = obj.__ob__.dep.constructor;
-    }
-}
-function VueModel$installPlugin(Vue, dependencies) {
+function VueModel$installPlugin(Vue) {
     Vue.mixin({
         beforeCreate: function VueModel$Plugin$beforeCreate() {
             var vm = this;
             if (vm.$options.data) {
                 // Intercept data that is an entity or data function that returns an entity
                 // so that this plugin can make the entity observable and create proxy properties
-                preprocessDataToInterceptEntities(vm, dependencies);
+                preprocessDataToInterceptEntities(vm);
             }
-            // if (vm.$options.propsData) {
-            //     // Intercept the `source` prop so that it can be marked as having a source
-            //     // and lazily evaluated if needed, or detected by other components
-            //     preprocessPropsToInterceptSource(vm);
-            // }
         },
         created: function VueModel$Plugin$created() {
             var vm = this;
             var vm$private = vm;
-            if (vm$private._data) {
-                interceptInternalTypes(vm$private._data, dependencies);
-            }
             if (vm$private._entity) {
-                interceptInternalTypes(vm$private._entity, dependencies);
-                if (!dependencies.entitiesAreVueObservable) {
+                var entity = vm$private._entity;
+                if (!entity.meta.type.model._entitiesAreVueObservable) {
                     // Ensure that Model entities are observable objects compatible with Vue's observer
-                    VueModel$makeEntitiesVueObservable(vm$private._entity.meta.type.model, dependencies);
+                    makeEntitiesVueObservable(vm$private._entity.meta.type.model);
                 }
-                Entity$getObserver(vm$private._entity, dependencies, true).ensureObservable();
+                getEntityObserver(vm$private._entity, true).ensureObservable();
                 // Restore the data by attempting to emulate what would have happened to
                 // the `data` object had it gone through normal component intialization
-                restoreComponentEntityData(vm, dependencies);
+                restoreComponentEntityData(vm);
             }
-            // if (isSourceAdapter(vm$private._data)) {
-            //     let sourceAdapter = vm$private._data as SourceAdapter<any>;
-            //     // Define the `$source` property if not already defined
-            //     defineDollarSourceProperty(vm, sourceAdapter);
-            //     // TODO: Who wins, props or data?
-            //     // Vue proxies the data objects `Object.keys()` onto the component itself,
-            //     // so that the data objects properties can be used directly in templates
-            //     proxySourceAdapterPropertiesOntoComponentInstance(vm, '_data', false, false);
-            // }
-            // Handle computed `source` property that is of type `SourceAdapter`?
-            // if (vm.$options.propsData) {
-            //     let props = vm.$options.propsData as any;
-            //     if (hasOwnProperty(props, 'source')) {
-            //         establishBindingSource(vm, dependencies as VuePluginSourceBindingDependencies);
-            //     }
-            // }
         }
     });
 }
@@ -3960,10 +4442,14 @@ var SourceRootAdapter = /** @class */ (function () {
     function SourceRootAdapter(entity) {
         // Public read-only properties
         Object.defineProperty(this, "entity", { enumerable: true, value: entity });
+        getEntityObserver(entity).ensureObservable();
+        Object.defineProperty(this, "__ob__", { configurable: false, enumerable: false, value: new CustomObserver(this), writable: false });
     }
     Object.defineProperty(SourceRootAdapter.prototype, "value", {
         get: function () {
-            return this.entity;
+            var value = this.entity;
+            this.__ob__.onPropertyAccess('value', value);
+            return value;
         },
         enumerable: true,
         configurable: true
@@ -3971,7 +4457,9 @@ var SourceRootAdapter = /** @class */ (function () {
     Object.defineProperty(SourceRootAdapter.prototype, "displayValue", {
         get: function () {
             // TODO: Use type-level format for entity `displayValue`
-            return this.entity.meta.type.fullName + "|" + this.entity.meta.id;
+            var displayValue = this.entity.meta.type.fullName + "|" + this.entity.meta.id;
+            this.__ob__.onPropertyAccess('displayValue', displayValue);
+            return displayValue;
         },
         enumerable: true,
         configurable: true
@@ -3982,13 +4470,440 @@ var SourceRootAdapter = /** @class */ (function () {
     return SourceRootAdapter;
 }());
 
+var SourceOptionAdapter = /** @class */ (function () {
+    function SourceOptionAdapter(source, value) {
+        // Public read-only properties
+        Object.defineProperty(this, "source", { enumerable: true, value: source });
+        Object.defineProperty(this, "_value", { enumerable: true, value: value });
+        Object.defineProperty(this, "__ob__", { configurable: false, enumerable: false, value: new CustomObserver(this), writable: false });
+    }
+    Object.defineProperty(SourceOptionAdapter.prototype, "label", {
+        get: function () {
+            // TODO: Make observable if label is dynamic
+            return this.source.label;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourceOptionAdapter.prototype, "value", {
+        get: function () {
+            var value = this._value;
+            this.__ob__.onPropertyAccess('value', value);
+            return value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourceOptionAdapter.prototype, "displayValue", {
+        get: function () {
+            var value = this._value;
+            var displayValue = SourcePathAdapter$_formatDisplayValue.call(this.source, value);
+            this.__ob__.onPropertyAccess('displayValue', displayValue);
+            return displayValue;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SourceOptionAdapter.prototype.toString = function () {
+        return "Option for Source['" + this.source.property.name + "']";
+    };
+    return SourceOptionAdapter;
+}());
+
+var ConditionRule = /** @class */ (function (_super) {
+    __extends$1(ConditionRule, _super);
+    /**
+     * Creates a rule that asserts a condition based on a predicate
+     * @param rootType The model type the rule is for
+     * @param options The options for the rule, of type ConditionRuleOptions
+     */
+    function ConditionRule(rootType, options, skipRegistration) {
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // Exit immediately if called with no arguments
+        if (arguments.length === 0)
+            return;
+        // automatically run the condition rule during initialization of new instances
+        if (!options.hasOwnProperty("onInitNew")) {
+            options.onInitNew = true;
+        }
+        // coerce string to condition type
+        var conditionType = options.conditionType;
+        if (typeof conditionType === "string") {
+            conditionType = ConditionType.get(conditionType);
+        }
+        // automatically run the condition rule during initialization of existing instances if the condition type was defined on the client
+        if (!options.hasOwnProperty("onInitExisting") && conditionType && conditionType.origin !== "server") {
+            options.onInitExisting = true;
+        }
+        // Call the base rule constructor
+        _this = _super.call(this, rootType, name, options, true) || this;
+        // store the condition predicate
+        var assert = options.assert || options.fn;
+        if (assert) {
+            _this._assert = assert;
+        }
+        if (!conditionType) {
+            // create a condition type if not passed in, defaulting to Error if a condition category was not specified
+            conditionType = Rule$ensureConditionType(options.name, rootType, options.category || "ErrorConditionType");
+        }
+        Object.defineProperty(_this, "conditionType", { enumerable: true, value: conditionType });
+        // store the condition message and properties
+        if (options.message) {
+            Object.defineProperty(_this, "_message", { value: options.message, writable: true });
+        }
+        Object.defineProperty(_this, "_properties", { value: options.properties || [], writable: true });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // subclasses may override this function to return the set of properties to attach conditions to for this rule
+    ConditionRule.prototype.getProperties = function () {
+        return hasOwnProperty(this, "_properties") ? this._properties : [];
+    };
+    // subclasses may override this function to calculate an appropriate message for this rule during the registration process
+    ConditionRule.prototype.getMessage = function (obj) {
+        if (hasOwnProperty(this, "_message")) {
+            if (typeof this._message === "string") {
+                var compiledMessageFn = new Function(this._message);
+                this._message = compiledMessageFn;
+            }
+            if (this._message instanceof Function) {
+                return this._message.call(obj);
+            }
+        }
+        return this.conditionType.message;
+    };
+    // subclasses may override this function to indicate whether the condition should be asserted
+    ConditionRule.prototype.assert = function (obj) {
+        throw new Error("ConditionRule.assert() must be passed into the constructor or overriden by subclasses.");
+    };
+    // asserts the condition and adds or removes it from the model if necessary
+    ConditionRule.prototype.execute = function (obj, args) {
+        if (args === void 0) { args = null; }
+        var assert;
+        // call assert the root object as "this" if the assertion function was overriden in the constructor
+        if (hasOwnProperty(this, "assert")) {
+            // convert string functions into compiled functions on first execution
+            if (typeof this.assert === "string") {
+                this.assert = (new Function("obj", this.assert));
+            }
+            assert = this.assert.call(obj, obj, args);
+        }
+        // otherwise, allow "this" to be the current rule to support subclasses that override assert
+        else {
+            assert = this.assert(obj);
+        }
+        var message;
+        if (hasOwnProperty(this, "message")) {
+            message = ConditionRule.prototype.getMessage.bind(this);
+        }
+        // create or remove the condition if necessary
+        if (assert !== undefined) {
+            this.conditionType.when(assert, obj, this._properties instanceof Function ? this._properties.call(obj) : this._properties, message);
+        }
+    };
+    // gets the string representation of the condition rule
+    ConditionRule.prototype.toString = function () {
+        return typeof this._message === "string" ? this._message : this.conditionType.message;
+    };
+    return ConditionRule;
+}(Rule));
+
+var ValidatedPropertyRule = /** @class */ (function (_super) {
+    __extends$1(ValidatedPropertyRule, _super);
+    function ValidatedPropertyRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates the value of a property in the model.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			isValid:			function (obj, prop, val) { return true; } (a predicate that returns true when the property is valid)
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        ///			properties:			an array of property paths the validation condition should be attached to when asserted, in addition to the target property
+        ///			onInit:				true to indicate the rule should run when an instance of the root type is initialized, otherwise false
+        ///			onInitNew:			true to indicate the rule should run when a new instance of the root type is initialized, otherwise false
+        ///			onInitExisting:		true to indicate the rule should run when an existing instance of the root type is initialized, otherwise false
+        ///			onChangeOf:			an array of property paths (strings, Property or PropertyChain instances) that drive when the rule should execute due to property changes
+        /// </param>
+        /// <returns type="ValidatedPropertyRule">The new validated property rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // exit immediately if called with no arguments
+        if (arguments.length == 0)
+            return;
+        // ensure the rule name is specified
+        options.name = options.name || "ValidatedProperty";
+        // store the property being validated
+        var property = typeof options.property === "string" ? rootType.getProperty(options.property) : options.property;
+        // ensure the properties and predicates to include the target property
+        if (!options.properties) {
+            options.properties = [property.name];
+        }
+        else if (options.properties.indexOf(property.name) < 0 && options.properties.indexOf(property) < 0) {
+            options.properties.push(property.name);
+        }
+        if (!options.onChangeOf) {
+            options.onChangeOf = [property];
+        }
+        else if (options.onChangeOf.indexOf(property.name) < 0 && options.onChangeOf.indexOf(property) < 0) {
+            options.onChangeOf.push(property);
+        }
+        // Default condition category to Error if a condition category was not specified
+        if (!options.conditionType) {
+            options.category = "Error";
+        }
+        // replace the property label token in the validation message if present
+        if (options.message && typeof (options.message) !== "function") {
+            options.message = options.message.replace('{property}', property.label);
+        }
+        // call the base rule constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        Object.defineProperty(_this, "property", { value: property });
+        // override the prototype isValid function if specified
+        if (options.isValid instanceof Function) {
+            Object.defineProperty(_this, "_isValid", { value: options.isValid });
+        }
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // returns false if the property is valid, true if invalid, or undefined if unknown
+    ValidatedPropertyRule.prototype.isValid = function (obj, prop, val) {
+        return this._isValid(obj, prop, val);
+    };
+    // returns false if the property is valid, true if invalid, or undefined if unknown
+    ValidatedPropertyRule.prototype.assert = function (obj) {
+        var isValid = this.isValid(obj, this.property, this.property.value(obj));
+        return isValid === undefined ? isValid : !isValid;
+    };
+    // perform addition initialization of the rule when it is registered
+    ValidatedPropertyRule.prototype.onRegister = function () {
+        // register the rule with the target property
+        registerPropertyRule(this);
+    };
+    return ValidatedPropertyRule;
+}(ConditionRule));
+
+var Resource = {
+    "allowed-values": "{property} is not in the list of allowed values.",
+    "compare-after": "{property} must be after {compareSource}.",
+    "compare-before": "{property} must be before {compareSource}.",
+    "compare-equal": "{property} must be the same as {compareSource}.",
+    "compare-greater-than": "{property} must be greater than {compareSource}.",
+    "compare-greater-than-or-equal": "{property} must be greater than or equal to {compareSource}.",
+    "compare-less-than": "{property} must be less than {compareSource}.",
+    "compare-less-than-or-equal": "{property} must be less than or equal to {compareSource}.",
+    "compare-not-equal": "{property} must be different from {compareSource}.",
+    "compare-on-or-after": "{property} must be on or after {compareSource}.",
+    "compare-on-or-before": "{property} must be on or before {compareSource}.",
+    "listlength-at-least": "Please specify at least {min} {property}.",
+    "listlength-at-most": "Please specify no more than {max} {property}.",
+    "listlength-between": "Please specify between {min} and {max} {property}.",
+    "range-at-least": "{property} must be at least {min}.",
+    "range-at-most": "{property} must be at most {max}.",
+    "range-between": "{property} must be between {min} and {max}.",
+    "range-on-or-after": "{property} must be on or after {min}.",
+    "range-on-or-before": "{property} must be on or before {max}.",
+    "required": "{property} is required.",
+    "required-if-after": "{property} is required when {compareSource} is after {compareValue}.",
+    "required-if-before": "{property} is required when {compareSource} is before {compareValue}.",
+    "required-if-equal": "{property} is required when {compareSource} is {compareValue}.",
+    "required-if-exists": "{property} is required when {compareSource} is specified.",
+    "required-if-greater-than": "{property} is required when {compareSource} is greater than {compareValue}.",
+    "required-if-greater-than-or-equal": "{property} is required when {compareSource} is greater than or equal to {compareValue}.",
+    "required-if-less-than": "{property} is required when {compareSource} is less than {compareValue}.",
+    "required-if-less-than-or-equal": "{property} is required when {compareSource} is less than or equal to {compareValue}.",
+    "required-if-not-equal": "{property} is required when {compareSource} is not {compareValue}.",
+    "required-if-not-exists": "{property} is required when {compareSource} is not specified.",
+    "required-if-on-or-after": "{property} is required when {compareSource} is on or after {compareValue}.",
+    "required-if-on-or-before": "{property} is required when {compareSource} is on or before {compareValue}.",
+    "string-format": "{property} must be formatted as {formatDescription}.",
+    "string-length-at-least": "{property} must be at least {min} characters.",
+    "string-length-at-most": "{property} must be at most {max} characters.",
+    "string-length-between": "{property} must be between {min} and {max} characters.",
+    "format-with-description": "{property} must be formatted as {description}.",
+    "format-without-description": "{property} is not properly formatted.",
+    "format-currency": "$#,###.##",
+    "format-percentage": "#.##%",
+    "format-integer": "#,###",
+    "format-decimal": "#,###.##",
+    // gets the resource with the specified name
+    get: function Resource$get(name) {
+        return this[name];
+    }
+};
+
+var AllowedValuesRule = /** @class */ (function (_super) {
+    __extends$1(AllowedValuesRule, _super);
+    /**
+     * Creates a rule that validates whether a selected value or values is in a list of allowed values.
+     * @param rootType The root type to bind the rule to
+     * @param options The rule configuration options
+     */
+    function AllowedValuesRule(rootType, options, skipRegistration) {
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // ensure the rule name is specified
+        options.name = options.name || "AllowedValues";
+        // ensure the error message is specified
+        // options.message = options.message || Resource.get("allowed-values");
+        options.message = options.message || Resource.get("allowed-values");
+        var source;
+        var sourcePath;
+        var sourceFn;
+        // subscribe to changes to the source property
+        if (options.source) {
+            // define properties for the rule
+            if (options.source instanceof Property || options.source instanceof PropertyChain) {
+                sourcePath = options.source.getPath();
+                source = options.source;
+                options.onChangeOf = [options.source];
+            }
+            else if (options.source instanceof Function) {
+                sourceFn = options.source;
+            }
+            else {
+                sourcePath = options.source;
+                options.onChangeOf = [options.source];
+            }
+        }
+        // Default condition category to Error if a condition category was not specified
+        if (!options.conditionType) {
+            options.category = "Error";
+        }
+        // never run allowed values rules during initialization of existing instances
+        if (!options.hasOwnProperty("onInitExisting") && options.conditionType instanceof ConditionType && options.conditionType.origin === "server") {
+            options.onInitExisting = false;
+        }
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        if (source) {
+            Object.defineProperty(_this, "_source", { enumerable: false, value: source });
+        }
+        if (sourcePath) {
+            Object.defineProperty(_this, "_sourcePath", { enumerable: false, value: sourcePath });
+        }
+        if (sourceFn) {
+            Object.defineProperty(_this, "_sourceFn", { enumerable: false, value: sourceFn });
+        }
+        if (options.ignoreValidation) {
+            Object.defineProperty(_this, "ignoreValidation", { value: options.ignoreValidation });
+        }
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    AllowedValuesRule.prototype.onRegister = function () {
+        // get the allowed values source, if only the path was specified
+        if (!this._source && !this._sourceFn) {
+            this._source = Model$getPropertyOrPropertyChain(this._sourcePath, this.rootType, this.rootType.model._allTypesRoot);
+        }
+        _super.prototype.onRegister.call(this);
+    };
+    AllowedValuesRule.prototype.isValid = function (obj, prop, value) {
+        //gives the ability to create a drop down of available options
+        //but does not need validatin (combo box)
+        if (this.ignoreValidation) {
+            return true;
+        }
+        // return true if no value is currently selected
+        if (!value) {
+            return true;
+        }
+        // get the list of allowed values of the property for the given object
+        var allowed = this.values(obj);
+        // TODO: Lazy loading?
+        // return undefined if the set of allowed values cannot be determined
+        // if (!LazyLoader.isLoaded(allowed)) {
+        // 	return;
+        // }
+        // ensure that the value or list of values is in the allowed values list (single and multi-select)				
+        if (value instanceof Array) {
+            return value.every(function (item) { return allowed.indexOf(item) >= 0; });
+        }
+        else {
+            return allowed.indexOf(value) >= 0;
+        }
+    };
+    // // Subscribes to changes to the allow value predicates, indicating that the allowed values have changed
+    // addChanged(handler, obj, once) {
+    // 	for (var p = 0; p < this.predicates.length; p++) {
+    // 		var predicate = this.predicates[p];
+    // 		if (predicate !== this.property)
+    // 			predicate.addChanged(handler, obj, once);
+    // 	}
+    // }
+    // // Unsubscribes from changes to the allow value predicates
+    // removeChanged(handler, obj, once) {
+    // 	for (var p = 0; p < this.predicates.length; p++) {
+    // 		var predicate = this.predicates[p];
+    // 		if (predicate !== this.property)
+    // 			predicate.removeChanged(handler, obj, once);
+    // 	}
+    // }
+    AllowedValuesRule.prototype.values = function (obj, exitEarly) {
+        if (exitEarly === void 0) { exitEarly = false; }
+        if (!this._source && !this._sourceFn) {
+            // TODO: Log warning?
+            // logWarning("AllowedValues rule on type \"" + this.prop.get_containingType().get_fullName() + "\" has not been initialized.");
+            return;
+        }
+        // Function-based allowed values
+        if (this._sourceFn) {
+            // convert string functions into compiled functions on first execution
+            if (typeof this._sourceFn === "string") {
+                this._sourceFn = (new Function("obj", this._sourceFn));
+            }
+            return this._sourceFn.call(obj, obj);
+        }
+        // Property path-based allowed values
+        else {
+            // For non-static properties, verify that a final target exists and
+            // if not return an appropriate null or undefined value instead.
+            if (!(this._source instanceof Property) || !this._source.isStatic) {
+                // Get the value of the last target for the source property (chain).
+                var target = obj;
+                if (this._source instanceof PropertyChain) {
+                    this._source.getLastTarget(obj, exitEarly);
+                }
+                // Use the last target to distinguish between the absence of data and
+                // data that has not been loaded, if a final value cannot be obtained.
+                if (target === undefined) {
+                    // Undefined signifies unloaded data
+                    return undefined;
+                }
+                else if (target === null) {
+                    // Null signifies the absensce of a value
+                    return null;
+                }
+            }
+            // Return the value of the source for the given object
+            return this._source.value(obj);
+        }
+    };
+    AllowedValuesRule.prototype.toString = function () {
+        return this.property.containingType.fullName + "." + this.property.name + " allowed values = " + this._sourcePath;
+    };
+    return AllowedValuesRule;
+}(ValidatedPropertyRule));
+
 var SourcePathAdapter = /** @class */ (function () {
-    // TODO: Support format options
-    // private _format: string;
     function SourcePathAdapter(source, path) {
         // Public read-only properties
         Object.defineProperty(this, "source", { enumerable: true, value: source });
         Object.defineProperty(this, "path", { enumerable: true, value: path });
+        getEntityObserver(source.value).ensureObservable();
+        Object.defineProperty(this, "__ob__", { configurable: false, enumerable: false, value: new CustomObserver(this), writable: false });
     }
     Object.defineProperty(SourcePathAdapter.prototype, "property", {
         get: function () {
@@ -4001,6 +4916,7 @@ var SourcePathAdapter = /** @class */ (function () {
     });
     Object.defineProperty(SourcePathAdapter.prototype, "label", {
         get: function () {
+            // TODO: Make observable if label is dynamic
             return this.property.label;
         },
         enumerable: true,
@@ -4008,6 +4924,7 @@ var SourcePathAdapter = /** @class */ (function () {
     });
     Object.defineProperty(SourcePathAdapter.prototype, "helptext", {
         get: function () {
+            // TODO: Make observable if helptext is dynamic
             return this.property.helptext;
         },
         enumerable: true,
@@ -4015,51 +4932,201 @@ var SourcePathAdapter = /** @class */ (function () {
     });
     Object.defineProperty(SourcePathAdapter.prototype, "value", {
         get: function () {
-            return this.property.value(this.source.value);
+            var property = this.property;
+            var value = property.value(this.source.value);
+            SourcePathAdapter$_ensureObservable.call(value);
+            this.__ob__.onPropertyAccess('value', value);
+            return value;
         },
         set: function (value) {
-            this.property.value(this.source.value, value);
+            var property = this.property;
+            var entity = this.source.value;
+            // Make sure a new value that is an entity is observable
+            if (value instanceof Entity) {
+                observeEntity(value).ensureObservable();
+            }
+            // TODO: Account for static properties
+            var previousValue = entity[property.fieldName];
+            // Set the underlying property value
+            property.value(entity, value);
+            if (value !== previousValue) {
+                this.__ob__.onPropertyChange('value', value);
+            }
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(SourcePathAdapter.prototype, "displayValue", {
         get: function () {
-            var _this = this;
-            var value = this.property.value(this.source.value);
-            var displayValue;
-            if (value === null || value === undefined) {
-                displayValue = "";
-            }
-            else if (this.property.format != null) {
-                // Use a markup or property format if available
-                if (Array.isArray(value)) {
-                    var array = value;
-                    displayValue = array.map(function (item) { return _this.property.format.convert(item); });
-                }
-                else {
-                    displayValue = this.property.format.convert(value);
-                }
-            }
-            else if (Array.isArray(value)) {
-                // If no format exists, then fall back to toString
-                var array = value;
-                displayValue = array.map(function (item) {
-                    if (value === null || value === undefined) {
-                        return "";
-                    }
-                    else {
-                        return item.toString();
-                    }
-                });
-            }
-            else {
-                displayValue = value.toString();
-            }
-            return Array.isArray(displayValue) ? displayValue.join(", ") : displayValue;
+            var property = this.property;
+            var value = property.value(this.source.value);
+            SourcePathAdapter$_ensureObservable.call(value);
+            var displayValue = SourcePathAdapter$_formatDisplayValue.call(this, value);
+            this.__ob__.onPropertyAccess('displayValue', displayValue);
+            return displayValue;
         },
         set: function (text) {
-            this.value = this.property.format != null ? this.property.format.convertBack(text) : text;
+            var property = this.property;
+            var entity = this.source.value;
+            // TODO: Account for static properties
+            var previousValue = entity[property.fieldName];
+            var value = property.format != null ? property.format.convertBack(text) : text;
+            this.value = value;
+            if (value !== previousValue) {
+                this.__ob__.onPropertyChange('displayValue', text);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourcePathAdapter.prototype, "allowedValuesRule", {
+        get: function () {
+            var allowedValuesRule;
+            if (hasOwnProperty(this, "_allowedValuesRule")) {
+                allowedValuesRule = this._allowedValuesRule;
+            }
+            else {
+                var property = this.property;
+                allowedValuesRule = property._rules.filter(function (r) { return r instanceof AllowedValuesRule; })[0];
+                if (allowedValuesRule) {
+                    Object.defineProperty(this, '_allowedValuesRule', { enumerable: false, value: allowedValuesRule, writable: true });
+                }
+                else if (!this._allowedValuesRuleExistsHandler) {
+                    // Watch for the registration of an allowed values rule if it doesn't exist
+                    var allowedValuesRuleExistsHandler = SourcePathAdapter$_checkAllowedValuesRuleExists.bind(this);
+                    Object.defineProperty(this, '_allowedValuesRuleExistsHandler', { enumerable: false, value: allowedValuesRuleExistsHandler, writable: true });
+                    property.ruleRegistered.subscribe(allowedValuesRuleExistsHandler);
+                }
+            }
+            this.__ob__.onPropertyAccess('allowedValuesRule', allowedValuesRule);
+            return allowedValuesRule;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourcePathAdapter.prototype, "allowedValuesSource", {
+        get: function () {
+            var allowedValuesSource;
+            if (hasOwnProperty(this, "_allowedValuesSource")) {
+                allowedValuesSource = this._allowedValuesSource;
+            }
+            else {
+                var allowedValuesRule = this.allowedValuesRule;
+                if (allowedValuesRule) {
+                    allowedValuesSource = allowedValuesRule._source;
+                    if (allowedValuesSource) {
+                        Object.defineProperty(this, '_allowedValuesSource', { enumerable: false, value: allowedValuesSource, writable: true });
+                    }
+                }
+            }
+            this.__ob__.onPropertyAccess('allowedValuesSource', allowedValuesSource);
+            return allowedValuesSource;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourcePathAdapter.prototype, "allowedValues", {
+        get: function () {
+            var allowedValues;
+            if (hasOwnProperty(this, "_allowedValues")) {
+                allowedValues = this._allowedValues;
+            }
+            else {
+                var property = this.property;
+                var allowedValuesRule = this.allowedValuesRule;
+                // Watch for the registration of an allowed values rule if it doesn't exist
+                if (!allowedValuesRule) {
+                    var allowedValuesRuleExistsHandler = SourcePathAdapter$_checkAllowedValuesRuleExists.bind(this);
+                    Object.defineProperty(this, '_allowedValuesRuleExistsHandler', { enumerable: false, value: allowedValuesRuleExistsHandler, writable: true });
+                    property.ruleRegistered.subscribe(allowedValuesRuleExistsHandler);
+                    this._allowedValues = null;
+                    this.__ob__.onPropertyAccess('allowedValues', null);
+                    return;
+                }
+                // Cache the last target
+                // TODO: Support property chains...
+                // var targetObj = property.getLastTarget(this.source.value);
+                var targetObj = this.source.value;
+                // Retrieve the value of allowed values property
+                var allowedValuesFromRule = allowedValuesRule.values(targetObj, this.allowedValuesMayBeNull);
+                // TODO: Support lazy loading type/property metadata?
+                // if (allowedValues === undefined && allowedValuesSource && (allowedValuesSource instanceof Property || allowedValuesSource instanceof PropertyChain)) { ...
+                if (allowedValuesFromRule) {
+                    // Create an observable copy of the allowed values that we can keep up to date in our own time
+                    allowedValues = ObservableArray.create(allowedValuesFromRule.slice());
+                    if (!this._allowedValuesChangedHandler) {
+                        // Respond to changes to allowed values
+                        var allowedValuesSource = this.allowedValuesSource;
+                        var allowedValuesChangedHandler = SourcePathAdapter$_allowedValuesChanged.bind(this);
+                        Object.defineProperty(this, '_allowedValuesChangedHandler', { enumerable: false, value: allowedValuesChangedHandler, writable: true });
+                        Property$addChanged(allowedValuesSource, allowedValuesChangedHandler, targetObj, true);
+                    }
+                    // Clear our values that are no longer valid
+                    if (!allowedValuesRule.ignoreValidation) {
+                        SourcePathAdapter$_clearInvalidOptions.call(this, allowedValues);
+                    }
+                    // TODO: Support lazy loading lists?
+                    // if (LazyLoader.isRegistered(allowedValues)) { ...
+                    // TODO: Support allowed values transformation?
+                    // transformedAllowedValues = $transform(observableAllowedValues, true);
+                    this._allowedValues = allowedValues;
+                }
+                else {
+                    // Subscribe to property/chain change for the entity in order to populate the options when available
+                    var allowedValuesSource = this.allowedValuesSource;
+                    if (allowedValuesSource && !this._allowedValuesExistHandler) {
+                        var allowedValuesExistHandler = SourcePathAdapter$_checkAllowedValuesExist.bind(this);
+                        Object.defineProperty(this, '_allowedValuesExistHandler', { enumerable: false, value: allowedValuesExistHandler, writable: true });
+                        Property$addChanged(allowedValuesSource, allowedValuesExistHandler, targetObj);
+                    }
+                    // Clear out values since the property doesn't currently have any allowed values
+                    if (!allowedValuesRule.ignoreValidation) {
+                        SourcePathAdapter$_clearInvalidOptions.call(this);
+                    }
+                    this._allowedValues = null;
+                    return;
+                }
+            }
+            this.__ob__.onPropertyAccess('allowedValues', allowedValues);
+            return allowedValues;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourcePathAdapter.prototype, "options", {
+        get: function () {
+            var _this = this;
+            var options;
+            if (hasOwnProperty(this, "_options")) {
+                options = this._options;
+            }
+            else {
+                var allowedValues = this.allowedValues;
+                if (this._allowedValuesCollectionChangedHandler) {
+                    allowedValues.changed.unsubscribe(this._allowedValuesCollectionChangedHandler);
+                    delete this._allowedValuesCollectionChangedHandler;
+                }
+                if (allowedValues) {
+                    // Respond to changes to allowed values
+                    var allowedValuesCollectionChangedHandler = SourcePathAdapter$_allowedValuesCollectionChanged.bind(this);
+                    Object.defineProperty(this, '_allowedValuesCollectionChangedHandler', { enumerable: false, value: allowedValuesCollectionChangedHandler, writable: true });
+                    allowedValues.changed.subscribe(allowedValuesCollectionChangedHandler);
+                }
+                else if (this.property.propertyType === Boolean) {
+                    // Provide true and false as special allowed values for booleans
+                    allowedValues = ObservableArray.create([true, false]);
+                }
+                if (allowedValues) {
+                    // Map the allowed values to option adapters
+                    options = allowedValues.map(function (v) { return new SourceOptionAdapter(_this, v); });
+                }
+                else {
+                    options = null;
+                }
+                this._options = options;
+            }
+            this.__ob__.onPropertyAccess('options', options);
+            return options;
         },
         enumerable: true,
         configurable: true
@@ -4069,6 +5136,184 @@ var SourcePathAdapter = /** @class */ (function () {
     };
     return SourcePathAdapter;
 }());
+function SourcePathAdapter$_ensureObservable(value) {
+    if (Array.isArray(value)) {
+        for (var i = 0; i < value.length; i++) {
+            var item = value[i];
+            if (item instanceof Entity) {
+                observeEntity(item).ensureObservable();
+            }
+        }
+    }
+    else if (value instanceof Entity) {
+        observeEntity(value).ensureObservable();
+    }
+}
+function SourcePathAdapter$_formatDisplayValue(value) {
+    var displayValue;
+    var property = this.property;
+    if (value === null || value === undefined) {
+        displayValue = "";
+    }
+    else if (property.format != null) {
+        // Use a markup or property format if available
+        if (Array.isArray(value)) {
+            var array = value;
+            displayValue = array.map(function (item) { return property.format.convert(item); });
+        }
+        else {
+            displayValue = property.format.convert(value);
+        }
+    }
+    else if (Array.isArray(value)) {
+        // If no format exists, then fall back to toString
+        var array = value;
+        displayValue = array.map(function (item) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+            else {
+                return item.toString();
+            }
+        });
+    }
+    else {
+        displayValue = value.toString();
+    }
+    displayValue = Array.isArray(displayValue) ? displayValue.join(", ") : displayValue;
+    return displayValue;
+}
+// Notify subscribers that options are available
+function SourcePathAdapter$_signalOptionsReady() {
+    // if (this._disposed) {
+    // 	return;
+    // }
+    // Delete backing fields so that options can be recalculated (and loaded)
+    delete this._options;
+    // Get the `Dep` object for the options property
+    var optionsPropertyDep = this.__ob__.getPropertyDep('options');
+    if (optionsPropertyDep) {
+        // Notify of change in order to cause subscribers to fetch the new value
+        optionsPropertyDep.notify();
+    }
+}
+function SourcePathAdapter$_clearInvalidOptions(allowedValues) {
+    var property = this.property;
+    var value = this.value;
+    if (allowedValues) {
+        // Remove option values that are no longer valid
+        if (value instanceof Array) {
+            var array = value;
+            array.batchUpdate(function (array) {
+                // From the `purge()` function in ExoWeb...
+                for (var i = 0; i < array.length; i++) {
+                    var item = array[i];
+                    if (allowedValues.indexOf(item) < 0) {
+                        array.splice(i--, 1);
+                    }
+                }
+            });
+        }
+        else if (value !== null && allowedValues.indexOf(value) < 0) {
+            property.value(this.source.value, null);
+        }
+    }
+    else if (value instanceof Array) {
+        var array = value;
+        array.splice(0, array.length);
+    }
+    else if (value !== null) {
+        property.value(this.source.value, null);
+    }
+}
+// If the given rule is allowed values, signal options ready
+function SourcePathAdapter$_checkAllowedValuesRuleExists(rule) {
+    if (rule instanceof AllowedValuesRule) {
+        this.property.ruleRegistered.unsubscribe(this._allowedValuesRuleExistsHandler);
+        SourcePathAdapter$_signalOptionsReady.call(this);
+    }
+}
+function SourcePathAdapter$_checkAllowedValuesExist(args) {
+    // TODO: Support property chains
+    // var lastProperty = this._propertyChain.lastProperty();
+    var property = this.property;
+    var allowedValuesRule = this.allowedValuesRule;
+    // TODO: Support property chains...
+    // var targetObj = property.getLastTarget(this.source.value);
+    var targetObj = this.source.value;
+    var allowedValues = allowedValuesRule.values(targetObj, this.allowedValuesMayBeNull);
+    if (allowedValues instanceof Array) {
+        var allowedValuesSource = this.allowedValuesSource;
+        if (allowedValuesSource) {
+            Property$removeChanged(allowedValuesSource, this._allowedValuesExistHandler);
+            delete this._allowedValuesExistHandler;
+        }
+        SourcePathAdapter$_signalOptionsReady.call(this);
+    }
+}
+function SourcePathAdapter$_allowedValuesChanged(args) {
+    // TODO: Support property chains
+    // var lastProperty = this._propertyChain.lastProperty();
+    var property = this.property;
+    // TODO: Support property chains...
+    // var targetObj = property.getLastTarget(this.source.value);
+    var targetObj = this.source.value;
+    var allowedValuesRule = this.allowedValuesRule;
+    var allowedValuesFromRule = allowedValuesRule.values(targetObj, this.allowedValuesMayBeNull);
+    var allowedValues = this._allowedValues;
+    allowedValues.batchUpdate(function (array) {
+        updateArray(array, allowedValuesFromRule);
+    });
+    // Clear out invalid selections
+    if (!allowedValuesRule.ignoreValidation) {
+        SourcePathAdapter$_clearInvalidOptions.call(this, allowedValues);
+    }
+    // TODO: Lazy load allowed values?
+    // ensureAllowedValuesLoaded(newItems, refreshOptionsFromAllowedValues.prependArguments(optionsSourceArray), this);
+    // Get the `Dep` object for the options property
+    var allowedValuesPropertyDep = this.__ob__.getPropertyDep('allowedValues');
+    if (allowedValuesPropertyDep) {
+        // Notify of change in order to cause subscribers to fetch the new value
+        allowedValuesPropertyDep.notify();
+    }
+}
+function SourcePathAdapter$_allowedValuesCollectionChanged(args) {
+    var _this = this;
+    var allowedValues = this._allowedValues;
+    var options = this._options;
+    if (options) {
+        // Attempt to project changes to allowed values onto the options list
+        var canUpdateOptions_1 = true;
+        args.changes.forEach(function (c) {
+            if (canUpdateOptions_1) {
+                if (c.type === ArrayChangeType.add) {
+                    var newOptions = c.items.map(function (i) { return new SourceOptionAdapter(_this, i); });
+                    options.splice.apply(options, [c.startIndex, 0].concat(newOptions));
+                }
+                else if (c.type === ArrayChangeType.remove) {
+                    options.splice(c.startIndex, c.items.length);
+                }
+                else {
+                    canUpdateOptions_1 = false;
+                }
+            }
+        });
+        // Fall back to rebuilding the list if needed
+        if (!canUpdateOptions_1) {
+            delete this._options;
+            if (this._allowedValuesCollectionChangedHandler) {
+                allowedValues.changed.unsubscribe(this._allowedValuesCollectionChangedHandler);
+                delete this._allowedValuesCollectionChangedHandler;
+            }
+        }
+        // Get the `Dep` object for the options property
+        var optionsPropertyDep = this.__ob__.getPropertyDep('options');
+        if (optionsPropertyDep) {
+            // Notify of change in order to cause subscribers to fetch the new value
+            optionsPropertyDep.notify();
+        }
+    }
+}
 
 var SourceIndexAdapter = /** @class */ (function () {
     function SourceIndexAdapter(source, index) {
@@ -4076,29 +5321,63 @@ var SourceIndexAdapter = /** @class */ (function () {
         Object.defineProperty(this, "source", { enumerable: true, value: source });
         // Backing fields for properties
         Object.defineProperty(this, "_index", { enumerable: false, value: index, writable: true });
+        Object.defineProperty(this, "_isOrphaned", { enumerable: false, value: false, writable: true });
+        Object.defineProperty(this, "__ob__", { configurable: false, enumerable: false, value: new CustomObserver(this), writable: false });
         // If the source array is modified, then update the index if needed
         this.subscribeToSourceChanges();
     }
     SourceIndexAdapter.prototype.subscribeToSourceChanges = function () {
-        var _this_1 = this;
         var _this = this;
-        var list = ObservableList.ensureObservable(this.source.value);
-        list.changed.subscribe(function (sender, args) {
-            if (args.addedIndex >= 0) {
-                if (args.addedIndex < _this.index) {
-                    _this_1._index += args.added.length;
+        var array = ObservableArray.ensureObservable(this.source.value);
+        array.changed.subscribe(function (args) {
+            var index = _this._index;
+            var isOrphaned = _this._isOrphaned;
+            args.changes.forEach(function (c) {
+                if (c.type === ArrayChangeType.remove) {
+                    if (c.startIndex === index) {
+                        index = -1;
+                        isOrphaned = true;
+                    }
+                    else if (c.startIndex < index) {
+                        if (c.items.length > index - c.startIndex) {
+                            index = -1;
+                            isOrphaned = true;
+                        }
+                        else {
+                            index -= c.items.length;
+                        }
+                    }
                 }
+                else if (c.type === ArrayChangeType.add) {
+                    if (c.startIndex >= 0) {
+                        if (c.startIndex <= index) {
+                            index += c.items.length;
+                        }
+                    }
+                }
+            });
+            if (isOrphaned != _this._isOrphaned) {
+                _this._isOrphaned = isOrphaned;
+                _this.__ob__.onPropertyChange('isOrphaned', isOrphaned);
             }
-            else if (args.removedIndex >= 0) {
-                if (args.removedIndex < _this.index) {
-                    _this_1._index -= args.removed.length;
-                }
+            if (index != _this._index) {
+                _this._index = index;
+                _this.__ob__.onPropertyChange('index', index);
             }
         });
     };
     Object.defineProperty(SourceIndexAdapter.prototype, "index", {
         get: function () {
-            return this._index;
+            var index = this._index;
+            this.__ob__.onPropertyAccess('index', index);
+            return index;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SourceIndexAdapter.prototype, "isOrphaned", {
+        get: function () {
+            return this._isOrphaned;
         },
         enumerable: true,
         configurable: true
@@ -4106,20 +5385,20 @@ var SourceIndexAdapter = /** @class */ (function () {
     Object.defineProperty(SourceIndexAdapter.prototype, "value", {
         get: function () {
             var list = this.source.value;
-            var item = list[this.index];
-            return item;
+            var value = list[this.index];
+            this.__ob__.onPropertyAccess('value', value);
+            return value;
         },
         set: function (value) {
             var list = this.source.value;
-            var currentItem = list[this.index];
-            if (value !== currentItem) {
-                var oldItem = currentItem;
-                var newItem = value;
-                list[this.index] = newItem;
-                var eventArgs = { property: this.source.property, newValue: list, oldValue: undefined };
-                eventArgs['changes'] = [{ newItems: [newItem], oldItems: [oldItem] }];
+            var previousValue = list[this.index];
+            if (value !== previousValue) {
+                list[this.index] = value;
+                var eventArgs = { entity: this.source.source.value, property: this.source.property, newValue: list, oldValue: undefined };
+                eventArgs['changes'] = [{ type: ArrayChangeType.replace, startIndex: this.index, endIndex: this.index }];
                 eventArgs['collectionChanged'] = true;
-                this.source.property._eventDispatchers.changedEvent.dispatch(this.source.source.value, eventArgs);
+                this.source.property._events.changedEvent.publish(this.source.source.value, eventArgs);
+                this.__ob__.onPropertyChange('value', value);
             }
         },
         enumerable: true,
@@ -4137,10 +5416,17 @@ var SourceIndexAdapter = /** @class */ (function () {
             else {
                 displayValue = value.toString();
             }
+            this.__ob__.onPropertyAccess('displayValue', displayValue);
             return displayValue;
         },
         set: function (text) {
-            this.value = this.source.property.format != null ? this.source.property.format.convertBack(text) : text;
+            var list = this.source.value;
+            var previousValue = list[this.index];
+            var value = this.source.property.format != null ? this.source.property.format.convertBack(text) : text;
+            this.value = value;
+            if (value !== previousValue) {
+                this.__ob__.onPropertyChange('displayValue', text);
+            }
         },
         enumerable: true,
         configurable: true
@@ -4179,10 +5465,9 @@ function defineDollarSourceProperty(vm, sourceAdapter) {
         });
     }
 }
-function getImplicitSource(vm, dependencies, detect) {
+function getImplicitSource(vm, detect) {
     if (detect === void 0) { detect = false; }
     var vm$private = vm;
-    var Model$Entity = dependencies.Model$Entity;
     if (hasOwnProperty$1(vm, '$source')) {
         // Source is explicit and has been established
         return null;
@@ -4193,7 +5478,7 @@ function getImplicitSource(vm, dependencies, detect) {
             // Source is explicit (but has not been established)
             return null;
         }
-        else if (source instanceof Model$Entity) {
+        else if (source instanceof Entity) {
             // An entity was previously flagged as a potential implicit source
             return source;
         }
@@ -4207,7 +5492,7 @@ function getImplicitSource(vm, dependencies, detect) {
     if (detect) {
         var data = vm$private._data;
         if (data) {
-            if (data instanceof Model$Entity) {
+            if (data instanceof Entity) {
                 debug("Found implicit source as data of type <" + data.meta.type.fullName + "> on component of type <" + (vm$private.$options._componentTag || "???") + ">.");
                 vm$private._source = data;
                 return data;
@@ -4220,7 +5505,7 @@ function getImplicitSource(vm, dependencies, detect) {
         }
         if (vm$private._entity) {
             var entity = vm$private._entity;
-            if (entity instanceof Model$Entity) {
+            if (entity instanceof Entity) {
                 // Mark the entity as a potential implicit source
                 debug("Found implicit source as pending entity of type <" + entity.meta.type.fullName + "> on component of type <" + (vm$private.$options._componentTag || "???") + ">.");
                 vm$private._source = entity;
@@ -4229,11 +5514,10 @@ function getImplicitSource(vm, dependencies, detect) {
         }
     }
 }
-function getSourceBindingContainer(vm, dependencies, detectImplicitSource) {
+function getSourceBindingContainer(vm, detectImplicitSource) {
     if (detectImplicitSource === void 0) { detectImplicitSource = false; }
     var firstImplicitSourceVm = null;
     var firstImplicitSourceVmLevel = -1;
-    var Model$Entity = dependencies.Model$Entity;
     for (var parentVm = vm.$parent, parentLevel = 1; parentVm != null; parentVm = parentVm.$parent, parentLevel += 1) {
         var parentVm$private = parentVm;
         var parentSource = parentVm$private.$source;
@@ -4252,7 +5536,7 @@ function getSourceBindingContainer(vm, dependencies, detectImplicitSource) {
             return parentVm;
         }
         else if (detectImplicitSource) {
-            var implicitSource = getImplicitSource(parentVm, dependencies, true);
+            var implicitSource = getImplicitSource(parentVm, true);
             if (implicitSource !== undefined && !firstImplicitSourceVm) {
                 firstImplicitSourceVm = parentVm;
                 firstImplicitSourceVmLevel = parentLevel;
@@ -4260,8 +5544,8 @@ function getSourceBindingContainer(vm, dependencies, detectImplicitSource) {
         }
     }
     if (detectImplicitSource && firstImplicitSourceVm) {
-        var implicitSource = getImplicitSource(firstImplicitSourceVm, dependencies);
-        if (implicitSource instanceof Model$Entity) {
+        var implicitSource = getImplicitSource(firstImplicitSourceVm);
+        if (implicitSource instanceof Entity) {
             debug("Found implicit source on level " + firstImplicitSourceVmLevel + " parent component of type <" + (firstImplicitSourceVm.$options._componentTag || "???") + ">.");
             return firstImplicitSourceVm;
         }
@@ -4279,7 +5563,7 @@ function preprocessPropsToInterceptSource(vm) {
         vm$private._source = props.source;
     }
 }
-function establishBindingSource(vm, dependencies) {
+function establishBindingSource(vm) {
     var vm$private = vm;
     if (vm$private._sourcePending) {
         // Detect re-entrance
@@ -4293,14 +5577,13 @@ function establishBindingSource(vm, dependencies) {
         return;
     }
     vm$private._sourcePending = true;
-    var Model$Entity = dependencies.Model$Entity;
     debug("Found component of type '" + vm$private.$options._componentTag + "' with source '" + props.source + "'.");
-    var sourceVm = getSourceBindingContainer(vm, dependencies, true);
+    var sourceVm = getSourceBindingContainer(vm, true);
     if (sourceVm) {
         var sourceVm$private = sourceVm;
         var source = sourceVm$private._source;
         if (typeof source === "string") {
-            establishBindingSource(sourceVm, dependencies);
+            establishBindingSource(sourceVm);
             source = sourceVm$private._source;
         }
         var sourceIndex = parseInt(props.source, 10);
@@ -4308,7 +5591,7 @@ function establishBindingSource(vm, dependencies) {
             sourceIndex = null;
         }
         var sourceAdapter = null;
-        if (source instanceof Model$Entity) {
+        if (source instanceof Entity) {
             debug("Found source entity of type <" + source.meta.type.fullName + ">.");
             sourceAdapter = new SourcePathAdapter(new SourceRootAdapter(source), props.source);
         }
@@ -4327,49 +5610,47 @@ function establishBindingSource(vm, dependencies) {
     }
     delete vm$private['_sourcePending'];
 }
-function SourceProviderMixin(dependencies) {
-    return {
-        props: {
-            source: {},
-            sourceIndex: {
-                type: Number,
-                validator: function (value) {
-                    return value >= 0;
-                }
-            }
-        },
-        beforeCreate: function () {
-            var vm = this;
-            if (vm.$options.propsData) {
-                // Intercept the `source` prop so that it can be marked as having a source
-                // and lazily evaluated if needed, or detected by other components
-                preprocessPropsToInterceptSource(vm);
-            }
-        },
-        created: function () {
-            var vm = this;
-            var vm$private = vm;
-            if (isSourceAdapter(vm$private._data)) {
-                var sourceAdapter = vm$private._data;
-                // Define the `$source` property if not already defined
-                defineDollarSourceProperty(vm, sourceAdapter);
-                // TODO: Who wins, props or data?
-                // Vue proxies the data objects `Object.keys()` onto the component itself,
-                // so that the data objects properties can be used directly in templates
-                // proxySourceAdapterPropertiesOntoComponentInstance(vm, '_data', false, false);
-            }
-            if (vm.$options.propsData) {
-                var props = vm.$options.propsData;
-                if (hasOwnProperty$1(props, 'source')) {
-                    establishBindingSource(vm, dependencies);
-                }
+var SourceProviderMixin = {
+    props: {
+        source: {},
+        sourceIndex: {
+            type: Number,
+            validator: function (value) {
+                return value >= 0;
             }
         }
-    };
-}
+    },
+    beforeCreate: function () {
+        var vm = this;
+        if (vm.$options.propsData) {
+            // Intercept the `source` prop so that it can be marked as having a source
+            // and lazily evaluated if needed, or detected by other components
+            preprocessPropsToInterceptSource(vm);
+        }
+    },
+    created: function () {
+        var vm = this;
+        var vm$private = vm;
+        if (isSourceAdapter(vm$private._data)) {
+            var sourceAdapter = vm$private._data;
+            // Define the `$source` property if not already defined
+            defineDollarSourceProperty(vm, sourceAdapter);
+            // TODO: Who wins, props or data?
+            // Vue proxies the data objects `Object.keys()` onto the component itself,
+            // so that the data objects properties can be used directly in templates
+            // proxySourceAdapterPropertiesOntoComponentInstance(vm, '_data', false, false);
+        }
+        if (vm.$options.propsData) {
+            var props = vm.$options.propsData;
+            if (hasOwnProperty$1(props, 'source')) {
+                establishBindingSource(vm);
+            }
+        }
+    }
+};
 
-function establishBindingSource$1(vm, dependencies) {
-    var sourceVm = getSourceBindingContainer(vm, dependencies);
+function establishBindingSource$1(vm) {
+    var sourceVm = getSourceBindingContainer(vm);
     var sourceVm$private = sourceVm;
     if (sourceVm$private.$source) {
         var source = sourceVm$private.$source;
@@ -4378,58 +5659,674 @@ function establishBindingSource$1(vm, dependencies) {
         }
     }
 }
-function SourceConsumerMixin(dependencies) {
-    return {
-        beforeCreate: function () {
-            var vm = this;
-            var vm$private = vm;
-            var originalData = vm.$options.data;
-            vm$private.$options.data = function () {
-                // Establish the `$source` variable
-                establishBindingSource$1(vm, dependencies);
-                if (originalData) {
-                    // Return the original data
-                    if (originalData instanceof Function) {
-                        var dataFn = originalData;
-                        return dataFn.apply(this, arguments);
-                    }
-                    else {
-                        return originalData;
-                    }
+var SourceConsumerMixin = {
+    beforeCreate: function () {
+        var vm = this;
+        var vm$private = vm;
+        var originalData = vm.$options.data;
+        vm$private.$options.data = function () {
+            // Establish the `$source` variable
+            establishBindingSource$1(vm);
+            if (originalData) {
+                // Return the original data
+                if (originalData instanceof Function) {
+                    var dataFn = originalData;
+                    return dataFn.apply(this, arguments);
                 }
                 else {
-                    return {};
+                    return originalData;
                 }
-            };
-        },
-        created: function () {
-            var vm = this;
-            var vm$private = vm;
-            if (!vm$private.$source) {
-                establishBindingSource$1(vm, dependencies);
+            }
+            else {
+                return {};
+            }
+        };
+    },
+    created: function () {
+        var vm = this;
+        var vm$private = vm;
+        if (!vm$private.$source) {
+            establishBindingSource$1(vm);
+        }
+    }
+};
+
+var calculationErrorDefault;
+var CalculatedPropertyRule = /** @class */ (function (_super) {
+    __extends$1(CalculatedPropertyRule, _super);
+    function CalculatedPropertyRule(rootType, name, options, skipRegistration) {
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        var property;
+        var defaultIfError = calculationErrorDefault;
+        var calculateFn;
+        if (!name) {
+            name = options.name;
+        }
+        if (options) {
+            var thisOptions = extractCalculatedPropertyRuleOptions(options);
+            if (thisOptions.property) {
+                property = typeof thisOptions.property === "string" ? rootType.getProperty(thisOptions.property) : thisOptions.property;
+                // indicate that the rule is responsible for returning the value of the calculated property
+                options.returns = [property];
+            }
+            if (!name) {
+                // Generate a reasonable default rule name if not specified
+                name = options.name = (rootType.fullName + "." + (typeof property === "string" ? property : property.name) + ".Calculated");
+            }
+            defaultIfError = thisOptions.defaultIfError;
+            calculateFn = thisOptions.calculate;
+        }
+        // Call the base rule constructor 
+        _this = _super.call(this, rootType, name, options, true) || this;
+        // Public read-only properties
+        Object.defineProperty(_this, "property", { enumerable: true, value: property });
+        // Public settable properties
+        _this.defaultIfError = defaultIfError;
+        // Backing fields for properties
+        if (calculateFn)
+            Object.defineProperty(_this, "_calculateFn", { enumerable: false, value: calculateFn, writable: true });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    CalculatedPropertyRule.prototype.execute = function (obj) {
+        var calculateFn;
+        // Convert string functions into compiled functions on first execution
+        if (this._calculateFn.constructor === String) {
+            // TODO: Calculation expression support
+            var calculateExpr = this._calculateFn;
+            var calculateCompiledFn = new Function("return " + calculateExpr + ";");
+            calculateFn = this._calculateFn = calculateCompiledFn;
+        }
+        else {
+            calculateFn = this._calculateFn;
+        }
+        // Calculate the new property value
+        var newValue;
+        if (this.defaultIfError === undefined) {
+            newValue = calculateFn.call(obj);
+        }
+        else {
+            try {
+                newValue = calculateFn.apply(obj);
+            }
+            catch (e) {
+                newValue = this.defaultIfError;
             }
         }
+        // Exit immediately if the calculated result was undefined
+        if (newValue === undefined) {
+            return;
+        }
+        // modify list properties to match the calculated value instead of overwriting the property
+        if (this.property.isList) {
+            // re-calculate the list values
+            var newList = newValue;
+            // compare the new list to the old one to see if changes were made
+            var curList = this.property.value(obj);
+            if (newList.length === curList.length) {
+                var noChanges = true;
+                for (var i = 0; i < newList.length; ++i) {
+                    if (newList[i] !== curList[i]) {
+                        noChanges = false;
+                        break;
+                    }
+                }
+                if (noChanges) {
+                    return;
+                }
+            }
+            // update the current list so observers will receive the change events
+            curList.batchUpdate(function (array) {
+                updateArray(array, newList);
+            });
+        }
+        else {
+            // Otherwise, just set the property to the new value
+            this.property.value(obj, newValue, { calculated: true });
+        }
     };
+    CalculatedPropertyRule.prototype.toString = function () {
+        return "calculation of " + this.property.name;
+    };
+    // perform addition initialization of the rule when it is registered
+    CalculatedPropertyRule.prototype.onRegister = function () {
+        // register the rule with the target property
+        registerPropertyRule(this);
+        this.property.isCalculated = true;
+    };
+    return CalculatedPropertyRule;
+}(Rule));
+function extractCalculatedPropertyRuleOptions(obj) {
+    if (!obj) {
+        return;
+    }
+    var options = {};
+    var keys = Object.keys(obj);
+    var extractedKeys = keys.filter(function (key) {
+        var value = obj[key];
+        if (key === 'property') {
+            if (value instanceof Property) {
+                options.property = value;
+                return true;
+            }
+        }
+        else if (key === 'calculate' || key === 'fn') {
+            if (value instanceof Function) {
+                options.calculate = value;
+                return true;
+            }
+            else if (typeof value === "string") {
+                options.calculate = value;
+                return true;
+            }
+        }
+        else if (key === 'defaultIfError') {
+            options.defaultIfError = value;
+            return true;
+        }
+        else {
+            // TODO: Warn about unsupported rule options?
+            return;
+        }
+        // TODO: Warn about invalid rule option value?
+        return;
+    }).forEach(function (key) {
+        delete obj[key];
+    });
+    return options;
 }
 
-var dependencies = {
-    entitiesAreVueObservable: false,
-    Model$Model: Model,
-    Model$Type: Type,
-    Model$Property: Property,
-    Model$Entity: Entity,
-};
+var RequiredRule = /** @class */ (function (_super) {
+    __extends$1(RequiredRule, _super);
+    function RequiredRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates that a property has a value.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        ///			requiredValue:		the optional required value
+        /// </param>
+        /// <returns type="RequiredRule">The new required rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // ensure the rule name is specified
+        options.name = options.name || "Required";
+        // ensure the error message is specified
+        options.message = options.message || Resource.get("required");
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        if (options.requiredValue)
+            Object.defineProperty(_this, "requiredValue", { value: options.requiredValue });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // define a global function that determines if a value exists
+    RequiredRule.hasValue = function (val) {
+        return val !== undefined && val !== null && (val.constructor !== String || val.trim() !== "") && (!(val instanceof Array) || val.length > 0);
+    };
+    // returns true if the property is valid, otherwise false
+    RequiredRule.prototype.isValid = function (obj, prop, val) {
+        if (this.requiredValue)
+            return val === this.requiredValue;
+        else
+            return RequiredRule.hasValue(val);
+    };
+    // get the string representation of the rule
+    RequiredRule.prototype.toString = function () {
+        return this.property.containingType.fullName + "." + this.property.name + " is required";
+    };
+    return RequiredRule;
+}(ValidatedPropertyRule));
+
+var RequiredIfRule = /** @class */ (function (_super) {
+    __extends$1(RequiredIfRule, _super);
+    function RequiredIfRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that conditionally validates whether a property has a value.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			isRequired:			a predicate function indicating whether the property should be required
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        ///		    onInit:				true to indicate the rule should run when an instance of the root type is initialized, otherwise false
+        ///		    onInitNew:			true to indicate the rule should run when a new instance of the root type is initialized, otherwise false
+        ///		    onInitExisting:		true to indicate the rule should run when an existing instance of the root type is initialized, otherwise false
+        ///		    onChangeOf:			an array of property paths (strings, Property or PropertyChain instances) that drive when the rule should execute due to property changes
+        ///			requiredValue:		the optional required value
+        /// </param>
+        /// <returns type="RequiredIfRule">The new required if rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        options.name = options.name || "RequiredIf";
+        // ensure changes to the compare source triggers rule execution
+        if (!options.onChangeOf && options.compareSource) {
+            options.onChangeOf = [options.compareSource];
+        }
+        if (!options.isRequired && options.fn) {
+            options.isRequired = options.fn;
+            options.fn = null;
+        }
+        // predicate-based rule
+        if (options.isRequired) {
+            options.message = options.message || Resource.get("required");
+        }
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        // predicate-based rule
+        if (options.isRequired) {
+            Object.defineProperty(_this, "_isRequired", { value: options.isRequired, writable: true });
+        }
+        if (options.requiredValue)
+            Object.defineProperty(_this, "requiredValue", { value: options.requiredValue });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // returns false if the property is valid, true if invalid, or undefined if unknown
+    RequiredIfRule.prototype.assert = function (obj) {
+        var isReq;
+        // convert string functions into compiled functions on first execution
+        if (typeof this._isRequired === "string") {
+            this._isRequired = (new Function(this._isRequired));
+        }
+        try {
+            isReq = this._isRequired.call(obj);
+        }
+        catch (e) {
+            isReq = false;
+        }
+        if (this.requiredValue)
+            return isReq && this.property.value(obj) !== this.requiredValue;
+        else
+            return isReq && !RequiredRule.hasValue(this.property.value(obj));
+    };
+    return RequiredIfRule;
+}(ValidatedPropertyRule));
+
+var RangeRule = /** @class */ (function (_super) {
+    __extends$1(RangeRule, _super);
+    function RangeRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates a property value is within a specific range.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			min:				the minimum valid value of the property (or function)
+        ///			max:				the maximum valid value of the property (or function)
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        ///		    onChangeOf:			an array of property paths (strings, Property or PropertyChain instances) that drive when the rule should execute due to property changes
+        /// </param>
+        /// <returns type="RangeRule">The new range rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // exit immediately if called with no arguments
+        if (arguments.length == 0)
+            return;
+        // ensure the rule name is specified
+        options.name = options.name || "Range";
+        // get the property being validated in order to determine the data type
+        var property = options.property instanceof Property ? options.property : rootType.getProperty(options.property);
+        // coerce date range constants
+        if (options.min && !(options.min instanceof Function) && typeof options.min !== "string" && property.propertyType === Date) {
+            options.min = new Date(options.min);
+        }
+        if (options.max && !(options.max instanceof Function) && typeof options.max !== "string" && property.propertyType === Date) {
+            options.max = new Date(options.max);
+        }
+        // coerce null ranges to undefined
+        if (options.min === null) {
+            options.min = undefined;
+        }
+        if (options.max === null) {
+            options.max = undefined;
+        }
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        // Store the min and max functions
+        Object.defineProperty(_this, "_min", { value: options.min, writable: true });
+        Object.defineProperty(_this, "_max", { value: options.max, writable: true });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // get the min and max range in effect for this rule for the specified instance
+    RangeRule.prototype.range = function (obj) {
+        // convert string functions into compiled functions on first execution
+        if (this._min && !(this._min instanceof Function)) {
+            if (typeof this._min === "string") {
+                this._min = (new Function(this._min));
+            }
+            else {
+                // convert constant values into functions
+                var min_1 = this._min;
+                this._min = function () { return min_1; };
+            }
+        }
+        if (this._max && !(this._max instanceof Function)) {
+            if (typeof this._max === "string") {
+                this._max = (new Function(this._max));
+            }
+            else {
+                // convert constant values into functions
+                var max_1 = this._max;
+                this._max = function () { return max_1; };
+            }
+        }
+        // determine the min and max values based on the current state of the instance
+        var range = {};
+        if (this._min && this._min instanceof Function)
+            try {
+                range.min = this._min.call(obj);
+            }
+            catch (e) { }
+        if (this._max && this._max instanceof Function)
+            try {
+                range.max = this._max.call(obj);
+            }
+            catch (e) { }
+        range.min = range.min == null ? undefined : range.min;
+        range.max = range.max == null ? undefined : range.max;
+        return range;
+    };
+    // returns true if the property is valid, otherwise false
+    RangeRule.prototype.isValid = function (obj, prop, val) {
+        var range = this.range(obj);
+        return val === null || val === undefined || ((range.min === undefined || val >= range.min) && (range.max === undefined || val <= range.max));
+    };
+    RangeRule.prototype.getMessage = function (obj) {
+        var range = this.range(obj);
+        // ensure the error message is specified
+        var message = (range.min !== undefined && range.max !== undefined ? Resource.get("range-between").replace("{min}", Property$format(this.property, range.min) || range.min).replace("{max}", Property$format(this.property, range.max) || range.max) : // between date or ordinal
+            this.property.propertyType === Date ?
+                range.min !== undefined ?
+                    Resource.get("range-on-or-after").replace("{min}", Property$format(this.property, range.min) || range.min) : // on or after date
+                    Resource.get("range-on-or-before").replace("{max}", Property$format(this.property, range.max) || range.max) : // on or before date
+                range.min !== undefined ?
+                    Resource.get("range-at-least").replace("{min}", Property$format(this.property, range.min) || range.min) : // at least ordinal
+                    Resource.get("range-at-most").replace("{max}", Property$format(this.property, range.max) || range.max)); // at most ordinal
+        return message.replace('{property}', this.property.label);
+    };
+    // get the string representation of the rule
+    RangeRule.prototype.toString = function () {
+        return this.property.containingType.fullName + "." + this.property.name + " in range, min: , max: ";
+    };
+    return RangeRule;
+}(ValidatedPropertyRule));
+
+var StringLengthRule = /** @class */ (function (_super) {
+    __extends$1(StringLengthRule, _super);
+    function StringLengthRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates that the length of a string property is within a specific range.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			min:				the minimum length of the property
+        ///			max:				the maximum length of the property
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        /// </param>
+        /// <returns type="RangeRule">The new range rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // ensure the rule name is specified
+        options.name = options.name || "StringLength";
+        // ensure the error message is specified
+        options.message = options.message ||
+            (options.min && options.max ? Resource.get("string-length-between").replace("{min}", options.min).replace("{max}", options.max) :
+                options.min ? Resource.get("string-length-at-least").replace("{min}", options.min) :
+                    Resource.get("string-length-at-most").replace("{max}", options.max));
+        var min = options.min;
+        delete options.min;
+        var max = options.max;
+        delete options.max;
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        // store the min and max lengths
+        Object.defineProperty(_this, "_min", { value: min });
+        Object.defineProperty(_this, "_max", { value: max });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // returns true if the property is valid, otherwise false
+    StringLengthRule.prototype.isValid = function (obj, prop, val) {
+        return !val || val === "" || ((!this._min || val.length >= this._min) && (!this._max || val.length <= this._max));
+    };
+    // get the string representation of the rule
+    StringLengthRule.prototype.toString = function () {
+        return this.property.containingType.fullName + "." + this.property.name + " in range, min: , max: ";
+    };
+    return StringLengthRule;
+}(RangeRule));
+
+var StringFormatRule = /** @class */ (function (_super) {
+    __extends$1(StringFormatRule, _super);
+    function StringFormatRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates that a string property value is correctly formatted.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			description:		the human readable description of the format, such as MM/DD/YYY
+        ///		    expression:			a regular expression string or RegExp instance that the property value must match
+        ///		    reformat:			and optional regular expression reformat string or reformat function that will be used to correct the value if it matches
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        /// </param>
+        /// <returns type="StringFormatRule">The new string format rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // exit immediately if called with no arguments
+        if (arguments.length == 0)
+            return;
+        // ensure the rule name is specified
+        options.name = options.name || "StringFormat";
+        // ensure the error message is specified
+        if (Resource.get(options.message))
+            options.message = Resource.get(options.message);
+        else
+            options.message = options.message || Resource.get("string-format").replace("{formatDescription}", options.description);
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        // define properties for the rule
+        Object.defineProperty(_this, "description", { value: options.description });
+        Object.defineProperty(_this, "expression", { value: options.expression instanceof RegExp ? options.expression : RegExp(options.expression) });
+        Object.defineProperty(_this, "reformat", { value: options.reformat });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // returns true if the property is valid, otherwise false
+    StringFormatRule.prototype.isValid = function (obj, prop, val) {
+        var isValid = true;
+        if (val && val != "") {
+            this.expression.lastIndex = 0;
+            isValid = this.expression.test(val);
+            if (isValid && this.reformat) {
+                if (this.reformat instanceof Function) {
+                    val = this.reformat(val);
+                }
+                else {
+                    this.expression.lastIndex = 0;
+                    val = val.replace(this.expression, this.reformat);
+                }
+                prop.value(obj, val);
+            }
+        }
+        return isValid;
+    };
+    // get the string representation of the rule
+    StringFormatRule.prototype.toString = function () {
+        return this.property.containingType.fullName + "." + this.property.name + " formatted as " + this.description;
+    };
+    return StringFormatRule;
+}(ValidatedPropertyRule));
+
+var ListLengthRule = /** @class */ (function (_super) {
+    __extends$1(ListLengthRule, _super);
+    function ListLengthRule(rootType, options, skipRegistration) {
+        /// <summary>Creates a rule that validates a list property contains a specific range of items.</summary>
+        /// <param name="rootType" type="Type">The model type the rule is for.</param>
+        /// <param name="options" type="Object">
+        ///		The options for the rule, including:
+        ///			property:			the property being validated (either a Property instance or string property name)
+        ///			min:				the minimum valid value of the property (or function)
+        ///			max:				the maximum valid value of the property (or function)
+        ///			name:				the optional unique name of the type of validation rule
+        ///			conditionType:		the optional condition type to use, which will be automatically created if not specified
+        ///			category:			ConditionType.Error || ConditionType.Warning (defaults to ConditionType.Error)
+        ///			message:			the message to show the user when the validation fails
+        ///		    onChangeOf:			an array of property paths (strings, Property or PropertyChain instances) that drive when the rule should execute due to property changes
+        /// </param>
+        /// <returns type="ListLengthRule">The new list length rule.</returns>
+        if (skipRegistration === void 0) { skipRegistration = false; }
+        var _this = this;
+        // ensure the rule name is specified
+        options.name = options.name || "ListLength";
+        var min = options.min;
+        delete options.min;
+        var max = options.max;
+        delete options.max;
+        // call the base type constructor
+        _this = _super.call(this, rootType, options, true) || this;
+        // store the min and max lengths
+        Object.defineProperty(_this, "_min", { value: min });
+        Object.defineProperty(_this, "_max", { value: max });
+        if (!skipRegistration) {
+            // Register the rule after loading has completed
+            rootType.model.registerRule(_this);
+        }
+        return _this;
+    }
+    // returns true if the property is valid, otherwise false
+    ListLengthRule.prototype.isValid = function (obj, prop, val) {
+        var range = this.range(obj);
+        return val === null || val === undefined || ((!range.min || val.length >= range.min) && (!range.max || val.length <= range.max));
+    };
+    ListLengthRule.prototype.getMessage = function (obj) {
+        var range = this.range(obj);
+        // ensure the error message is specified
+        var message = (range.min && range.max ? Resource.get("listlength-between").replace("{min}", Property$format(this.property, range.min) || range.min).replace("{max}", Property$format(this.property, range.max) || range.max) :
+            range.min ?
+                Resource.get("listlength-at-least").replace("{min}", Property$format(this.property, range.min) || range.min) : // at least ordinal
+                Resource.get("listlength-at-most").replace("{max}", Property$format(this.property, range.max) || range.max)); // at most ordinal
+        return message.replace('{property}', this.property.label);
+    };
+    return ListLengthRule;
+}(RangeRule));
+
+function preparePropertyRuleOptions(property, options, error) {
+    options.property = property;
+    if (error && error.constructor === String) {
+        options.message = error;
+    }
+    else if (error instanceof ConditionType) {
+        options.conditionType = error;
+    }
+    return options;
+}
+mixin(Property, {
+    calculated: function Property$calculated(options) {
+        options.property = this;
+        var definedType = options.rootType ? options.rootType.meta : this.containingType;
+        delete options.rootType;
+        new CalculatedPropertyRule(definedType, options.name, options);
+        return this;
+    },
+    conditionIf: function Property$conditionIf(options, error) {
+        var definedType = options.rootType ? options.rootType.meta : this.containingType;
+        delete options.rootType;
+        options = preparePropertyRuleOptions(this, options, error);
+        new ValidatedPropertyRule(definedType, options);
+        return this;
+    },
+    required: function Property$required(error) {
+        var options = preparePropertyRuleOptions(this, {}, error);
+        new RequiredRule(this.containingType, options);
+        return this;
+    },
+    requiredIf: function Property$requiredIf(options, error) {
+        var definedType = options.rootType ? options.rootType.meta : this.containingType;
+        delete options.rootType;
+        var options = preparePropertyRuleOptions(this, options, error);
+        new RequiredIfRule(definedType, options);
+        return this;
+    },
+    allowedValues: function (source, error) {
+        var options = preparePropertyRuleOptions(this, { source: source }, error);
+        new AllowedValuesRule(this.containingType, options);
+        return this;
+    },
+    optionValues: function (source, error) {
+        var options = preparePropertyRuleOptions(this, { source: source, onInit: false, onInitNew: false, onInitExisting: false }, error);
+        options.ignoreValidation = true;
+        new AllowedValuesRule(this.containingType, options);
+        return this;
+    },
+    range: function (min, max, error) {
+        var options = preparePropertyRuleOptions(this, { min: min, max: max }, error);
+        new RangeRule(this.containingType, options);
+        return this;
+    },
+    stringLength: function (min, max, error) {
+        var options = preparePropertyRuleOptions(this, { min: min, max: max }, error);
+        new StringLengthRule(this.containingType, options);
+        return this;
+    },
+    stringFormat: function (description, expression, reformat, error) {
+        var options = preparePropertyRuleOptions(this, { description: description, expression: expression, reformat: reformat }, error);
+        new StringFormatRule(this.containingType, options);
+        return this;
+    },
+    listLength: function (min, max, error) {
+        var options = preparePropertyRuleOptions(this, { min: min, max: max }, error);
+        new ListLengthRule(this.containingType, options);
+        return this;
+    }
+});
+
 var api = VueModel;
 api.SourceRootAdapter = SourceRootAdapter;
 api.SourcePathAdapter = SourcePathAdapter;
 api.SourceIndexAdapter = SourceIndexAdapter;
 // TODO: Implement source-binding mixins
 api.mixins = {
-    SourceProvider: SourceProviderMixin(dependencies),
-    SourceConsumer: SourceConsumerMixin(dependencies),
+    SourceProvider: SourceProviderMixin,
+    SourceConsumer: SourceConsumerMixin,
 };
 api.install = function install(Vue) {
-    return VueModel$installPlugin(Vue, dependencies);
+    ensureVueInternalTypes(Vue);
+    return VueModel$installPlugin(Vue);
 };
 
 module.exports = api;
