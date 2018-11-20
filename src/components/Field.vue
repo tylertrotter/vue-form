@@ -8,13 +8,12 @@
 <template>
 	<div :class="[
 		`c-field`,
-		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
-		(column === '1') ? 'c-row-start' : '',
-		(+column + +colspan  === 25) ? 'c-row-end' : '',
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
-	]">
-		<label class="c-label" v-if="fieldLabel">{{fieldLabel}}</label>
+		]"
+	 	:is="this.$parent.$parent.type === 'table' ? 'td' : 'div'"
+	>
+		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.type !== 'table'">{{fieldLabel}}</label>
 		<slot></slot>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
