@@ -8,6 +8,8 @@ export function createModel() {
 
             var formType = model.addType("Cognito.Forms.FormEntry");
 
+            Cognito.Forms.FormEntry = formType.jstype;
+
             formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
             formType.addProperty("Email4", String, false, false, { label: 'Email 4' });
             formType.addProperty("Checkbox2", Boolean, false, false, { label: 'Checkbox 2' });
@@ -54,7 +56,9 @@ export function createModel() {
             formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });
         
             var formRepeatingSection1ItemType = model.addType("Cognito.Forms.FormEntryRepeatingSection1Item");
-        
+
+            Cognito.Forms.FormEntryRepeatingSection1Item = formRepeatingSection1ItemType.jstype;
+
             formType.addProperty("RepeatingSection1", Cognito.Forms.FormEntryRepeatingSection1Item, true, false, { label: 'Repeating Section 1' });
 
             Cognito.Forms.FormEntry.$RepeatingSection1.listLength(0, 2);
@@ -71,6 +75,8 @@ export function createModel() {
             });
 
             var formSection1Type = model.addType("Cognito.Forms.FormEntrySection1");
+
+            Cognito.Forms.FormEntrySection1 = formSection1Type.jstype;
         
             formType.addProperty("Section1", Cognito.Forms.FormEntrySection1, false, false, { label: 'Section 1' });
         
@@ -84,6 +90,8 @@ export function createModel() {
        
             var formTableType = model.addType("Cognito.Forms.FormEntryTable1");
 
+            Cognito.Forms.FormEntryTable1 = formTableType.jstype;
+
             formType.addProperty("Table1", Cognito.Forms.FormEntryTable1, false, false, { label: 'Table 1' });
         
             formTableType.addProperty("Text1", String, false, false, { label: 'Text 1' });
@@ -91,6 +99,8 @@ export function createModel() {
             formTableType.addProperty("Text2", String, false, false, { label: 'Text 2' });
          
             var formSection2Type = model.addType("Cognito.Forms.FormEntrySection2");
+
+            Cognito.Forms.FormEntrySection2 = formSection2Type.jstype;
         
             formType.addProperty("Section2", Cognito.Forms.FormEntrySection2, false, false, { label: 'Section 2' });
 
