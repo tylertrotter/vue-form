@@ -46,6 +46,9 @@
 			</c-page>
 			<c-page :page="4">
 				<c-section source="Section2" type="section" title="Menu" helptext="Place your order" column="13" colspan="12">
+					<c-field source="OrderDate" label="" column="1" colspan="4">
+						<c-text />
+					</c-field>
 					<c-field source="Vegetarian" label="" column="1" colspan="4">
 						<c-checkbox />
 					</c-field>

@@ -30,15 +30,21 @@ export function createModel() {
                 onChangeOf: ["Name3", "Email4"]
             });
 
+            Cognito.Forms.FormEntry.$Checkbox2.changed.subscribe(function(e) {
+                if (this.Name3) {
+                    console.log(this.Name3 + " " + (this.Checkbox2 ? "agrees" : "does not agree") + " to sign up.");
+                }
+            });
+
             Cognito.Forms.FormEntry.$Checkbox2.conditionIf({
-                isValid: function(entry, prop, val) {
-                    if (!entry.Name3) {
+                isValid: function() {
+                    if (!this.Name3) {
                         return;
                     }
-                    if (!entry.Email4) {
+                    if (!this.Email4) {
                         return;
                     }
-                    return entry.Checkbox2;
+                    return this.Checkbox2;
                 },
                 category: "Error",
                 name: "AgreeToSignUp",
@@ -101,17 +107,25 @@ export function createModel() {
             var formSection2Type = model.addType("Cognito.Forms.FormEntrySection2");
 
             Cognito.Forms.FormEntrySection2 = formSection2Type.jstype;
-        
-            formType.addProperty("Section2", Cognito.Forms.FormEntrySection2, false, false, { label: 'Section 2' });
 
+            formSection2Type.addProperty("OrderDate", Date, false, false, { label: "Date", format: "d" });
             formSection2Type.addProperty("AllSideDishes", String, true, false, { label: "All Side Dishes" });
             formSection2Type.addProperty("SideDish", String, false, false, { label: "Side Dish" });
             formSection2Type.addProperty("Vegetarian", Boolean, false, false, { label: "Vegetarian (V)" });
             formSection2Type.addProperty("GlutenFree", Boolean, false, false, { label: "Gluten Free (GF)" });
             formSection2Type.addProperty("DairyFree", Boolean, false, false, { label: "Dairy Free (DF)" });
             formSection2Type.addProperty("RelevantSideDishes", String, true, false, { label: "Relevant Side Dishes" });
+        
+            formType.addProperty("Section2", Cognito.Forms.FormEntrySection2, false, false, { label: 'Section 2', format: "Order of chicken with a side of [SideDish] on [OrderDate]" });
 
             Cognito.Forms.FormEntrySection2.$SideDish.allowedValues("RelevantSideDishes");
+
+            Cognito.Forms.FormEntrySection2.$OrderDate.calculated({
+                calculate: function() {
+                    return new Date();
+                },
+                onInit: true
+            });
 
             Cognito.Forms.FormEntrySection2.$RelevantSideDishes.calculated({
                 calculate: function() {

@@ -16,7 +16,7 @@ export default {
 		return {
 			hasFocus: false,
 			focusValue: null,
-			selfModel: (typeof this.text === "string" ? this.text : this.$source ? this.$source.value : false),
+			selfModel: (typeof this.text === "string" ? this.text : this.$source ? this.$source.displayValue : false),
 		};
 	},
 	watch: {
@@ -24,8 +24,8 @@ export default {
 		// prop coming from OUTSIDE of the component...
 		text: function(newVal, oldVal) {
 			this.selfModel = newVal;
-			if (this.$source && this.$source.value !== newVal) {
-				this.$source.value = newVal;
+			if (this.$source && this.$source.displayValue !== newVal) {
+				this.$source.displayValue = newVal;
 			}
 		},
 	},
@@ -36,7 +36,7 @@ export default {
 
 				let sourceValue = null;
 				if (this.$source) {
-					sourceValue = this.$source.value;
+					sourceValue = this.$source.displayValue;
 				}
 
 				return this.hasFocus ? this.selfModel : (sourceValue != null ? sourceValue : this.selfModel);
@@ -48,7 +48,7 @@ export default {
 
 				if (!this.hasFocus) {
 					if (this.$source) {
-						this.$source.value = val;
+						this.$source.displayValue = val;
 					}
 				}
 			}
@@ -80,7 +80,7 @@ export default {
 			// NOTE: Could do some validation in here?
 			this.$emit('change', value, ev);
 			if (this.$source) {
-				this.$source.value = value;
+				this.$source.displayValue = value;
 			}
 		}
 	}
