@@ -1,12 +1,23 @@
 <template>
-	<div class="c-row" :is="this.$parent.type === 'table' ? 'tr' : 'div'">
+	<component class="c-row" :is="containerIsTable ? 'tr' : 'div'">
+		<td v-if="containerIsTable"><c-button><c-ex /></c-button></td>
 		<slot></slot>
-	</div>
+	</component>
 </template>
 
 <script>
+	import CButton from './Button.vue';
+	import CEx from './icons/Ex.vue';
+	import CRepeatingSection from './RepeatingSection.vue';
+
 	export default {
-		name: 'c-field-row'
+		name: 'c-field-row',
+		components: { CButton, CEx, CRepeatingSection },
+		data(){
+			return {
+				containerIsTable: this.$parent.$parent.currentType === 'c-table'
+			}
+		}
   };
 </script>
 
@@ -16,24 +27,16 @@
 	@import '../sass/_field-style';
 	// End sandbox only code
 
-	div.c-row {
-		display: flex;
-		width: calc(100% + #{$gutter}/2);
-		margin-left: -$gutter/4;
-		margin-bottom: $gutter;
-
-		& > * {
-			margin-left: $gutter/4;
-			margin-right: $gutter/4;
-		}
-
-		& + .c-row > * {
-			margin-top: $gutter/2;
-		}
-	}
-
 	.c-pull {
 		margin-left: auto;
+	}
+
+	// Temporary
+	button {
+		width: 15px;
+		background: transparent;
+		border: 0;
+		padding: 0;
 	}
 </style>
 

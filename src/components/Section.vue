@@ -1,19 +1,17 @@
 <template>
-	<div :is="type === 'table' ? 'table' : 'div'">
+	<div>
+		<h2>Title</h2>
 		<slot></slot>
 	</div>
 </template>
 
 <script>
 	export default {
-		name: 'c-section',
-		props: ['type']
+		name: 'c-section'
 	}
 </script>
 
-<style scoped>
-	table {
-		width: 100%;
-	}
+<style lang="scss">
+
 </style>
 

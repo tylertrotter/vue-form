@@ -66,7 +66,7 @@ Cognito.Forms.model.perform(function() {
   formEntry.Section1.Email3 = "bryan@cognitoforms.com";
   formEntry.Checkbox2 = true;
   formEntry.Email4 = "tyler@cognitoforms.com";
-  
+
   Cognito.Forms.model.entry = formEntry;
 
 });

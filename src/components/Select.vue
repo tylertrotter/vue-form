@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 	@import '../sass/theme-chalk-master/src/select';
 
 	.el-input {

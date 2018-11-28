@@ -1,0 +1,5 @@
+@for $i from 1 through 23{
+	[data-width~="500"] .c-col-#{$i} {
+		width: columns($i);
+	}
+}

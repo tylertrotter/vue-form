@@ -3,19 +3,11 @@
 
 .cg {
 	table {
-		border-collapse: collapse;
+		// border-collapse: collapse;
+		border-spacing: 0;
 	}
 
 	thead {
 		vertical-align: bottom;
-	}
-
-	tbody:nth-child(even) {
-		background: $neutral-bg;
-	}
-
-	td,
-	th {
-		padding: $gutter/4;
 	}
 }

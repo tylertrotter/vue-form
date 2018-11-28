@@ -1,57 +1,66 @@
 <template>
-	<table v-if="wide">
-		<tr>
-			<td v-for="(column, index) in columns" :key="index">
-				<slot :name="column" />
-			</td>
-		</tr>
-	</table>
-	<div v-else>
-		<div v-for="(column, i) in columns" :key="i">
-			<slot :name="column" />
-		</div>
+	<div class="c-table">
+		<table>
+			<thead>
+				<th><!-- Corresponds to X buttons --></th>
+				<slot name="thead"></slot>
+			</thead>
+			<tbody>
+				<slot></slot>
+			</tbody>
+			<tfoot>
+				<td></td>
+				<td><c-button>Add</c-button></td>
+			</tfoot>
+		</table>
 	</div>
 </template>
 
 <script>
-import { VueModel } from "../imports";
-import CSection from "./Section";
-export default {
-	name: 'c-table',
-	props: [
-		'columns'
-	],
-	mixins: [VueModel.mixins.SourceProvider],
-	components: {
-		CSection
-	},
-	data() {
-		return {
-			wide: true
-		}
-	},
-	created() {
-		window.addEventListener("resize", this.handleResize);
-	},
-	mounted() {
-		this.handleResize();
-	},
-	destroyed() {
-		window.removeEventListener("resize", this.handleResize);
-	},
-	methods: {
-		handleResize() {
-			if( this.$el.clientWidth <= window.innerWidth - 150){
-				this.wide = true;
-			}else{
-				this.wide = false;
-			}
-		}
+	import CButton from './Button.vue';
+
+	export default {
+		name: 'c-table',
+		components: { CButton }
 	}
-};
 </script>
 
 <style lang="scss">
+	@import "../sass/common/_table.scss";
 
+	.c-table {
+
+		tr:first-child td:nth-child(2) {
+			border-top-left-radius: $input-radius;
+		}
+
+		tr:first-child td:last-child {
+			border-top-right-radius: $input-radius;
+		}
+
+		tr:last-child td:nth-child(2) {
+			border-bottom-left-radius: $input-radius;
+		}
+
+		tr:last-child td:last-child {
+			border-bottom-right-radius: $input-radius;
+		}
+
+		tbody {
+			td + td {
+				border: 1px solid $input-border;
+				border-right-width: 0;
+				border-bottom-width: 0;
+
+				&:last-child {
+					border-right-width: 1px;
+				}
+			}
+
+			tr:last-child td {
+				border-bottom-width: 1px;
+			}
+		}
+
+	}
 </style>
-

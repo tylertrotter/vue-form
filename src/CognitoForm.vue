@@ -7,43 +7,54 @@
 			<c-page-progress :pages="['Signup']" />
 			<c-page :page="1">
 
-				<c-row>
-					<c-field source="Name3" label="Your Name" class="c-col-8">
-						<c-text type="text" />
-					</c-field>
-					<c-field source="Email4" label="Your Email" class="c-col-8">
-						<c-text type="email" />
-					</c-field>
-					<c-field source="Checkbox2" label="" class="c-col-8">
-						<c-checkbox label="Do you agree?" />
-					</c-field>
-				</c-row>
-
-				<c-section type="table">
+				<c-container type="c-repeating-section">
 					<c-row>
-						<c-field source="Name3" label="Your Name" class="c-col-8">
+						<c-field source="Name1" label="Your Name" class="c-col-8">
 							<c-text type="text" />
 						</c-field>
-						<c-field source="Email4" label="Your Email" class="c-col-8">
-							<c-text type="email" />
+						<c-field source="Name1" label="Your Email" class="c-col-8">
+							<c-select />
 						</c-field>
-						<c-field source="Checkbox2" label="" class="c-col-8">
+						<c-field source="Name1" label="" class="c-col-8">
 							<c-checkbox label="Do you agree?" />
 						</c-field>
 					</c-row>
+				</c-container>
+
+
+				<c-container type="c-table">
+					<template slot="thead">
+						<th>Your Name</th>
+						<th>Your Email</th>
+						<th>Your Phone Number</th>
+					</template>
+
+					<!-- <c-container type="c-repeating-section">
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+						</c-row>
+					</c-container> -->
 
 					<c-row>
-						<c-field source="Name3" label="Your Name" class="c-col-8">
+						<c-field source="Name1" label="Your Name" class="c-col-8">
 							<c-text type="text" />
 						</c-field>
-						<c-field source="Email4" label="Your Email" class="c-col-8">
-							<c-text type="email" />
+						<c-field source="Name1" label="Your Email" class="c-col-8">
+							<c-text type="text" />
 						</c-field>
-						<c-field source="Checkbox2" label="" class="c-col-8">
-							<c-checkbox label="Do you agree?" />
+						<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+							<c-text type="text" />
 						</c-field>
 					</c-row>
-				</c-section>
+				</c-container>
 
 			</c-page>
 		</div>
@@ -64,8 +75,8 @@ import CSpinner from './components/Spinner.vue';
 import CButtonSection from './components/ButtonSection.vue';
 import CDatePicker from './components/DatePicker.vue';
 import CSelect from './components/Select.vue';
-import CTable from './components/Table.vue';
 import CRow from './components/Row.vue';
+import CContainer from './components/Container.vue';
 
 export default {
 	name: 'c-form',
@@ -87,8 +98,8 @@ export default {
 		CSpinner,
 		CDatePicker,
 		CSelect,
-		CTable,
-		CRow
+		CRow,
+		CContainer
 	}
 }
 </script>
@@ -96,56 +107,36 @@ export default {
 <style lang="scss">
 	@import './sass/_theme';
 	@import './sass/_field-style';
-
-	@function columns($columns) {
-		@return $columns / 24 * 100%;
-	}
+	@import './sass/common/_grid';
 
 	[id="c-form"] * {
 		box-sizing: border-box;
 	}
 
-	[data-width~="500"],
-	.c-col-21 {
-		width: 87.5%;
+	div:not(:last-child) > .c-field,
+	.cg:not([data-width~="500"]) .c-field  {
+		margin-bottom: $gutter/2;
 	}
 
-	.c-col-18 {
-		width: 75%;
+	.c-container:not(:last-child) {
+			margin-bottom: $gutter;
 	}
 
-	.c-col-15 {
-		width: 62.5%;
-	}
+	[data-width~="500"] {
+		div.c-row {
+			display: flex;
+			width: calc(100% + #{$gutter}/2);
+			margin-left: -$gutter/4;
 
-	.c-col-12 {
-		width: columns(12);
-	}
+			& > * {
+				margin-left: $gutter/4;
+				margin-right: $gutter/4;
+			}
 
-	.c-col-9 {
-		width: 37.5%;
-	}
-
-	.c-col-8 {
-		width: columns(8);
-	}
-
-	.c-col-9 {
-		width: 37.5%;
-	}
-
-	.c-col-6 {
-		width: 25%;
-	}
-
-	.c-col-3 {
-		width: 12.5%;
-	}
-
-	.c-cf:after {
-		content: "";
-		display: table;
-		clear: both;
+			& + .c-row > * {
+				margin-top: $gutter/2;
+			}
+		}
 	}
 
 	.c-shift {
@@ -163,8 +154,17 @@ export default {
 		width: 100%;
 	}
 
-	.el-input{
+	.el-input > input {
+		border: 0;
+	}
+
+	div > .el-input{
 		@include input;
+		overflow: hidden;
+	}
+
+	td input {
+		border: 0;
 	}
 
 	///////////////////////
@@ -205,6 +205,14 @@ export default {
 		stroke: $negative-reverse;
 	}
 
+		// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
+	// Allowing us to use the field component outside of 24-column grid context.
+	div[class*='c-col-'],
+	.c-container,
+	.c-padding {
+		padding: 0 $gutter/2;
+	}
+
 
 </style>
 
@@ -230,12 +238,6 @@ export default {
 
 	.c-wrapper:last-child {
 		padding-bottom: $form-margins;
-	}
-
-	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
-	// Allowing us to use the field component outside of 24-column grid context.
-	[class*='c-col-'] {
-		padding: 0 $gutter/2;
 	}
 
 </style>

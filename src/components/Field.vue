@@ -11,9 +11,9 @@
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 		]"
-	 	:is="this.$parent.$parent.type === 'table' ? 'td' : 'div'"
+	 	:is="this.$parent.$parent.$parent.currentType === 'c-table' ? 'td' : 'div'"
 	>
-		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.type !== 'table'">{{fieldLabel}}</label>
+		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.currentType !== 'c-table' ">{{fieldLabel}}</label>
 		<slot></slot>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
