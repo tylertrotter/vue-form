@@ -15,7 +15,7 @@
 		components: { CButton, CEx, CRepeatingSection },
 		data(){
 			return {
-				containerIsTable: this.$parent.$parent.currentType === 'c-table'
+				containerIsTable: this.$parent.$parent.$parent.currentType === 'c-repeating-table'
 			}
 		}
   };

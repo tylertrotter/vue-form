@@ -1,19 +1,12 @@
-<!--
-	This component is for sections of a form down to the field level.
-	Inside of a field the CognitoRow component can be used (if necessary).
-
-	E.g. c-field, c-section, and c-buttons (the section at the bottom for buttons).
--->
-
 <template>
 	<div :class="[
 		`c-field`,
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 		]"
-	 	:is="this.$parent.$parent.$parent.currentType === 'c-table' ? 'td' : 'div'"
+	 	:is="this.$parent.$parent.$parent.$parent.currentType === 'c-repeating-table' ? 'td' : 'div'"
 	>
-		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.currentType !== 'c-table' ">{{fieldLabel}}</label>
+		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.$parent.currentType !== 'c-repeating-table' ">{{fieldLabel}}</label>
 		<slot></slot>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>

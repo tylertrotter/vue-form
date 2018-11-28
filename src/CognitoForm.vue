@@ -7,7 +7,7 @@
 			<c-page-progress :pages="['Signup']" />
 			<c-page :page="1">
 
-				<c-container type="c-repeating-section">
+				<c-section>
 					<c-row>
 						<c-field source="Name1" label="Your Name" class="c-col-8">
 							<c-text type="text" />
@@ -19,17 +19,47 @@
 							<c-checkbox label="Do you agree?" />
 						</c-field>
 					</c-row>
-				</c-container>
+				</c-section>
+
+				<c-repeating-data> <!-- c-repeating-table / .c-region -->
+					<c-repeating-section>  <!-- tbody / .c-section--repeating -->
+						<c-row> <!-- tr / .c-row -->
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field source="Name1" label="" class="c-col-8">
+								<c-checkbox label="Do you agree?" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+
+					<c-repeating-section>
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field source="Name1" label="" class="c-col-8">
+								<c-checkbox label="Do you agree?" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+				</c-repeating-data>
 
 
-				<c-container type="c-table">
+				<c-repeating-data :is-table="true">
 					<template slot="thead">
 						<th>Your Name</th>
 						<th>Your Email</th>
 						<th>Your Phone Number</th>
 					</template>
 
-					<!-- <c-container type="c-repeating-section">
+					<c-repeating-section>
 						<c-row>
 							<c-field source="Name1" label="Your Name" class="c-col-8">
 								<c-text type="text" />
@@ -41,20 +71,9 @@
 								<c-text type="text" />
 							</c-field>
 						</c-row>
-					</c-container> -->
+					</c-repeating-section>
 
-					<c-row>
-						<c-field source="Name1" label="Your Name" class="c-col-8">
-							<c-text type="text" />
-						</c-field>
-						<c-field source="Name1" label="Your Email" class="c-col-8">
-							<c-text type="text" />
-						</c-field>
-						<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-							<c-text type="text" />
-						</c-field>
-					</c-row>
-				</c-container>
+				</c-repeating-data>
 
 			</c-page>
 		</div>
@@ -76,7 +95,9 @@ import CButtonSection from './components/ButtonSection.vue';
 import CDatePicker from './components/DatePicker.vue';
 import CSelect from './components/Select.vue';
 import CRow from './components/Row.vue';
-import CContainer from './components/Container.vue';
+import CRepeatingData from './components/RepeatingData.vue';
+import CRepeatingSectionGroup from './components/RepeatingSectionGroup.vue';
+import CRepeatingSection from './components/RepeatingSection.vue';
 
 export default {
 	name: 'c-form',
@@ -99,7 +120,9 @@ export default {
 		CDatePicker,
 		CSelect,
 		CRow,
-		CContainer
+		CRepeatingData,
+		CRepeatingSectionGroup,
+		CRepeatingSection
 	}
 }
 </script>
@@ -118,7 +141,7 @@ export default {
 		margin-bottom: $gutter/2;
 	}
 
-	.c-container:not(:last-child) {
+	.c-region:not(:last-child) {
 			margin-bottom: $gutter;
 	}
 
@@ -144,6 +167,10 @@ export default {
 		margin-left: -$gutter/2;
 		width: calc(100% + #{$gutter});
 	}
+	.c-unshift {
+		margin-left: $gutter/2;
+		margin-right: $gutter/2;
+	}
 
 	.el-input,
 	[type="text"],
@@ -167,13 +194,26 @@ export default {
 		border: 0;
 	}
 
+	.c-section {
+		position: relative;
+		background: $neutral-bg;
+		padding-top: $gutter/2;
+		padding-bottom: $gutter/2;
+	}
+
+	.c-section:nth-child(odd){
+		background: $neutral-bg-alt;
+	}
+
+
 	///////////////////////
 	// End Structural CSS
 	///////////////////////
 
 	[id="c-form"] {
 		h1, h2, h3, h4, h5, h6 {
-			margin: 0;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 
 		h1:not(:last-child),
@@ -182,7 +222,7 @@ export default {
 		h4:not(:last-child),
 		h5:not(:last-child),
 		h6:not(:last-child) {
-			margin: 0 0 $gutter/3;
+			margin-bottom: $gutter/3;
 		}
 
 		// General theme settings

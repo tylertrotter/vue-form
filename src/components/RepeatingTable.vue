@@ -1,13 +1,13 @@
 <template>
-	<div class="c-table">
+	<div class="c-repeating-table c-region c-unshift">
 		<table>
 			<thead>
 				<th><!-- Corresponds to X buttons --></th>
 				<slot name="thead"></slot>
 			</thead>
-			<tbody>
-				<slot></slot>
-			</tbody>
+
+			<slot></slot>
+
 			<tfoot>
 				<td></td>
 				<td><c-button>Add</c-button></td>
@@ -18,17 +18,24 @@
 
 <script>
 	import CButton from './Button.vue';
+	import CEx from './icons/Ex.vue';
 
 	export default {
-		name: 'c-table',
-		components: { CButton }
+		name: 'c-repeating-table',
+		components: { CButton, CEx },
+		data(){
+			return {
+				containerIsTable: this.$parent.currentType === 'c-repeating-table'
+			}
+		}
 	}
 </script>
+
 
 <style lang="scss">
 	@import "../sass/common/_table.scss";
 
-	.c-table {
+	.c-repeating-table {
 
 		tr:first-child td:nth-child(2) {
 			border-top-left-radius: $input-radius;
