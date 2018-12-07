@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide" mode="in-out">
-		<div class="c-page c-shift" :data-page="page" v-show="show">
+		<div class="c-page c-outdent" :data-page="page" v-if="show">
 			<slot></slot>
 		</div>
 	</transition>

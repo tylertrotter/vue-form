@@ -31,3 +31,4 @@ $form-bg: white;
 $btn-primary-bg: $primary;
 $btn-primary-text: $primary-reverse;
 $neutral-bg: rgba($neutral, .07);
+$neutral-bg-alt: lighten($neutral-bg, 20);

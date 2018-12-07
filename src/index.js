@@ -39,6 +39,9 @@ Vue.use(Upload);
 Vue.use(Steps);
 Vue.use(Switch);
 
+// Register Common Components
+Vue.component("c-button", require('./components/Button.vue'))
+
 // import * as sourceBinding from "./source-binding";
 
 Vue.use(VueModel);
@@ -75,7 +78,7 @@ Cognito.Forms.model.perform(function() {
   formEntry.Section2.AllSideDishes.push("Pita & Hummus");
   formEntry.Section2.AllSideDishes.push("Cheesy Grits");
   formEntry.Section2.AllSideDishes.push("Asparagus");
-  
+
   Cognito.Forms.model.entry = formEntry;
 
 });
@@ -83,7 +86,7 @@ Cognito.Forms.model.perform(function() {
 // console.log(Cognito.Forms.model.entry);
 
 var vm = new Vue({
-  el: "#c-form",
+	el: "#c-form",
   render: (createElement) => createElement(Form, { attrs: { eid: Cognito.Forms.model.entry.meta.id } }),
   created() {
     window.addEventListener("resize", this.handleResize);

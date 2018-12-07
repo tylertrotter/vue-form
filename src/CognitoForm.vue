@@ -6,114 +6,175 @@
 		<div class="c-body c-wrapper">
 			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Menu', 'Rating Scale', 'Address', 'Miscellaneous']" />
 			<c-page :page="1">
-				<c-field source="Name3" label="Your Name" column="7" colspan="18">
-					<c-text type="text" />
-				</c-field>
-				<c-field source="Email4" label="Your Email" column="1" colspan="6">
-					<c-text type="email" />
-				</c-field>
-				<c-field source="Checkbox2" label="" column="1" colspan="6">
-					<c-checkbox label="Do you agree?" />
-				</c-field>
-				<p class="c-col-18" style="clear: both;">{{ Name3 }} {{ Checkbox2 ? 'agrees' : 'does NOT agree' }} to signup with email {{ Email4 }}.</p>
+				<c-row>
+					<c-section class="c-col-24">
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field source="Checkbox2" label="" class="c-col-8">
+								<c-checkbox label="Do you agree?" />
+							</c-field>
+						</c-row>
+					</c-section>
+				</c-row>
 			</c-page>
 			<c-page :page="2">
-				<c-field source="Table1" label="Table Field" column="1" colspan="24">
-					<c-table :columns="['Text1', 'Toggle2', 'Text2']">
-						<template slot="Text1">
-							<c-text value="blah" />
-						</template>
-						<template slot="Toggle2">
-							<c-toggle active-text="Most Absolutely" inactive-text="No" />
-						</template>
-						<template slot="Text2">
-							<c-text value="Something Else" />
-						</template>
-					</c-table>
-				</c-field>
+				<c-repeating-data :is-table="true">
+
+					<template slot="thead">
+						<th>Your Name</th>
+						<th>Your Email</th>
+						<th>Your Phone Number</th>
+					</template>
+
+					<c-repeating-section>
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+				</c-repeating-data >
 			</c-page>
 			<c-page :page="3">
-				<c-section source="RepeatingSection1" type="repeating-section" title="Repeating Section" helptext="This is a section help" column="1" colspan="12">
-					<template slot-scope="item">
-						<c-field source="Checkbox1" label="" helptext="check it if it is true." column="1" colspan="9">
-							<c-checkbox label="Hello" />
-						</c-field>
-						<c-field source="Email1" label="Your Email" column="10" colspan="15">
-							<c-text type="email" />
-						</c-field>
-					</template>
-				</c-section>
+				<c-repeating-data>
+					<c-repeating-section>
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field source="Name1" label="" class="c-col-8">
+								<c-checkbox label="Do you agree?" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+
+					<c-repeating-section>
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field source="Name1" label="" class="c-col-8">
+								<c-checkbox label="Do you agree?" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+				</c-repeating-data>
 			</c-page>
 			<c-page :page="4">
-				<c-section source="Section2" type="section" title="Menu" helptext="Place your order" column="13" colspan="12">
-					<c-field source="OrderDate" label="" column="1" colspan="4">
-						<c-text />
-					</c-field>
-					<c-field source="Vegetarian" label="" column="1" colspan="4">
-						<c-checkbox />
-					</c-field>
-					<c-field source="GlutenFree" label="" column="4" colspan="4">
-						<c-checkbox />
-					</c-field>
-					<c-field source="DairyFree" label="" column="8" colspan="4">
-						<c-checkbox />
-					</c-field>
-					<c-field source="SideDish" label="Side" column="1" colspan="12">
-						<c-select />
-					</c-field>
-				</c-section>
+				<c-row>
+					<c-section source="Section2" title="Menu" helptext="Place your order" class="c-col-12">
+						<c-row>
+							<!--  source="OrderDate"  -->
+							<c-field source="OrderDate" label="" class="c-col-4">
+								<c-text />
+							</c-field>
+							<!-- source="Vegetarian" -->
+							<c-field source="Vegetarian" label="" class="c-col-4">
+								<c-checkbox/>
+							</c-field>
+							<!-- source="GlutenFree" -->
+							<c-field source="GlutenFree" class="c-col-4">
+								<c-checkbox />
+							</c-field>
+							<!-- source="DairyFree" -->
+							<c-field source="DairyFree" label="" class="c-col-4">
+								<c-checkbox />
+							</c-field>
+						</c-row>
+						<c-row>
+							<!-- source="SideDish" -->
+							<c-field source="SideDish" label="Side" class="c-col-12">
+								<c-select>
+									asdf
+								</c-select>
+							</c-field>
+						</c-row>
+					</c-section>
+				</c-row>
 			</c-page>
 			<c-page :page="5">
-				<c-field source="RatingScale2" required="true" label="Rating Scale" column="1" colspan="15">
-					<c-rating-scale />
-				</c-field>
-				<c-field source="RatingScale3" required="true" label="Rating Scale" column="16" colspan="9">
-					<c-rating-scale />
-				</c-field>
+				<c-row>
+					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-15">
+						<c-rating-scale />
+					</c-field>
+					<c-field source="RatingScale3" required="true" label="Rating Scale" class="c-col-9">
+						<c-rating-scale />
+					</c-field>
+				</c-row>
 			</c-page>
 			<c-page :page="6">
-				<c-field source="Address1" label="Address" helptext="The place you live." error="That's not your address!" column="1" colspan="24">
-					<c-address />
-				</c-field>
-				<c-button-section />
+				<c-row>
+					<!--  source="Address1" -->
+					<c-field label="Address" helptext="The place you live." error="That's not your address!" class="c-col-24">
+						<c-address />
+					</c-field>
+				</c-row>
 			</c-page>
 			<c-page :page="7">
-				<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" column="1" colspan="6">
-					<c-date-picker />
-				</c-field>
-				<c-field source="Select1" label="Element's Select" column="7" colspan="18">
-					<c-select />
-				</c-field>
-				<c-field source="Spinner1" title="Spinner" column="1" colspan="6">
-					<c-spinner :min="0" :max="100" :step="10" />
-				</c-field>
-				<c-field source="Name3" title="Your Name" column="7" colspan="18">
-					<c-text type="text" />
-				</c-field>
-				<c-field source="Toggle1" required="true" label="Toggle" column="1" colspan="24">
-					<c-toggle active-text="Most Absolutely" inactive-text="No" />
-				</c-field>
-
-				<c-section source="Section1" type="section" title="Section Title" helptext="This is a section help" column="13" colspan="12">
-					<c-field source="Email2" label="Your Email" column="7" colspan="6">
+				<c-row>
+					<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" class="c-col-6">
+						<c-date-picker />
+					</c-field>
+					<c-field source="Select1" label="Element's Select" class="c-col-18">
+						<c-select />
+					</c-field>
+					<c-field source="Spinner1" title="Spinner" class="c-col-6">
+						<c-spinner :min="0" :max="100" :step="10" />
+					</c-field>
+				</c-row>
+				<c-row>
+					<c-field source="Name3" title="Your Name" class="c-col-18">
+						<c-text type="text" />
+					</c-field>
+					<c-field source="Toggle1" required="true" label="Toggle" class="c-col-24">
+						<c-toggle active-text="Most Absolutely" inactive-text="No" />
+					</c-field>
+				</c-row>
+				<c-row>
+					<c-section class="c-col-24">
+						<c-row>
+							<c-field label="Your Email" class="c-col-6">
+								<c-text type="email" />
+							</c-field>
+							<c-field required="true" label="Your Email" class="c-col-18">
+								<c-text type="email" />
+							</c-field>
+						</c-row>
+					</c-section>
+				</c-row>
+				<c-row>
+					<c-field source="Checkbox2" label="Do you agree?" class="c-col-6">
+						<c-checkbox />
+					</c-field>
+					<c-field source="Email4" label="Your Email" error="Something is wrong" class="c-col-6">
 						<c-text type="email" />
 					</c-field>
-					<c-field source="Email3" required="true" label="Your Email" column="13" colspan="18">
-						<c-text type="email" />
+					<c-field source="Name1" label="Your Name" class="c-col-12">
+						<c-text type="text" />
 					</c-field>
-				</c-section>
-				<c-field source="Checkbox2" label="Do you agree?" column="1" colspan="6">
-					<c-checkbox />
-				</c-field>
-				<c-field source="Email4" label="Your Email" error="Something is wrong" column="1" colspan="6">
-					<c-text type="email" />
-				</c-field>
-				<c-field source="Name1" label="Your Name" column="1" colspan="12">
-					<c-text type="text" />
-				</c-field>
-				<c-field source="Name2" label="Your Name" column="13" colspan="12">
-					<c-text type="text" />
-				</c-field>
+				</c-row>
+				<c-row>
+					<c-field source="Name2" label="Your Name" class="c-col-12">
+						<c-text type="text" />
+					</c-field>
+				</c-row>
 			</c-page>
 		</div>
   </form>
@@ -133,7 +194,9 @@ import CSpinner from './components/Spinner.vue';
 import CButtonSection from './components/ButtonSection.vue';
 import CDatePicker from './components/DatePicker.vue';
 import CSelect from './components/Select.vue';
-import CTable from './components/Table.vue';
+import CRow from './components/Row.vue';
+import CRepeatingData from './components/RepeatingData.vue';
+import CRepeatingSection from './components/RepeatingSection.vue';
 
 export default {
 	name: 'c-form',
@@ -155,7 +218,9 @@ export default {
 		CSpinner,
 		CDatePicker,
 		CSelect,
-		CTable
+		CRow,
+		CRepeatingData,
+		CRepeatingSection
 	}
 }
 </script>
@@ -163,56 +228,46 @@ export default {
 <style lang="scss">
 	@import './sass/_theme';
 	@import './sass/_field-style';
+	@import './sass/common/_grid';
 
 	[id="c-form"] * {
 		box-sizing: border-box;
 	}
 
-	[data-width~="500"],
-	.c-row {
-		.c-row-start {
-			clear: left;
-		}
+	div:not(:last-child) > .c-field,
+	.cg:not([data-width~="500"]) .c-field  {
+		margin-bottom: $gutter/2;
+	}
 
-		.c-col-21 {
-			width: 87.5%;
-		}
+	.c-region:not(:last-child) {
+			margin-bottom: $gutter;
+	}
 
-		.c-col-18 {
-			width: 75%;
-		}
+	[data-width~="500"] {
+		div.c-row {
+			display: flex;
+			width: calc(100% + #{$gutter}/2);
+			margin-left: -$gutter/4;
 
-		.c-col-15 {
-			width: 62.5%;
-		}
+			& > * {
+				margin-left: $gutter/4;
+				margin-right: $gutter/4;
+			}
 
-		.c-col-12 {
-			width: 50%;
-		}
-
-		.c-col-9 {
-			width: 37.5%;
-		}
-
-		.c-col-6 {
-			width: 25%;
-		}
-
-		.c-col-3 {
-			width: 12.5%;
+			& + .c-row > * {
+				margin-top: $gutter/2;
+			}
 		}
 	}
 
-	.c-cf:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
-
-	.c-shift {
+	.c-outdent {
 		// Shift the page container to accomodate c-field gutter padding
 		margin-left: -$gutter/2;
 		width: calc(100% + #{$gutter});
+	}
+	.c-indent {
+		margin-left: $gutter/2;
+		margin-right: $gutter/2;
 	}
 
 	.el-input,
@@ -224,9 +279,30 @@ export default {
 		width: 100%;
 	}
 
-	.el-input{
-		@include input;
+	.el-input > input {
+		border: 0;
 	}
+
+	div > .el-input{
+		@include input;
+		overflow: hidden;
+	}
+
+	td input {
+		border: 0;
+	}
+
+	.c-section {
+		position: relative;
+		background: $neutral-bg;
+		padding-top: $gutter/2;
+		padding-bottom: $gutter/2;
+	}
+
+	.c-section:nth-child(odd){
+		background: $neutral-bg-alt;
+	}
+
 
 	///////////////////////
 	// End Structural CSS
@@ -234,7 +310,8 @@ export default {
 
 	[id="c-form"] {
 		h1, h2, h3, h4, h5, h6 {
-			margin: 0;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 
 		h1:not(:last-child),
@@ -243,7 +320,7 @@ export default {
 		h4:not(:last-child),
 		h5:not(:last-child),
 		h6:not(:last-child) {
-			margin: 0 0 $gutter/3;
+			margin-bottom: $gutter/3;
 		}
 
 		// General theme settings
@@ -264,6 +341,14 @@ export default {
 		fill: $negative-reverse;
 		color: $negative-reverse;
 		stroke: $negative-reverse;
+	}
+
+		// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
+	// Allowing us to use the field component outside of 24-column grid context.
+	div[class*='c-col-'],
+	.c-container,
+	.c-padding {
+		padding: 0 $gutter/2;
 	}
 
 
@@ -291,27 +376,6 @@ export default {
 
 	.c-wrapper:last-child {
 		padding-bottom: $form-margins;
-	}
-
-	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
-	// Allowing us to use the field component outside of 24-column grid context.
-	[class*='c-col-'] {
-		padding: 0 $gutter/2;
-	}
-
-	[data-width~="500"] [class*='c-col-']:not(.c-col-24) {
-		float: left;
-		overflow: hidden;
-	}
-
-	// Add padding to the top of every field after the first row.
-	// (If the form is 500px or wider, otherwise do it for all but the first field.)
-	[data-width~="500"] .c-row-end ~ [class*='c-col-']{
-		padding-top: $gutter;
-	}
-
-	[id="c-form"]:not([data-width~="500"]) [class*='c-col-']:nth-child(n+2){
-		padding-top: $gutter;
 	}
 
 </style>

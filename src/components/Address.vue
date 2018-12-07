@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="c-address">
 		<c-row>
 			<c-text type="text" placeholder="Street Address" />
 		</c-row>
@@ -7,9 +7,9 @@
 			<c-text type="text" placeholder="Line 2" />
 		</c-row>
 		<c-row >
-			<c-text type="text" placeholder="city" class="c-12" />
-			<c-text type="text" placeholder="state" class="c-9" />
-			<c-text type="text" placeholder="ZIP" class="c-3" />
+			<c-text type="text" placeholder="city" />
+			<c-text type="text" placeholder="state" />
+			<c-text type="text" placeholder="ZIP" />
 		</c-row>
 	</div>
 </template>

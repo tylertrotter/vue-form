@@ -51,7 +51,16 @@ export default {
 @import "../sass/_mixins.scss";
 
 .c-rating-scale {
-  width: 100%;
+	width: 100%;
+
+	tbody:nth-child(even) {
+		background: $neutral-bg;
+	}
+
+	td,
+	th {
+		padding: $gutter/4;
+	}
 }
 
 .c-rating-scale--question:after {

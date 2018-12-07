@@ -1,20 +1,12 @@
-<!--
-	This component is for sections of a form down to the field level.
-	Inside of a field the CognitoRow component can be used (if necessary).
-
-	E.g. c-field, c-section, and c-buttons (the section at the bottom for buttons).
--->
-
 <template>
 	<div :class="[
 		`c-field`,
-		(typeof(colspan) !== 'undefined') ? `c-col-${colspan}` : '',
-		(column === '1') ? 'c-row-start' : '',
-		(+column + +colspan  === 25) ? 'c-row-end' : '',
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
-	]">
-		<label class="c-label" v-if="fieldLabel">{{fieldLabel}}</label>
+		]"
+	 	:is="this.$parent.$parent.$parent.$parent.currentType && this.$parent.$parent.$parent.$parent.currentType === 'c-repeating-table' ? 'td' : 'div'"
+	>
+		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.$parent.currentType !== 'c-repeating-table' ">{{fieldLabel}}</label>
 		<slot></slot>
 		<div v-if="helptext" class="c-helptext">{{helptext}}</div>
 		<div v-if="error" class="c-validation">{{error}}</div>
@@ -36,7 +28,7 @@ export default {
       return typeof this.label === "string" ? this.label : sourceLabel;
     }
   },
-  props: ["colspan", "label", "helptext", "error", "column", "required"]
+  props: ["label", "helptext", "error", "column", "required"]
 };
 </script>
 
