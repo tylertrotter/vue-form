@@ -20,8 +20,8 @@ $highlight: orange;
 $highlight-reverse: white;
 $primary: #bada55;
 $primary-reverse: white;
-$neutral: #555;
-$neutral-reverse: #eee;
+$neutral: #ccc;
+$neutral-reverse: #333;
 
 // Element's Primary Color
 $--color-primary: $primary;
@@ -32,3 +32,21 @@ $btn-primary-bg: $primary;
 $btn-primary-text: $primary-reverse;
 $neutral-bg: rgba($neutral, .07);
 $neutral-bg-alt: lighten($neutral-bg, 20);
+
+// Field Style
+$input-font-size: 16px;
+$input-padding-v: 10px;
+$input-padding-h: 7px;
+$input-radius: 0;
+$input-bg: transparent;
+$input-border-color: black;
+$input-border-width: 1px;
+$input-border-style: solid;
+$underline: false;
+
+$button-padding: 6px;
+
+$table-border-spacing: 0;
+
+// Animation
+$page-transition-duration: 1s;

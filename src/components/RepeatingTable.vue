@@ -37,37 +37,54 @@
 
 	.c-repeating-table {
 
-		tr:first-child td:nth-child(2) {
-			border-top-left-radius: $input-radius;
+		.c-readonly {
+			@include input-appearance;
+			@include disabled-input;
 		}
 
-		tr:first-child td:last-child {
-			border-top-right-radius: $input-radius;
+		table {
+			border-spacing: $table-border-spacing;
 		}
 
-		tr:last-child td:nth-child(2) {
-			border-bottom-left-radius: $input-radius;
+		td {
+			padding: 0;
 		}
 
-		tr:last-child td:last-child {
-			border-bottom-right-radius: $input-radius;
+		.el-input,
+		.c-readonly {
+			border-radius: 0;
 		}
 
 		tbody {
-			td + td {
-				border: 1px solid $input-border;
+			.el-input,
+			.c-readonly  {
 				border-right-width: 0;
-				border-bottom-width: 0;
+			}
 
-				&:last-child {
-					border-right-width: 1px;
+			@if $underline != true {
+				td:last-child .el-input,
+				td:last-child .c-readonly {
+					border-right-width: $input-border-width;
 				}
 			}
 
-			tr:last-child td {
-				border-bottom-width: 1px;
+			& + tbody .el-input,
+			& + tbody .c-readonly  {
+				border-top-width: 0;
 			}
 		}
 
+	}
+
+	.top-left-corner .el-input {
+		border-top-left-radius: $input-radius;
+	}
+
+		// Temporary
+	button {
+		width: $input-padding-v*2 + $input-border-width*2 + $input-font-size/2;
+		background: transparent;
+		border: 0;
+		padding: 0;
 	}
 </style>

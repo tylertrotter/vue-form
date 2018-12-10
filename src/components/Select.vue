@@ -64,10 +64,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import '../sass/theme-chalk-master/src/select';
+	// @import '../sass/theme-chalk-master/src/select';
 
 	.el-input {
-		@include input;
+		// @include input-spacing;
 
 		input {
 			border: 0;

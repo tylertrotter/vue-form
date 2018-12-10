@@ -1,9 +1,11 @@
 <template>
+	<div>
 	<ol class="c-page-progress">
 		<li v-for="(page, index) in pageTitles" :key="index" :class="{active: index === currentPage-1}">
 			<a @click="goto(index + 1)">{{ page }}</a>
 		</li>
 	</ol>
+	</div>
 </template>
 
 <script>
@@ -22,6 +24,42 @@
 			goto(num){
 				this.currentPage = num;
 				EventBus.$emit('page-number-updated', this.currentPage);
+
+				// Handle transition
+				const form = this.$parent.$refs.form;
+
+				// record form height
+				let formHeight = form.clientHeight;
+
+				let enterEl,
+						leaveEl,
+						enterElHeight,
+						leaveElHeight,
+						heightDiff;
+
+				// set form to that height
+				form.style.height = formHeight + 'px';
+
+				// set enter and leave els to position absolute (Done in CSS)
+
+				// Wait a tick for the transition to start
+				setTimeout(function(){
+
+					enterEl = document.querySelector('.transition-enter-active');
+					leaveEl = document.querySelector('.transition-leave-active');
+
+					// record height of leave and enter elements
+					enterElHeight = enterEl.clientHeight;
+					leaveElHeight = leaveEl.clientHeight;
+
+					heightDiff = enterElHeight - leaveElHeight;
+
+					// Set the form height to the new height after transition
+					form.style.height = (formHeight + heightDiff) + 'px';
+				});
+
+				// After the transition is over form height is set back to 'initial' by the page component.
+
 			}
 		}
   };

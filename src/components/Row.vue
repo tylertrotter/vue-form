@@ -27,16 +27,9 @@
 	@import '../sass/_field-style';
 	// End sandbox only code
 
-	.c-pull {
-		margin-left: auto;
-	}
+	// .c-pull {
+	// 	margin-left: auto;
+	// }
 
-	// Temporary
-	button {
-		width: 15px;
-		background: transparent;
-		border: 0;
-		padding: 0;
-	}
 </style>
 

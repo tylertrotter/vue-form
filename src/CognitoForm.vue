@@ -1,15 +1,15 @@
 <template>
-  <form id="c-form" class="cg">
+  <form ref="form" id="c-form" class="cg">
 		<header class="c-header c-wrapper">
 			<h1>Form Title</h1>
 		</header>
-		<div class="c-body c-wrapper">
+		<div class="c-body">
 			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Menu', 'Rating Scale', 'Address', 'Miscellaneous']" />
 			<c-page :page="1">
 				<c-row>
 					<c-section class="c-col-24">
 						<c-row>
-							<c-field source="Name1" label="Your Name" class="c-col-8">
+							<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
 								<c-text type="text" />
 							</c-field>
 							<c-field source="Name1" label="Your Email" class="c-col-8">
@@ -22,6 +22,7 @@
 					</c-section>
 				</c-row>
 			</c-page>
+
 			<c-page :page="2">
 				<c-repeating-data :is-table="true">
 
@@ -34,16 +35,31 @@
 					<c-repeating-section>
 						<c-row>
 							<c-field source="Name1" label="Your Name" class="c-col-8">
-								<c-text type="text" />
+								<c-text type="text"/>
 							</c-field>
 							<c-field source="Name1" label="Your Email" class="c-col-8">
-								<c-text type="text" />
+								<c-select />
 							</c-field>
 							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
 								<c-text type="text" />
 							</c-field>
 						</c-row>
 					</c-repeating-section>
+
+					<c-repeating-section>
+						<c-row>
+							<c-field source="Name1" label="Your Name" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+							<c-field source="Name1" label="Your Email" class="c-col-8">
+								<c-select />
+							</c-field>
+							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+								<c-text type="text" />
+							</c-field>
+						</c-row>
+					</c-repeating-section>
+
 				</c-repeating-data >
 			</c-page>
 			<c-page :page="3">
@@ -109,6 +125,8 @@
 					</c-section>
 				</c-row>
 			</c-page>
+
+
 			<c-page :page="5">
 				<c-row>
 					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-15">
@@ -197,10 +215,12 @@ import CSelect from './components/Select.vue';
 import CRow from './components/Row.vue';
 import CRepeatingData from './components/RepeatingData.vue';
 import CRepeatingSection from './components/RepeatingSection.vue';
+import smoothReflow from 'vue-smooth-reflow';
 
 export default {
 	name: 'c-form',
 	props: ['eid'],
+
 	data: function() {
 		return Cognito.Forms.FormEntry.meta.get(this.eid);
 	},
@@ -243,6 +263,10 @@ export default {
 			margin-bottom: $gutter;
 	}
 
+	.c-row > * {
+		flex-grow: 1;
+	}
+
 	[data-width~="500"] {
 		div.c-row {
 			display: flex;
@@ -281,15 +305,12 @@ export default {
 
 	.el-input > input {
 		border: 0;
+		background: transparent;
 	}
 
-	div > .el-input{
-		@include input;
+.el-input{
+		@include input-appearance;
 		overflow: hidden;
-	}
-
-	td input {
-		border: 0;
 	}
 
 	.c-section {
@@ -326,8 +347,14 @@ export default {
 		// General theme settings
 		[type="text"],
 		[type="email"],
-		select {
-			padding: $input-padding;
+		select,
+		.c-readonly {
+			@include input-spacing;
+		}
+
+		.c-readonly {
+			border-color: transparent;
+			@include input-border;
 		}
 	}
 
@@ -351,7 +378,15 @@ export default {
 		padding: 0 $gutter/2;
 	}
 
+	.c-body {
+		position: relative;
+		margin: $form-margins/2 $form-margins;
+		transition: all .5s;
+	}
 
+	// .c-page {
+	// 	bottom: 0;
+	// }
 </style>
 
 <style scoped lang="scss">
@@ -377,5 +412,10 @@ export default {
 	.c-wrapper:last-child {
 		padding-bottom: $form-margins;
 	}
+
+	.c-header {
+		background: gray;
+	}
+
 
 </style>

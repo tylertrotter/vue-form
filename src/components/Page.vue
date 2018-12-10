@@ -1,5 +1,5 @@
 <template>
-	<transition name="slide" mode="in-out">
+	<transition name="transition" @after-enter="transitionDone">
 		<div class="c-page c-outdent" :data-page="page" v-if="show">
 			<slot></slot>
 		</div>
@@ -7,6 +7,7 @@
 </template>
 
 <script>
+
 import {EventBus} from './../event-bus.js';
 export default {
 	name: 'c-page',
@@ -27,11 +28,16 @@ export default {
 		show(){
 			return +this.page === +this.currentPage;
 		}
+	},
+	methods: {
+		transitionDone() {
+			this.$parent.$refs.form.style.height = 'initial';
+		}
 	}
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 		// Just to get sandbox working
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
@@ -50,13 +56,36 @@ export default {
 			padding: $gutter $gutter/2 0 0;
 			font-size: $small-text;
 		}
+
+		&[class*="transition"]{
+			position: absolute;
+		}
 	}
 
 	// Not sure these belong here
-	.slide-enter-active, .slide-leave-active {
-		transition: all 1s;
+	.transition-enter-active, .transition-leave-active {
+		transition: all $page-transition-duration;
 	}
-	.slide-enter, .slide-leave-to {
+
+	// Going forward
+	.transition-enter {
 		transform: translateX(-100%);
+	}
+
+	.c-page + .transition-leave-to {
+		transform: translateX(120%);
+	}
+
+	// Going backward
+	.c-page + .transition-enter {
+		transform: translateX(100%);
+	}
+
+	.transition-leave-to {
+		transform: translateX(-120%);
+	}
+
+	[id="c-form"] {
+		transition: height $page-transition-duration;
 	}
 </style>

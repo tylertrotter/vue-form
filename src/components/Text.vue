@@ -1,5 +1,8 @@
 <template>
-	<el-input v-model="inputModel" :type="type" :v-mask="mask" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
+	<div>
+		<div v-if="isReadonly" class="c-readonly">{{value}}</div>
+		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
+	</div>
 </template>
 
 <script>
@@ -17,6 +20,8 @@ export default {
 			hasFocus: false,
 			focusValue: null,
 			selfModel: (typeof this.text === "string" ? this.text : this.$source ? this.$source.displayValue : false),
+			readonly: true,
+			value: 'John Doe'
 		};
 	},
 	watch: {
@@ -51,6 +56,12 @@ export default {
 						this.$source.displayValue = val;
 					}
 				}
+			}
+		},
+		isReadonly: {
+			get: function(){
+				console.log(this.readonly)
+				return this.readonly;
 			}
 		}
 	},

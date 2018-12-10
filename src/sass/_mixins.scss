@@ -14,9 +14,36 @@
 	overflow:hidden;
 }
 
-@mixin input {
-	background: $input-bg;
+@mixin input-spacing {
+	padding: $input-padding-v $input-padding-h;
+	font-size: $input-font-size;
+
+	outline-width: $input-border-width;
+}
+
+@mixin input-border {
 	border-radius: $input-radius;
-	border: 1px solid $input-border;
-	// overflow: hidden;
+	border-style: $input-border-style;
+
+	@if $underline == true {
+		border-width: 0;
+		border-bottom-width: $input-border-width;
+	}@else{
+		border-width: $input-border-width;
+	}
+}
+
+@mixin input-appearance {
+	background: $input-bg;
+	border-color: $input-border-color;
+	@include input-border;
+}
+
+$disabled-stripe: rgba($neutral-reverse, .15);
+@mixin disabled-input {
+	background: $neutral;
+	// background-image: linear-gradient(45deg, $disabled-stripe 4.55%, transparent 4.55%, transparent 50%, $disabled-stripe 50%, $disabled-stripe 54.55%, transparent 54.55%, transparent 100%);
+	// background-size: 5px 5px;
+	color: $neutral-reverse;
+	cursor: not-allowed;
 }

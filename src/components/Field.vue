@@ -17,7 +17,11 @@
 import { VueModel } from "../imports";
 export default {
   name: "c-field",
-  mixins: [VueModel.mixins.SourceProvider],
+	mixins: [VueModel.mixins.SourceProvider],
+	data() {
+		return {
+		}
+	},
   computed: {
     fieldLabel: function() {
       let sourceLabel = null;
@@ -26,9 +30,15 @@ export default {
       }
 
       return typeof this.label === "string" ? this.label : sourceLabel;
-    }
+		},
+
+		setReadOnly: function(){
+				this.readOnly = true;
+
+				return true;
+		}
   },
-  props: ["label", "helptext", "error", "column", "required"]
+  props: ["label", "helptext", "error", "required", "readonly"]
 };
 </script>
 
