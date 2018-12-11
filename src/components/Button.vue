@@ -15,39 +15,49 @@
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
 
-	.btn {
+	.el-button {
 		border: 0;
 		background: transparent;
 		padding: 0;
+
+		svg {
+			width: 1.2em;
+			height: 1.2em;
+			vertical-align: bottom;
+		}
+
+		svg:not(:last-child){
+			margin-right: .3em;
+		}
 	}
 
-	.btn-primary,
-	.btn-secondary {
+	.c-button--primary,
+	.c-button--secondary {
 		padding: $button-padding;
 	}
 
-	.btn-primary {
+	.c-button--primary {
 		background: $btn-primary-bg;
 		color: $btn-primary-text;
 	}
 
-	.btn-secondary {
+	.c-button--secondary {
 		background: $neutral-reverse;
 		color: $neutral;
 	}
 
 	// Button Icon
-	.btn svg {
-		width: 1.2em;
-		vertical-align: sub;
-	}
+	// .c-button--icon {
+	// 	width: 1.2em;
+	// 	vertical-align: sub;
+	// }
 
-	.btn-primary svg line {
-		stroke: $primary-reverse;
-	}
+	// .btn-primary svg line {
+	// 	stroke: $primary-reverse;
+	// }
 
-	.btn-primary svg * {
-		fill: $primary-reverse;
-	}
+	// .btn-primary svg * {
+	// 	fill: $primary-reverse;
+	// }
 </style>
 

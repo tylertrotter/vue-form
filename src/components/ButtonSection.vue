@@ -1,11 +1,14 @@
 <template>
-	<div class="c-col-24">
-		<c-row>
-			<c-button class="btn btn-primary">Back</c-button>
-			<c-button type="submit" class="btn btn-primary">Submit</c-button>
-			<c-button class="c-pull btn btn-secondary">Save</c-button>
-		</c-row>
-	</div>
+	<c-row>
+		<div class="c-col-12">
+			<c-button v-if="!firstPage" class="c-button--secondary">Back</c-button>
+			<c-button v-if="!lastPage" class="c-button--secondary">Next</c-button>
+			<c-button type="submit" class="c-button--primary">Submit</c-button>
+		</div>
+		<div class="c-col-12 c-right">
+			<c-button class="c-button--secondary">Save</c-button>
+		</div>
+	</c-row>
 </template>
 
 
@@ -20,17 +23,19 @@ export default {
     CButton,
     CSection,
     CRow
-  },
-  props: ["colspan"]
+	},
+	data() {
+		return {
+			firstPage: this.$parent.$attrs.first,
+			lastPage: this.$parent.$attrs.last
+		}
+	},
+	mounted(){
+		console.log(this.$parent.$attrs)
+	}
 };
 </script>
 
 <style scoped lang="scss">
-// Just to get sandbox working
-@import "../sass/_theme";
-@import "../sass/_field-style";
-// End sandbox only code
-.c-buttons {
-  padding-top: $gutter;
-}
+
 </style>

@@ -30,15 +30,9 @@ export default {
       }
 
       return typeof this.label === "string" ? this.label : sourceLabel;
-		},
-
-		setReadOnly: function(){
-				this.readOnly = true;
-
-				return true;
 		}
   },
-  props: ["label", "helptext", "error", "required", "readonly"]
+  props: ["label", "helptext", "error", "required"]
 };
 </script>
 

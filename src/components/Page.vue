@@ -2,6 +2,7 @@
 	<transition name="transition" @after-enter="transitionDone">
 		<div class="c-page c-outdent" :data-page="page" v-if="show">
 			<slot></slot>
+			<c-button-section />
 		</div>
 	</transition>
 </template>
@@ -9,11 +10,13 @@
 <script>
 
 import {EventBus} from './../event-bus.js';
+import CButtonSection from './ButtonSection'
 export default {
 	name: 'c-page',
 	props: {
 		page: Number
 	},
+	components: { CButtonSection },
 	data() {
 		return {
 			currentPage: 1
@@ -64,12 +67,13 @@ export default {
 
 	// Not sure these belong here
 	.transition-enter-active, .transition-leave-active {
-		transition: all $page-transition-duration;
+		transition: all ease-in-out $page-transition-duration;
 	}
 
 	// Going forward
 	.transition-enter {
 		transform: translateX(-100%);
+		opacity: 0;
 	}
 
 	.c-page + .transition-leave-to {
@@ -83,9 +87,10 @@ export default {
 
 	.transition-leave-to {
 		transform: translateX(-120%);
+		opacity: 0;
 	}
 
 	[id="c-form"] {
-		transition: height $page-transition-duration;
+		transition: height ease-in-out $page-transition-duration;
 	}
 </style>

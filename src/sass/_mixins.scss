@@ -47,3 +47,10 @@ $disabled-stripe: rgba($neutral-reverse, .15);
 	color: $neutral-reverse;
 	cursor: not-allowed;
 }
+
+@mixin break-word {
+	overflow-wrap: break-word;
+  word-wrap: break-word;
+	// word-break: break-all;
+	break-inside: avoid;
+}

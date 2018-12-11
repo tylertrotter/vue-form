@@ -9,8 +9,16 @@
 			<slot></slot>
 
 			<tfoot>
-				<td></td>
-				<td><c-button>Add</c-button></td>
+				<tr class="c-repeating-table--summary">
+					<td></td>
+					<td>Footer</td>
+					<td>Footer</td>
+					<td>Footer</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><c-button class="c-button--secondary"><c-plus /> Add</c-button></td>
+				</tr>
 			</tfoot>
 		</table>
 	</div>
@@ -19,10 +27,11 @@
 <script>
 	import CButton from './Button.vue';
 	import CEx from './icons/Ex.vue';
+	import CPlus from './icons/Plus.vue';
 
 	export default {
 		name: 'c-repeating-table',
-		components: { CButton, CEx },
+		components: { CButton, CEx, CPlus },
 		data(){
 			return {
 				containerIsTable: this.$parent.currentType === 'c-repeating-table'
@@ -73,18 +82,24 @@
 				border-top-width: 0;
 			}
 		}
+	}
 
+	.c-repeating-table--summary td {
+		padding: $input-padding-v $input-padding-h;
 	}
 
 	.top-left-corner .el-input {
 		border-top-left-radius: $input-radius;
 	}
 
-		// Temporary
-	button {
-		width: $input-padding-v*2 + $input-border-width*2 + $input-font-size/2;
-		background: transparent;
-		border: 0;
-		padding: 0;
+	// .c-button--remove-row {
+	// 	width: $input-padding-v*2 + $input-border-width*2 + $input-font-size/2;
+	// 	background: transparent;
+	// 	border: 0;
+	// 	padding: 0;
+	// }
+
+	.c-plus{
+		stroke: $neutral;
 	}
 </style>

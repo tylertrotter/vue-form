@@ -1,6 +1,6 @@
 <template>
 	<component class="c-row" :is="containerIsTable ? 'tr' : 'div'">
-		<td v-if="containerIsTable"><c-button><c-ex /></c-button></td>
+		<td v-if="containerIsTable"><c-button class="c-button--remove-row"><c-ex /></c-button></td>
 		<slot></slot>
 	</component>
 </template>
@@ -26,10 +26,5 @@
 	@import '../sass/_theme';
 	@import '../sass/_field-style';
 	// End sandbox only code
-
-	// .c-pull {
-	// 	margin-left: auto;
-	// }
-
 </style>
 

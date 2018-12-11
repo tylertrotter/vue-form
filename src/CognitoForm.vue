@@ -5,24 +5,30 @@
 		</header>
 		<div class="c-body">
 			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Menu', 'Rating Scale', 'Address', 'Miscellaneous']" />
-			<c-page :page="1">
+			<c-page :page="1" :first="true">
 				<c-row>
 					<c-section class="c-col-24">
 						<c-row>
-							<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
+							<c-field source="Name1" readonly="true" value="Jane Doe" label="Your Name" class="c-col-6">
 								<c-text type="text" />
 							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-8">
+							<c-field source="Name1" label="Your Email" class="c-col-6">
 								<c-select />
 							</c-field>
-							<c-field source="Checkbox2" label="" class="c-col-8">
-								<c-checkbox label="Do you agree?" />
+							<c-field label="Radio Group" class="c-col-12">
+								<c-radio-group class="c-inner-col-3">
+									<c-radio label="Choice 1" />
+									<c-radio label="Choice 2" />
+									<c-radio label="Choice 3" />
+									<c-radio label="Antidisestablishmentarianism" />
+									<c-radio label="Constantine von Tischendorf" />
+									<c-radio label="Choice 6" />
+								</c-radio-group>
 							</c-field>
 						</c-row>
 					</c-section>
 				</c-row>
 			</c-page>
-
 			<c-page :page="2">
 				<c-repeating-data :is-table="true">
 
@@ -34,7 +40,7 @@
 
 					<c-repeating-section>
 						<c-row>
-							<c-field source="Name1" label="Your Name" class="c-col-8">
+							<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
 								<c-text type="text"/>
 							</c-field>
 							<c-field source="Name1" label="Your Email" class="c-col-8">
@@ -48,7 +54,7 @@
 
 					<c-repeating-section>
 						<c-row>
-							<c-field source="Name1" label="Your Name" class="c-col-8">
+							<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
 								<c-text type="text" />
 							</c-field>
 							<c-field source="Name1" label="Your Email" class="c-col-8">
@@ -125,8 +131,6 @@
 					</c-section>
 				</c-row>
 			</c-page>
-
-
 			<c-page :page="5">
 				<c-row>
 					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-15">
@@ -145,7 +149,7 @@
 					</c-field>
 				</c-row>
 			</c-page>
-			<c-page :page="7">
+			<c-page :page="7" :last="true">
 				<c-row>
 					<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" class="c-col-6">
 						<c-date-picker />
@@ -215,7 +219,8 @@ import CSelect from './components/Select.vue';
 import CRow from './components/Row.vue';
 import CRepeatingData from './components/RepeatingData.vue';
 import CRepeatingSection from './components/RepeatingSection.vue';
-import smoothReflow from 'vue-smooth-reflow';
+import CRadioGroup from './components/RadioGroup.vue';
+import CRadio from './components/Radio.vue';
 
 export default {
 	name: 'c-form',
@@ -240,7 +245,9 @@ export default {
 		CSelect,
 		CRow,
 		CRepeatingData,
-		CRepeatingSection
+		CRepeatingSection,
+		CRadioGroup,
+		CRadio
 	}
 }
 </script>
@@ -384,9 +391,9 @@ export default {
 		transition: all .5s;
 	}
 
-	// .c-page {
-	// 	bottom: 0;
-	// }
+	.c-right {
+		text-align: right;
+	}
 </style>
 
 <style scoped lang="scss">
