@@ -1,0 +1,48 @@
+.el-radio,
+.el-checkbox {
+	margin-bottom: $gutter/4;
+}
+
+.c-inline {
+	.el-radio,
+	.el-checkbox {
+		display: inline-block;
+	}
+
+	.el-radio:not(:last-child),
+	.el-checkbox:not(:last-child) {
+		margin-right: 1em;
+	}
+
+}
+
+.c-inner-col-2 {
+	columns: 130px 2;
+}
+
+.c-inner-col-3 {
+	columns: 130px 3;
+}
+
+.c-inner-col-4 {
+	columns: 130px 4;
+}
+
+[class*="c-inner-col-"] {
+
+	label {
+		display: block;
+		padding-left: 1.3em;
+		@include break-word;
+	}
+
+	.el-radio,
+	.el-checkbox {
+		position: relative;
+
+		input {
+			position: absolute;
+			left: 0;
+		}
+	}
+}

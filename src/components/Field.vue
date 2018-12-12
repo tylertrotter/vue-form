@@ -45,7 +45,8 @@ export default {
 
 .c-label {
   display: block;
-  font-family: $label-typeface;
+	font-family: $label-typeface;
+	margin-bottom: $gutter/4;
 }
 
 .c-required .c-label:after {
@@ -92,4 +93,13 @@ $section-left-padding: 36px;
 .add-section-button {
   margin-top: $gutter/3;
 }
+
+	.c-error {
+		background: lighten($negative, 47);
+		outline: 2px solid $negative;
+
+		.c-label {
+			color: $negative;
+		}
+	}
 </style>

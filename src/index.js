@@ -13,6 +13,7 @@ import {
 	Radio,
 	RadioGroup,
 	Checkbox,
+	CheckboxGroup,
 	TimePicker,
 	Upload,
 	Steps,
@@ -34,6 +35,7 @@ Vue.use(InputNumber);
 Vue.use(RadioGroup);
 Vue.use(Radio);
 Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
 Vue.use(TimePicker);
 Vue.use(Upload);
 Vue.use(Steps);

@@ -20,11 +20,3 @@
 		}
   };
 </script>
-
-<style scoped lang="scss">
-	// Just to get sandbox working
-	@import '../sass/_theme';
-	@import '../sass/_field-style';
-	// End sandbox only code
-</style>
-

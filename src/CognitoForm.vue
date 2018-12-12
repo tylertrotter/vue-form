@@ -9,21 +9,44 @@
 				<c-row>
 					<c-section class="c-col-24">
 						<c-row>
-							<c-field source="Name1" readonly="true" value="Jane Doe" label="Your Name" class="c-col-6">
+							<!-- <c-field source="Name1" readonly="true" value="Jane Doe" label="Your Name" class="c-col-6">
 								<c-text type="text" />
+							</c-field> -->
+							<c-field label="Do you agree?" class="c-col-4">
+								<c-checkable-group
+									type="checkbox"
+									:options="[
+										{label: 'Yes', checked: false}
+									]"
+								/>
 							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-6">
-								<c-select />
+							<c-field source="Name1" error="Is this message in the right place?" label="Checkbox Group" class="c-col-10">
+								<c-checkable-group
+									type="checkbox"
+									:options="[
+										{label: 'Shanghai', checked: false},
+										{label: 'Bejing', checked: true},
+										{label: 'Nanjing', checked: true},
+										{label: 'Guangzhou', checked: true}
+									]"
+									columns="2"
+								/>
 							</c-field>
 							<c-field label="Radio Group" class="c-col-12">
-								<c-radio-group class="c-inner-col-3">
-									<c-radio label="Choice 1" />
-									<c-radio label="Choice 2" />
-									<c-radio label="Choice 3" />
-									<c-radio label="Antidisestablishmentarianism" />
-									<c-radio label="Constantine von Tischendorf" />
-									<c-radio label="Choice 6" />
-								</c-radio-group>
+								<c-checkable-group
+									type="radio"
+									:options="[
+										{label: 'Shanghai', checked: false},
+										{label: 'Bejing', checked: false},
+										{label: 'Nanjing', checked: false},
+										{label: 'Guangzhou', checked: true},
+										{label: 'Wuxi', checked: false},
+										{label: 'Hong Kong', checked: true},
+										{label: 'Xi\'an', checked: false},
+										{label: 'Shantou', checked: true}
+									]"
+									columns="3"
+								/>
 							</c-field>
 						</c-row>
 					</c-section>
@@ -207,7 +230,6 @@ import CPageProgress from './components/PageProgress.vue';
 import CPage from './components/Page.vue';
 import CSection from './components/Section.vue';
 import CField from './components/Field.vue';
-import CCheckbox from './components/Checkbox.vue';
 import CText from './components/Text.vue';
 import CAddress from './components/Address.vue';
 import CRatingScale from './components/RatingScale.vue';
@@ -219,8 +241,7 @@ import CSelect from './components/Select.vue';
 import CRow from './components/Row.vue';
 import CRepeatingData from './components/RepeatingData.vue';
 import CRepeatingSection from './components/RepeatingSection.vue';
-import CRadioGroup from './components/RadioGroup.vue';
-import CRadio from './components/Radio.vue';
+import CCheckableGroup from './components/CheckableGroup.vue';
 
 export default {
 	name: 'c-form',
@@ -234,7 +255,6 @@ export default {
 		CPage,
 		CSection,
 		CField,
-		CCheckbox,
 		CText,
 		CAddress,
 		CButtonSection,
@@ -246,8 +266,7 @@ export default {
 		CRow,
 		CRepeatingData,
 		CRepeatingSection,
-		CRadioGroup,
-		CRadio
+		CCheckableGroup
 	}
 }
 </script>
@@ -277,16 +296,13 @@ export default {
 	[data-width~="500"] {
 		div.c-row {
 			display: flex;
+			align-items: flex-start;
 			width: calc(100% + #{$gutter}/2);
 			margin-left: -$gutter/4;
 
 			& > * {
 				margin-left: $gutter/4;
 				margin-right: $gutter/4;
-			}
-
-			& + .c-row > * {
-				margin-top: $gutter/2;
 			}
 		}
 	}
@@ -382,7 +398,7 @@ export default {
 	div[class*='c-col-'],
 	.c-container,
 	.c-padding {
-		padding: 0 $gutter/2;
+		padding: $gutter/2;
 	}
 
 	.c-body {
@@ -419,10 +435,5 @@ export default {
 	.c-wrapper:last-child {
 		padding-bottom: $form-margins;
 	}
-
-	.c-header {
-		background: gray;
-	}
-
 
 </style>
