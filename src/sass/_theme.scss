@@ -1,7 +1,7 @@
 // Structure
 $form-width: 1100px;
-$form-margins: 40px;
 $gutter: 30px;
+$form-margins: $gutter * 1.5;
 $small-text: .8em;
 
 // Typeography
@@ -18,8 +18,8 @@ $positive: green;
 $positive-reverse: white;
 $highlight: orange;
 $highlight-reverse: white;
-$primary: #bada55;
-$primary-reverse: white;
+$primary: #e3f8f8;
+$primary-reverse: #234652;
 $neutral: #ccc;
 $neutral-reverse: #333;
 
@@ -33,18 +33,20 @@ $btn-primary-text: $primary-reverse;
 $neutral-bg: rgba($neutral, .07);
 $neutral-bg-alt: lighten($neutral-bg, 20);
 
+// Button Styles
+$button-font-size: 16px;
+$button-padding: $gutter/3;
+
 // Field Style
 $input-font-size: 16px;
-$input-padding-v: 10px;
-$input-padding-h: 7px;
+$input-padding-v: $gutter/3;
+$input-padding-h: $gutter/4;
 $input-radius: 0;
 $input-bg: transparent;
 $input-border-color: black;
 $input-border-width: 1px;
 $input-border-style: solid;
 $underline: false;
-
-$button-padding: 6px;
 
 $table-border-spacing: 0;
 

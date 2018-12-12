@@ -33,6 +33,7 @@
 
 	.c-button--primary,
 	.c-button--secondary {
+		font-size: $button-font-size;
 		padding: $button-padding;
 	}
 

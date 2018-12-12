@@ -280,11 +280,6 @@ export default {
 		box-sizing: border-box;
 	}
 
-	div:not(:last-child) > .c-field,
-	.cg:not([data-width~="500"]) .c-field  {
-		margin-bottom: $gutter/2;
-	}
-
 	.c-region:not(:last-child) {
 			margin-bottom: $gutter;
 	}
@@ -393,12 +388,16 @@ export default {
 		stroke: $negative-reverse;
 	}
 
-		// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
+	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
 	// Allowing us to use the field component outside of 24-column grid context.
 	div[class*='c-col-'],
 	.c-container,
 	.c-padding {
 		padding: $gutter/2;
+	}
+
+	.c-field .c-row + .c-row {
+		margin-top: $gutter/2;
 	}
 
 	.c-body {
