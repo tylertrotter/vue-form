@@ -20,18 +20,19 @@ $highlight: orange;
 $highlight-reverse: white;
 $primary: #e3f8f8;
 $primary-reverse: #234652;
-$neutral: #ccc;
-$neutral-reverse: #333;
+
 
 // Element's Primary Color
 $--color-primary: $primary;
 
 // Specific Colors
 $form-bg: white;
+$neutral: darken($form-bg, 15);
+$neutral-reverse: darken($form-bg, 80);
 $btn-primary-bg: $primary;
 $btn-primary-text: $primary-reverse;
-$neutral-bg: rgba($neutral, .07);
-$neutral-bg-alt: lighten($neutral-bg, 20);
+$neutral-bg: rgba($neutral, .2);
+$neutral-bg-alt: rgba($neutral, .5);
 
 // Button Styles
 $button-font-size: 16px;
@@ -42,9 +43,10 @@ $input-font-size: 16px;
 $input-padding-v: $gutter/3;
 $input-padding-h: $gutter/4;
 $input-radius: 0;
-$input-bg: transparent;
-$input-border-color: black;
-$input-border-width: 1px;
+$input-bg: white;
+$input-color: gray;
+$input-border-color: #aaa;
+$input-border-width: 3px;
 $input-border-style: solid;
 $underline: false;
 

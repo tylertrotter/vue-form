@@ -92,12 +92,9 @@
 		border-top-left-radius: $input-radius;
 	}
 
-	// .c-button--remove-row {
-	// 	width: $input-padding-v*2 + $input-border-width*2 + $input-font-size/2;
-	// 	background: transparent;
-	// 	border: 0;
-	// 	padding: 0;
-	// }
+	.c-button--remove-row {
+		margin-right: $gutter/8;
+	}
 
 	.c-plus{
 		stroke: $neutral;

@@ -1,7 +1,7 @@
 <template>
-	<div class="c-region c-indent">
+	<div class="c-region">
 		<div class="c-section">
-			<h2 class="c-indent">Section Title</h2>
+			<h2>Section Title</h2>
 			<slot></slot>
 		</div>
 	</div>

@@ -60,12 +60,6 @@ export default {
 					}
 				}
 			}
-		},
-		isReadonly: {
-			get: function(){
-				console.log(this.readonly)
-				return this.readonly;
-			}
 		}
 	},
 	methods: {

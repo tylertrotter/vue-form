@@ -1,6 +1,6 @@
 <template>
 	<div :class="containerIsTable ? '' : 'c-section c-section--repeating'" :is="containerIsTable ? 'tbody' : 'div'">
-		<div v-if="!containerIsTable" class="c-indent">
+		<div v-if="!containerIsTable">
 			<c-button class="c-remove"><c-ex /></c-button>
 			<h2>Section Title</h2>
 		</div>
@@ -66,5 +66,12 @@
 		background: transparent;
 		border: 0;
 		padding: 0;
+	}
+
+	.c-section--repeating {
+		h2 {
+			display: inline-block;
+			vertical-align: middle;
+		}
 	}
 </style>

@@ -51,76 +51,85 @@
 						</c-row>
 					</c-section>
 				</c-row>
+				<c-row>
+					<c-field label="Sign on the dotted line" class="c-col-24">
+						<c-signature />
+					</c-field>
+				</c-row>
 			</c-page>
 			<c-page :page="2">
-				<c-repeating-data :is-table="true">
+				<c-row class="c-col-24">
+					<c-repeating-data :is-table="true">
 
-					<template slot="thead">
-						<th>Your Name</th>
-						<th>Your Email</th>
-						<th>Your Phone Number</th>
-					</template>
+						<template slot="thead">
+							<th>Your Name</th>
+							<th>Your Email</th>
+							<th>Your Phone Number</th>
+						</template>
 
-					<c-repeating-section>
-						<c-row>
-							<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
-								<c-text type="text"/>
-							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-8">
-								<c-select />
-							</c-field>
-							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-								<c-text type="text" />
-							</c-field>
-						</c-row>
-					</c-repeating-section>
+						<c-repeating-section>
+							<c-row class="c-col-24">
+								<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
+									<c-text type="text"/>
+								</c-field>
+								<c-field source="Name1" label="Your Email" class="c-col-8">
+									<c-select />
+								</c-field>
+								<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+									<c-text type="text" />
+								</c-field>
+							</c-row>
+						</c-repeating-section>
 
-					<c-repeating-section>
-						<c-row>
-							<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
-								<c-text type="text" />
-							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-8">
-								<c-select />
-							</c-field>
-							<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-								<c-text type="text" />
-							</c-field>
-						</c-row>
-					</c-repeating-section>
+						<c-repeating-section>
+							<c-row class="c-col-24">
+								<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
+									<c-text type="text" />
+								</c-field>
+								<c-field source="Name1" label="Your Email" class="c-col-8">
+									<c-select />
+								</c-field>
+								<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+									<c-text type="text" />
+								</c-field>
+							</c-row>
+						</c-repeating-section>
 
-				</c-repeating-data >
+					</c-repeating-data >
+				</c-row>
 			</c-page>
 			<c-page :page="3">
-				<c-repeating-data>
-					<c-repeating-section>
-						<c-row>
-							<c-field source="Name1" label="Your Name" class="c-col-8">
-								<c-text type="text" />
-							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-8">
-								<c-select />
-							</c-field>
-							<c-field source="Name1" label="" class="c-col-8">
-								<c-checkbox label="Do you agree?" />
-							</c-field>
-						</c-row>
-					</c-repeating-section>
+				<c-row class="c-col-24">
+					<c-repeating-data>
+						<c-repeating-section>
+							<c-row class="c-col-24">
+								<c-field source="Name1" label="Your Name" class="c-col-8">
+									<c-text type="text" />
+								</c-field>
+								<c-field source="Name1" label="Your Email" class="c-col-8">
+									<c-select />
+								</c-field>
+								<c-field source="Name1" label="" class="c-col-8">
+									<c-checkbox label="Do you agree?" />
+								</c-field>
+							</c-row>
+						</c-repeating-section>
 
-					<c-repeating-section>
-						<c-row>
-							<c-field source="Name1" label="Your Name" class="c-col-8">
-								<c-text type="text" />
-							</c-field>
-							<c-field source="Name1" label="Your Email" class="c-col-8">
-								<c-select />
-							</c-field>
-							<c-field source="Name1" label="" class="c-col-8">
-								<c-checkbox label="Do you agree?" />
-							</c-field>
-						</c-row>
-					</c-repeating-section>
-				</c-repeating-data>
+						<c-repeating-section>
+							<c-row class="c-col-24">
+								<c-field source="Name1" label="Your Name" class="c-col-8">
+									<c-text type="text" />
+								</c-field>
+								<c-field source="Name1" label="Your Email" class="c-col-8">
+									<c-select />
+								</c-field>
+								<c-field source="Name1" label="" class="c-col-8">
+									<c-checkbox label="Do you agree?" />
+								</c-field>
+							</c-row>
+						</c-repeating-section>
+					</c-repeating-data>
+				</c-row>
 			</c-page>
 			<c-page :page="4">
 				<c-row>
@@ -242,6 +251,7 @@ import CRow from './components/Row.vue';
 import CRepeatingData from './components/RepeatingData.vue';
 import CRepeatingSection from './components/RepeatingSection.vue';
 import CCheckableGroup from './components/CheckableGroup.vue';
+import CSignature from './components/Signature.vue';
 
 export default {
 	name: 'c-form',
@@ -266,7 +276,8 @@ export default {
 		CRow,
 		CRepeatingData,
 		CRepeatingSection,
-		CCheckableGroup
+		CCheckableGroup,
+		CSignature
 	}
 }
 </script>
@@ -282,10 +293,6 @@ export default {
 
 	.c-region:not(:last-child) {
 			margin-bottom: $gutter;
-	}
-
-	.c-row > * {
-		flex-grow: 1;
 	}
 
 	[data-width~="500"] {
@@ -334,11 +341,10 @@ export default {
 	.c-section {
 		position: relative;
 		background: $neutral-bg;
-		padding-top: $gutter/2;
-		padding-bottom: $gutter/2;
+		padding: $gutter/2;
 	}
 
-	.c-section:nth-child(odd){
+	.c-section:nth-child(even){
 		background: $neutral-bg-alt;
 	}
 
@@ -398,6 +404,10 @@ export default {
 
 	.c-field .c-row + .c-row {
 		margin-top: $gutter/2;
+	}
+
+	div.c-row > * {
+		width: 100%;
 	}
 
 	.c-body {

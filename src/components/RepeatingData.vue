@@ -1,7 +1,7 @@
 <template>
 	<keep-alive>
-		<component :is="currentType">
-			<template slot="thead"><slot name="thead"></slot></template>
+		<component :is="currentType" class="c-repeating-data">
+			<template v-if="currentType === 'c-repeating-table'" slot="thead"><slot name="thead"></slot></template>
 			<slot></slot>
 		</component>
 	</keep-alive>
@@ -18,7 +18,7 @@
 		},
 		data() {
 			return {
-				currentType: this.$props.isTable ? 'c-repeating-table' : 'c-repeating-section-group'
+				currentType: this.$props.isTable ? 'c-repeating-table' : 'div'
 			}
 		},
 		created() {
@@ -32,7 +32,7 @@
 				if( this.$props.isTable === true && this.$el.clientWidth > 600 )
 					this.currentType = 'c-repeating-table'
 				else
-					this.currentType = 'c-repeating-section-group'
+					this.currentType = 'div'
 			}
 		}
 	}

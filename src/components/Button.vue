@@ -12,8 +12,6 @@
 </script>
 
 <style lang="scss">
-	@import '../sass/_theme';
-	@import '../sass/_field-style';
 
 	.el-button {
 		border: 0;

@@ -19,6 +19,9 @@
 	font-size: $input-font-size;
 
 	outline-width: $input-border-width;
+
+	// This is obviously not spacing
+	color: $input-color;
 }
 
 @mixin input-border {

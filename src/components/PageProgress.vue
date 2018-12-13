@@ -79,10 +79,12 @@
 
 	li {
 		display: inline-block;
+		padding-top: $gutter/6;
+		padding-bottom: $gutter/6;
 	}
 
-	li + li {
-		margin-left: 1em;
+	li:not(:last-child) {
+		margin-right: $gutter;
 	}
 
 	a {
