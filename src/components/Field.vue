@@ -37,66 +37,68 @@ export default {
 </script>
 
 <style scoped lang="scss">
-// Just to get sandbox working
-@import "../sass/_theme";
-@import "../sass/_field-style";
-@import "../sass/_mixins.scss";
-// End sandbox only code
+	// Just to get sandbox working
+	@import "../sass/_theme";
+	@import "../sass/_field-style";
+	@import "../sass/_mixins.scss";
+	// End sandbox only code
 
-.c-label {
-  display: block;
-	font-family: $label-typeface;
-	margin-bottom: $gutter/4;
-}
+	.c-label {
+		display: block;
+		font-family: $label-typeface;
+		margin-bottom: $gutter/4;
+	}
 
-.c-required .c-label:after {
-  @include required;
-}
+	.c-required .c-label:after {
+		@include required;
+	}
 
-.c-helptext {
-  font-size: $small-text;
-  padding: $gutter/4 0;
-}
+	.c-helptext {
+		@include helptext;
+	}
 
-.c-validation {
-  background: $negative;
-  color: $negative-reverse;
-  font-size: $small-text;
-  padding: $gutter/4;
-}
+	.c-validation {
+		background: $negative;
+		border-radius: $border-radius/2;
+		padding: $gutter/4;
+		color: $negative-reverse;
+		font-size: $small-text;
+	}
 
-.c-section-container {
-  background: $neutral-bg;
-  padding: $gutter/2;
-}
+	.c-section-container {
+		background: $neutral-bg;
+		padding: $gutter/2;
+	}
 
-.c-section-container:nth-child(odd) {
-  background: transparent;
-  border-bottom: 2px solid $neutral-bg;
-}
+	.c-section-container:nth-child(odd) {
+		background: transparent;
+		border-bottom: 2px solid $neutral-bg;
+	}
 
-$section-left-padding: 36px;
+	$section-left-padding: 36px;
 
-.c-repeating-section .c-section-container {
-  position: relative;
-  padding-left: $section-left-padding;
-}
+	.c-repeating-section .c-section-container {
+		position: relative;
+		padding-left: $section-left-padding;
+	}
 
-.remove-section-button {
-  width: $section-left-padding/1.75;
-  height: $section-left-padding/1.75;
-  margin-left: $section-left-padding * -0.6 - 5;
-  margin-right: 5px;
-  display: inline-block;
-}
+	.remove-section-button {
+		width: $section-left-padding/1.75;
+		height: $section-left-padding/1.75;
+		margin-left: $section-left-padding * -0.6 - 5;
+		margin-right: 5px;
+		display: inline-block;
+	}
 
-.add-section-button {
-  margin-top: $gutter/3;
-}
+	.add-section-button {
+		margin-top: $gutter/3;
+	}
 
+	// Should I add a c-container class to this and sections so they can share some styles?
 	.c-error {
 		background: lighten($negative, 47);
-		outline: 2px solid $negative;
+		border: 2px solid $negative;
+		border-radius: $border-radius;
 
 		.c-label {
 			color: $negative;

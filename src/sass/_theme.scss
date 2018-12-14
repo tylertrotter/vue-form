@@ -4,8 +4,10 @@ $gutter: 30px;
 $form-margins: $gutter * 1.5;
 $small-text: .8em;
 
+$border-radius: 10px;
+
 // Typeography
-$typeface: Arial;
+$typeface: Verdana;
 $header-typeface: Georgia;
 $label-typeface: Georgia;
 $link-typeface: Georgia;
@@ -18,15 +20,15 @@ $positive: green;
 $positive-reverse: white;
 $highlight: orange;
 $highlight-reverse: white;
-$primary: #e3f8f8;
-$primary-reverse: #234652;
+$primary: orange;
+$primary-reverse: white;
 
 
 // Element's Primary Color
 $--color-primary: $primary;
 
 // Specific Colors
-$form-bg: white;
+$form-bg: tan;
 $neutral: darken($form-bg, 15);
 $neutral-reverse: darken($form-bg, 80);
 $btn-primary-bg: $primary;
@@ -42,13 +44,15 @@ $button-padding: $gutter/3;
 $input-font-size: 16px;
 $input-padding-v: $gutter/3;
 $input-padding-h: $gutter/4;
-$input-radius: 0;
+$input-radius: $border-radius*.75;
 $input-bg: white;
 $input-color: gray;
-$input-border-color: #aaa;
+$input-border-color: brown;
 $input-border-width: 3px;
 $input-border-style: solid;
 $underline: false;
+
+$upload-border-style: dashed;
 
 $table-border-spacing: 0;
 

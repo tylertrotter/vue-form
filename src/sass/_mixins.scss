@@ -57,3 +57,8 @@ $disabled-stripe: rgba($neutral-reverse, .15);
 	// word-break: break-all;
 	break-inside: avoid;
 }
+
+@mixin helptext {
+	font-size: $small-text;
+  padding: $gutter/4 0;
+}

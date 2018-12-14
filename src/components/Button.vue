@@ -33,6 +33,7 @@
 	.c-button--secondary {
 		font-size: $button-font-size;
 		padding: $button-padding;
+		border-radius: $border-radius * .75;
 	}
 
 	.c-button--primary {
@@ -44,19 +45,5 @@
 		background: $neutral-reverse;
 		color: $neutral;
 	}
-
-	// Button Icon
-	// .c-button--icon {
-	// 	width: 1.2em;
-	// 	vertical-align: sub;
-	// }
-
-	// .btn-primary svg line {
-	// 	stroke: $primary-reverse;
-	// }
-
-	// .btn-primary svg * {
-	// 	fill: $primary-reverse;
-	// }
 </style>
 

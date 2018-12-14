@@ -69,6 +69,7 @@
 	.c-signature {
 		position: relative;
 		height: 200px;
+		border-radius: $border-radius;
 		background: $input-bg;
 		border: $input-border-color $input-border-width $input-border-style;
 
@@ -81,9 +82,9 @@
 			position: absolute;
 			z-index: 0;
 			bottom: 30px;
-			left: 15px;
+			left: $gutter/2;
 			content: '';
-			width: calc(100% - 30px);
+			width: calc(100% - #{$gutter});
 			height: 0;
 			border-bottom: rgba($input-border-color, .5) $input-border-width $input-border-style;
 			pointer-events: none;
@@ -104,7 +105,7 @@
 		position: absolute;
 		z-index: 2;
 		bottom: 40px;
-		left: 15px;
+		left: $gutter/2;
 
 		.readonly & {
 			display: none;

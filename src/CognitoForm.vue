@@ -7,6 +7,11 @@
 			<c-page-progress :pages="['Signup', 'Table', 'Repeating Section', 'Menu', 'Rating Scale', 'Address', 'Miscellaneous']" />
 			<c-page :page="1" :first="true">
 				<c-row>
+					<c-field label="Upload something cool" class="c-col-10">
+						<c-upload />
+					</c-field>
+				</c-row>
+				<c-row>
 					<c-section class="c-col-24">
 						<c-row>
 							<!-- <c-field source="Name1" readonly="true" value="Jane Doe" label="Your Name" class="c-col-6">
@@ -252,6 +257,7 @@ import CRepeatingData from './components/RepeatingData.vue';
 import CRepeatingSection from './components/RepeatingSection.vue';
 import CCheckableGroup from './components/CheckableGroup.vue';
 import CSignature from './components/Signature.vue';
+import CUpload from './components/Upload.vue';
 
 export default {
 	name: 'c-form',
@@ -277,7 +283,8 @@ export default {
 		CRepeatingData,
 		CRepeatingSection,
 		CCheckableGroup,
-		CSignature
+		CSignature,
+		CUpload
 	}
 }
 </script>
@@ -342,6 +349,7 @@ export default {
 		position: relative;
 		background: $neutral-bg;
 		padding: $gutter/2;
+		border-radius: $border-radius;
 	}
 
 	.c-section:nth-child(even){
