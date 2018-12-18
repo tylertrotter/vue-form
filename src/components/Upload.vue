@@ -1,10 +1,13 @@
+<!--
+	 :on-preview="handlePreview"
+	 :on-remove="handleRemove"
+	:file-list="fileList"
+-->
+
 <template>
 	<el-upload
 		drag
 		action="https://jsonplaceholder.typicode.com/posts/"
-		:on-preview="handlePreview"
-		:on-remove="handleRemove"
-		:file-list="fileList"
 		multiple>
 		<i-upload />
 		<div>Drop file here or click to upload</div>
@@ -13,7 +16,7 @@
 </template>
 
 <script>
-	import IUpload from "./assets/upload.svg";
+	import IUpload from "./../assets/upload.svg";
 
 	export default {
 		name: 'c-upload',

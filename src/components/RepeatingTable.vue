@@ -26,7 +26,7 @@
 
 <script>
 	import CButton from './Button.vue';
-	import IPlus from './assets/plus.svg';
+	import IPlus from './../assets/plus.svg';
 
 	export default {
 		name: 'c-repeating-table',

@@ -4,16 +4,14 @@
 			<c-button class="c-remove"><i-ex /></c-button>
 			<h2>Section Title</h2>
 		</div>
-
 		<slot></slot>
-
 	</div>
 </template>
 
 <script>
 	import { VueModel } from "../imports";
 	import CButton from './Button.vue';
-	import IEx from './assets/ex.svg';
+	import IEx from './../assets/ex.svg';
 	import CSection from './Section.vue';
 
 	export default {

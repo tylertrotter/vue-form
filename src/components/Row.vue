@@ -8,7 +8,7 @@
 <script>
 	import CButton from './Button.vue';
 	import CRepeatingSection from './RepeatingSection.vue';
-	import IEx from './assets/ex.svg';
+	import IEx from './../assets/ex.svg';
 
 	export default {
 		name: 'c-field-row',

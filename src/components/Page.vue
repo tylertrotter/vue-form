@@ -41,10 +41,6 @@ export default {
 </script>
 
 <style lang="scss">
-		// Just to get sandbox working
-	@import '../sass/_theme';
-	@import '../sass/_field-style';
-	// End sandbox only code
 	.c-page {
 
 		&:after {

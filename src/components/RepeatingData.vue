@@ -3,6 +3,7 @@
 		<component :is="currentType" class="c-repeating-data">
 			<template v-if="currentType === 'c-repeating-table'" slot="thead"><slot name="thead"></slot></template>
 			<slot></slot>
+			<!-- <c-button>Add</c-button> -->
 		</component>
 	</keep-alive>
 </template>

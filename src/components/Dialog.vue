@@ -5,6 +5,7 @@
 </template>
 
 <script>
+	import {EventBus} from './../event-bus.js';
 	export default {
 		name: 'c-dialog',
 		props: ['title'],
@@ -12,6 +13,11 @@
 			return {
 				dialogVisible: false
 			}
+		},
+		mounted() {
+			EventBus.$on('open-modal', name => {
+				this.dialogVisible = true;
+			});
 		}
 	}
 </script>

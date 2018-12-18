@@ -62,7 +62,7 @@ Cognito.Forms.model.perform(function() {
 
   formEntry.DatePicker1 = "2018-11-14";
   formEntry.Spinner1 = 3;
-  formEntry.Name3 = "Tyler Trotter";
+  formEntry.Name1 = "Tyler Trotter";
   formEntry.Toggle1 = true;
   formEntry.RepeatingSection1[0].Email1 = "jamie@cognitoforms.com";
   formEntry.RepeatingSection1[1].Email1 = "royal@cognitoforms.com";

@@ -1,5 +1,5 @@
 <template>
-	<c-row class="c-name" :class="nameLength">
+	<c-row class="c-name">
 		<c-input class="c-input--small" v-if="optionalParts.title" type="text" placeholder="Title" />
 		<c-input class="c-input--long" type="text" placeholder="First" />
 		<c-input class="c-input--tiny" v-if="optionalParts.middleInitial" type="text" placeholder="MI" />
@@ -24,7 +24,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss">
-
-</style>

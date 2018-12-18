@@ -6,7 +6,7 @@
 			<c-button type="submit" class="c-button--primary">Submit</c-button>
 		</div>
 		<div class="c-col-12 c-right">
-			<c-button class="c-button--secondary">Save</c-button>
+			<c-button @click.native="openSave" class="c-button--secondary">Save</c-button>
 		</div>
 	</c-row>
 </template>
@@ -16,6 +16,8 @@
 import CButton from "./Button.vue";
 import CSection from "./Section.vue";
 import CRow from "./Row.vue";
+
+import {EventBus} from './../event-bus.js';
 
 export default {
   name: "c-button-section",
@@ -28,6 +30,11 @@ export default {
 		return {
 			firstPage: this.$parent.$attrs.first,
 			lastPage: this.$parent.$attrs.last
+		}
+	},
+	methods: {
+		openSave(){
+			EventBus.$emit('open-modal', 'save')
 		}
 	}
 };

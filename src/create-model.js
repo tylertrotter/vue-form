@@ -8,10 +8,51 @@ export function createModel() {
 
             var formType = model.addType("Cognito.Forms.FormEntry");
 
-            Cognito.Forms.FormEntry = formType.jstype;
+						Cognito.Forms.FormEntry = formType.jstype;
+
+
+
+
+
+						formType.addProperty("Text", String, false, false, { label: 'Text' });
+						formType.addProperty("Phone", String, false, false, { label: 'Phone' });
+
+						formType.addProperty("Name1", String, false, false, { label: 'Name' });
+
+						formType.addProperty("ChoiceSelect", String, false, false, { label: 'Choice Drop Down' });
+						formType.addProperty("ChoiceRadio", Object, false, false, { label: 'Choice Radio Buttons' });
+
+						formType.addProperty("ChoiceCheckboxes", Object, false, false, { label: 'Choice Checkboxes' });
+						formType.addProperty("Password", String, false, false, { label: 'Password' });
+
+						formType.addProperty("Address", String, false, false, { label: 'Address' });
+
+						formType.addProperty("YesNoRadio", String, false, false, { label: 'YesNo Radio Buttons' });
+						formType.addProperty("YesNoCheck", String, false, false, { label: 'YesNo Checkbox' });
+
+						formType.addProperty("Toggle1", Boolean, false, false, { label: 'YesNo Toggle' });
+						formType.addProperty("DatePicker1", String, false, false, { label: 'Date' });
+
+						formType.addProperty("Time", String, false, false, { label: 'Time' });
+            formType.addProperty("Email4", String, false, false, { label: 'Email' });
+
+						formType.addProperty("SectionText", String, false, false, { label: 'Section Text' });
+
+						formType.addProperty("Signature", String, false, false, { label: 'Signature' });
+						formType.addProperty("Textarea", String, false, false, { label: 'Text' });
+
+
+
+
+
+
+
+
+
+
+
 
             formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
-            formType.addProperty("Email4", String, false, false, { label: 'Email 4' });
             formType.addProperty("Checkbox2", Boolean, false, false, { label: 'Checkbox 2' });
 
             Cognito.Forms.FormEntry.$Name3.required();
@@ -54,13 +95,11 @@ export function createModel() {
                 onChangeOf: ["Name3", "Email4", "Checkbox2"]
             });
 
-            formType.addProperty("DatePicker1", String, false, false, { label: 'Date Picker 1' });
             formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
             formType.addProperty("Select1", String, false, false, { label: 'Select 1' });
-            formType.addProperty("Toggle1", Boolean, false, false, { label: 'Toggle 1' });
             formType.addProperty("RatingScale2", Object, false, false, { label: 'Rating Scale 2' });
             formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });
-        
+
             var formRepeatingSection1ItemType = model.addType("Cognito.Forms.FormEntryRepeatingSection1Item");
 
             Cognito.Forms.FormEntryRepeatingSection1Item = formRepeatingSection1ItemType.jstype;
@@ -68,7 +107,7 @@ export function createModel() {
             formType.addProperty("RepeatingSection1", Cognito.Forms.FormEntryRepeatingSection1Item, true, false, { label: 'Repeating Section 1' });
 
             Cognito.Forms.FormEntry.$RepeatingSection1.listLength(0, 2);
-        
+
             formRepeatingSection1ItemType.addProperty("Checkbox1", Boolean, false, false, { label: 'Checkbox 1' });
             formRepeatingSection1ItemType.addProperty("Email1", String, false, false, { label: 'Email 1' });
 
@@ -83,27 +122,26 @@ export function createModel() {
             var formSection1Type = model.addType("Cognito.Forms.FormEntrySection1");
 
             Cognito.Forms.FormEntrySection1 = formSection1Type.jstype;
-        
-            formType.addProperty("Section1", Cognito.Forms.FormEntrySection1, false, false, { label: 'Section 1' });
-        
+
+            formType.addProperty("Section1", Cognito.Forms.FormEntrySection1, false, false, { label: 'Section' });
+
             formSection1Type.addProperty("Email2", String, false, false, { label: 'Email 2' });
             formSection1Type.addProperty("Email3", String, false, false, { label: 'Email 3' });
 
-            formType.addProperty("Name1", String, false, false, { label: 'Name 1' });
             formType.addProperty("Name2", String, false, false, { label: 'Name 2' });
-        
+
             formType.addProperty("Address1", Object, false, false, { label: 'Address 1' });
-       
+
             var formTableType = model.addType("Cognito.Forms.FormEntryTable1");
 
             Cognito.Forms.FormEntryTable1 = formTableType.jstype;
 
             formType.addProperty("Table1", Cognito.Forms.FormEntryTable1, false, false, { label: 'Table 1' });
-        
+
             formTableType.addProperty("Text1", String, false, false, { label: 'Text 1' });
             formTableType.addProperty("Toggle2", Boolean, false, false, { label: 'Toggle 2' });
             formTableType.addProperty("Text2", String, false, false, { label: 'Text 2' });
-         
+
             var formSection2Type = model.addType("Cognito.Forms.FormEntrySection2");
 
             Cognito.Forms.FormEntrySection2 = formSection2Type.jstype;
@@ -115,7 +153,7 @@ export function createModel() {
             formSection2Type.addProperty("GlutenFree", Boolean, false, false, { label: "Gluten Free (GF)" });
             formSection2Type.addProperty("DairyFree", Boolean, false, false, { label: "Dairy Free (DF)" });
             formSection2Type.addProperty("RelevantSideDishes", String, true, false, { label: "Relevant Side Dishes" });
-        
+
             formType.addProperty("Section2", Cognito.Forms.FormEntrySection2, false, false, { label: 'Section 2', format: "Order of chicken with a side of [SideDish] on [OrderDate]" });
 
             Cognito.Forms.FormEntrySection2.$SideDish.allowedValues("RelevantSideDishes");

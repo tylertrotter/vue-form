@@ -12,7 +12,7 @@
 <script>
 	import VueSignaturePad from 'vue-signature-pad';
 	import CButton from './Button.vue';
-	import IEx from './assets/ex.svg';
+	import IEx from './../assets/ex.svg';
 
 	export default {
 		name: 'c-signature',
