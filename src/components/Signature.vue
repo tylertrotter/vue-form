@@ -1,9 +1,9 @@
 <template>
 	<div class="c-signature" :class="{readonly: isReadonly}">
 		<!-- Need to get sass variables converted to JS so I can populate penColor (and for many other reasons) -->
-		<VueSignaturePad ref="signaturePad" :options="{ onEnd, onBegin, penColor: 'black'}" />
+		<VueSignaturePad ref="signaturePad" :options="{ onEnd, penColor: 'black'}" />
 		<div class="c-signature-symbol">
-			<c-button v-if="hasMark" @click.native="clear"><c-ex /></c-button>
+			<c-button v-if="hasMark" @click.native="clear"><i-ex /></c-button>
 			<span class="c-signature-empty-symbol" v-else>&times;</span>
 		</div>
 	</div>
@@ -12,11 +12,11 @@
 <script>
 	import VueSignaturePad from 'vue-signature-pad';
 	import CButton from './Button.vue';
-	import CEx from './icons/Ex.vue';
+	import IEx from './assets/ex.svg';
 
 	export default {
 		name: 'c-signature',
-		components: { VueSignaturePad, CButton, CEx },
+		components: { VueSignaturePad, CButton, IEx },
 		data() {
 			return {
 				hasMark: null,

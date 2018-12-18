@@ -15,13 +15,11 @@
 
 <script>
 import { VueModel } from "../imports";
+import {EventBus} from './../event-bus.js';
+
 export default {
   name: "c-field",
 	mixins: [VueModel.mixins.SourceProvider],
-	data() {
-		return {
-		}
-	},
   computed: {
     fieldLabel: function() {
       let sourceLabel = null;
@@ -31,8 +29,8 @@ export default {
 
       return typeof this.label === "string" ? this.label : sourceLabel;
 		}
-  },
-  props: ["label", "helptext", "error", "required"]
+	},
+	props: ["label", "helptext", "error", "required"]
 };
 </script>
 

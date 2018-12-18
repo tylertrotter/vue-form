@@ -1,29 +1,26 @@
 <template>
 	<div class="c-address">
 		<c-row>
-			<c-text type="text" placeholder="Street Address" />
-		</c-row>
-		<c-row>
-			<c-text type="text" placeholder="Line 2" />
-		</c-row>
-		<c-row >
-			<c-text type="text" placeholder="city" />
-			<c-text type="text" placeholder="state" />
-			<c-text type="text" placeholder="ZIP" />
+			<c-input class="st c-input--full" type="text" placeholder="Street Address" />
+
+			<c-input class="ln2 c-input--full" type="text" placeholder="Line 2" />
+
+			<c-input class="city c-input--long" type="text" placeholder="city" />
+			<c-input class="state c-input--small" type="text" placeholder="state" />
+			<c-input class="zip c-input--medium" type="text" placeholder="ZIP" />
 		</c-row>
 	</div>
 </template>
 
 <script>
 import CRow from "./Row.vue";
-import CText from "./Text.vue";
+import CInput from "./Input.vue";
 
 export default {
   name: "c-address",
   components: {
-    CText,
+    CInput,
     CRow
-  },
-  props: ["colspan"]
+  }
 };
 </script>

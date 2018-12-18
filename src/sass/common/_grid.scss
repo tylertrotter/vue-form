@@ -1,5 +1,9 @@
 @for $i from 1 through 24{
-	[data-width~="500"] .c-col-#{$i} {
-		width: columns($i);
+	.c-col-#{$i} {
+		flex: 2 1 #{400 * $i/24}px;
+		width: #{$i/24 * 100%};
 	}
+}
+[data-width~="700"] [class*="c-col-"]:first-child:last-child {
+	flex: initial;
 }

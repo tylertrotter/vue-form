@@ -33,17 +33,19 @@
 	.c-button--secondary {
 		font-size: $button-font-size;
 		padding: $button-padding;
-		border-radius: $border-radius * .75;
+		border-radius: $button-border-radius;
 	}
 
 	.c-button--primary {
 		background: $btn-primary-bg;
 		color: $btn-primary-text;
+		border: $input-border-width $btn-primary-bg $input-border-style;
 	}
 
 	.c-button--secondary {
 		background: $neutral-reverse;
 		color: $neutral;
+		border: $input-border-width $neutral-reverse $input-border-style;
 	}
 </style>
 

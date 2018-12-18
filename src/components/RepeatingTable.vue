@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td><c-button class="c-button--secondary"><c-plus /> Add</c-button></td>
+					<td><c-button class="c-button--secondary"><i-plus /> Add</c-button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -26,12 +26,11 @@
 
 <script>
 	import CButton from './Button.vue';
-	import CEx from './icons/Ex.vue';
-	import CPlus from './icons/Plus.vue';
+	import IPlus from './assets/plus.svg';
 
 	export default {
 		name: 'c-repeating-table',
-		components: { CButton, CEx, CPlus },
+		components: { CButton, IPlus },
 		data(){
 			return {
 				containerIsTable: this.$parent.currentType === 'c-repeating-table'
@@ -45,6 +44,7 @@
 	@import "../sass/common/_table.scss";
 
 	.c-repeating-table {
+		width: 100%;
 
 		.c-readonly {
 			@include input-appearance;

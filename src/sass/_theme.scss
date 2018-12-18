@@ -1,26 +1,27 @@
 // Structure
-$form-width: 1100px;
-$gutter: 30px;
-$form-margins: $gutter * 1.5;
+$form-width: 900px;
+$unitless-gutter: 30;
+$gutter: $unitless-gutter * 1px;
+$form-margins: $unitless-gutter * 1.5px;
 $small-text: .8em;
 
-$border-radius: 10px;
+$border-radius: 0;
 
 // Typeography
-$typeface: Verdana;
-$header-typeface: Georgia;
-$label-typeface: Georgia;
-$link-typeface: Georgia;
+$typeface: Arial;
+$header-typeface: Arial;
+$label-typeface: Arial;
+$link-typeface: Arial;
 $button-typeface: Arial;
 
 // General Colors
-$negative: red;
+$negative: #D85427;
 $negative-reverse: white;
 $positive: green;
 $positive-reverse: white;
-$highlight: orange;
+$highlight: #D85427;
 $highlight-reverse: white;
-$primary: orange;
+$primary: #D85427;
 $primary-reverse: white;
 
 
@@ -28,7 +29,7 @@ $primary-reverse: white;
 $--color-primary: $primary;
 
 // Specific Colors
-$form-bg: tan;
+$form-bg: white;
 $neutral: darken($form-bg, 15);
 $neutral-reverse: darken($form-bg, 80);
 $btn-primary-bg: $primary;
@@ -39,6 +40,9 @@ $neutral-bg-alt: rgba($neutral, .5);
 // Button Styles
 $button-font-size: 16px;
 $button-padding: $gutter/3;
+$button-border-color: #D85427;
+$button-border-radius: $border-radius * .75 !default;
+$button-border-radius: 4px;
 
 // Field Style
 $input-font-size: 16px;
@@ -47,8 +51,8 @@ $input-padding-h: $gutter/4;
 $input-radius: $border-radius*.75;
 $input-bg: white;
 $input-color: gray;
-$input-border-color: brown;
-$input-border-width: 3px;
+$input-border-color: #ccc;
+$input-border-width: 1px;
 $input-border-style: solid;
 $underline: false;
 

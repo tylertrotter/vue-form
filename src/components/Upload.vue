@@ -13,11 +13,11 @@
 </template>
 
 <script>
-	import IUpload from "./icons/Upload.vue";
+	import IUpload from "./assets/upload.svg";
 
 	export default {
 		name: 'c-upload',
-		components: { IUpload}
+		components: { IUpload }
 	}
 </script>
 

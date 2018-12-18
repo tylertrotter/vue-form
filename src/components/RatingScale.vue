@@ -32,14 +32,17 @@ export default {
       questions: [
         "How happy are you with Vue.js",
         "How do you like SFCs?",
-        "How you liking this rating scale component?"
+				"How you liking this rating scale component?"
       ],
       answers: [
+				"I'm very upset",
         "Very Unsatisfied",
         "Unsatisfied",
         "Neutral",
         "Satisfied",
-        "Very Satisfied"
+				"Very Satisfied",
+				"Out-of-my-mind Happy",
+				"11"
       ]
     };
   }

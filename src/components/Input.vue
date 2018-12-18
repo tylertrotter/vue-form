@@ -1,16 +1,16 @@
 <template>
 	<div>
 		<div v-if="isReadonly" class="c-readonly">{{value || '&nbsp;'}}</div>
-		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
+		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" :placeholder="placeholder" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
 	</div>
 </template>
 
 <script>
 import { VueModel } from "../imports";
 export default {
-	name: 'c-text',
+	name: 'c-input',
 	mixins: [VueModel.mixins.SourceConsumer],
-	props: ['type', 'text', 'mask'],
+	props: ['type', 'text', 'mask', 'placeholder'],
 	model: {
 		prop: 'text',
 		event: 'change'
@@ -20,7 +20,7 @@ export default {
 			hasFocus: false,
 			focusValue: null,
 			selfModel: (typeof this.text === "string" ? this.text : this.$source ? this.$source.displayValue : false),
-			isReadonly: this.$parent.$attrs.readonly,
+			// isReadonly: this.$parent.$attrs.readonly,
 			value: this.$parent.$attrs.value
 		};
 	},
@@ -34,13 +34,10 @@ export default {
 			}
 		},
 	},
-	mounted(){
-		console.log(this.$parent.$attrs)
-	},
 	computed: {
 		inputModel: {
 			get: function() {
-				// console.log("Received 'c-text' inputModel.get()");
+				// console.log("Received 'c-input' inputModel.get()");
 
 				let sourceValue = null;
 				if (this.$source) {
@@ -50,7 +47,7 @@ export default {
 				return this.hasFocus ? this.selfModel : (sourceValue != null ? sourceValue : this.selfModel);
 			},
 			set: function (val) {
-				// console.log("Received 'c-text' inputModel.set()");
+				// console.log("Received 'c-input' inputModel.set()");
 
 				this.selfModel = val;
 
@@ -60,11 +57,14 @@ export default {
 					}
 				}
 			}
+		},
+		isReadonly() {
+			return this.$parent.$attrs.readonly;
 		}
 	},
 	methods: {
 		handleKeyDown(ev) {
-			// console.log("Received 'c-text' keydown event");
+			// console.log("Received 'c-input' keydown event");
 			if (ev.ctrlKey || ev.shiftKey || ev.altKey || ev.metaKey) {
 				return;
 			}
@@ -75,16 +75,16 @@ export default {
 			}
 		},
 		handleFocus(value, ev) {
-			// console.log("Received 'c-text' focus event");
+			// console.log("Received 'c-input' focus event");
 			this.hasFocus = true;
 			this.focusValue = this.selfModel;
 		},
 		handleBlur(value, ev) {
-			// console.log("Received 'c-text' blur event");
+			// console.log("Received 'c-input' blur event");
 			this.hasFocus = false;
 		},
 		handleChange(value, ev) {
-			// console.log("Received 'c-text' change event");
+			// console.log("Received 'c-input' change event");
 			// NOTE: Could do some validation in here?
 			this.$emit('change', value, ev);
 			if (this.$source) {

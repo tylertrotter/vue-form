@@ -1,7 +1,7 @@
 <template>
 	<div :class="containerIsTable ? '' : 'c-section c-section--repeating'" :is="containerIsTable ? 'tbody' : 'div'">
 		<div v-if="!containerIsTable">
-			<c-button class="c-remove"><c-ex /></c-button>
+			<c-button class="c-remove"><i-ex /></c-button>
 			<h2>Section Title</h2>
 		</div>
 
@@ -13,12 +13,12 @@
 <script>
 	import { VueModel } from "../imports";
 	import CButton from './Button.vue';
-	import CEx from './icons/Ex.vue';
+	import IEx from './assets/ex.svg';
 	import CSection from './Section.vue';
 
 	export default {
 		name: 'c-repeating-section',
-		components: { CButton, CEx, CSection },
+		components: { CButton, IEx, CSection },
 		mixins: [VueModel.mixins.SourceProvider],
 		data(){
 			return {

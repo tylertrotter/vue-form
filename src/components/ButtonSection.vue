@@ -29,9 +29,6 @@ export default {
 			firstPage: this.$parent.$attrs.first,
 			lastPage: this.$parent.$attrs.last
 		}
-	},
-	mounted(){
-		console.log(this.$parent.$attrs)
 	}
 };
 </script>
