@@ -3,7 +3,11 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { Vue, VueModel } from "../imports";
+import { Checkbox, CheckboxGroup } from 'element-ui';
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+
 export default {
 	name: 'c-checkbox',
 	mixins: [VueModel.mixins.SourceConsumer],

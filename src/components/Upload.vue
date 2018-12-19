@@ -16,6 +16,10 @@
 </template>
 
 <script>
+	import { Vue } from "../imports";
+	import { Upload } from 'element-ui';
+	Vue.use(Upload);
+
 	import IUpload from "./../assets/upload.svg";
 
 	export default {

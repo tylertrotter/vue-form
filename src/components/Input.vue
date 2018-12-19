@@ -6,7 +6,10 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { VueModel, Vue } from "../imports";
+import { Input } from 'element-ui';
+Vue.use(Input);
+
 export default {
 	name: 'c-input',
 	mixins: [VueModel.mixins.SourceConsumer],

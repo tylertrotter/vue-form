@@ -3,7 +3,10 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { VueModel, Vue } from "../imports";
+import { DatePicker } from 'element-ui';
+Vue.use(DatePicker);
+
 export default {
 	name: 'c-date-picker',
 	mixins: [VueModel.mixins.SourceConsumer],

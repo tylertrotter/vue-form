@@ -7,7 +7,10 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { Vue, VueModel } from "../imports";
+import { Switch } from 'element-ui';
+Vue.use(Switch);
+
 export default {
 	name: 'c-toggle',
 	mixins: [VueModel.mixins.SourceConsumer],

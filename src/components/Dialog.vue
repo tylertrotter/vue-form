@@ -6,6 +6,10 @@
 
 <script>
 	import {EventBus} from './../event-bus.js';
+	import { Vue } from "../imports";
+	import { Dialog } from 'element-ui';
+	Vue.use(Dialog);
+
 	export default {
 		name: 'c-dialog',
 		props: ['title'],

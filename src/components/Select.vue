@@ -20,7 +20,10 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { VueModel, Vue } from "../imports";
+import { Select } from 'element-ui';
+Vue.use(Select);
+
 export default {
 	name: 'c-select',
 	mixins: [VueModel.mixins.SourceConsumer],

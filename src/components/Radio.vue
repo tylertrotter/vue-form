@@ -3,6 +3,11 @@
 </template>
 
 <script>
+	import { Vue } from "../imports";
+	import { Radio, RadioGroup } from 'element-ui';
+	Vue.use(Radio);
+	Vue.use(RadioGroup);
+
 	export default {
 		name: 'c-radio',
 		data () {

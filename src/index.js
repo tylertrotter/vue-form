@@ -2,44 +2,10 @@ import { Vue, VueModel } from "./imports";
 import { createModel } from "./create-model";
 import Form from "./CognitoForm.vue";
 
-import {
-	Button,
-	DatePicker,
-  Select,
-  Option,
-	Dialog,
-	Input,
-	InputNumber,
-	Radio,
-	RadioGroup,
-	Checkbox,
-	CheckboxGroup,
-	TimePicker,
-	Upload,
-	Steps,
-	Switch
-} from 'element-ui';
-
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
-
 locale.use(lang);
 
-Vue.use(Button);
-Vue.use(DatePicker);
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(Dialog);
-Vue.use(Input);
-Vue.use(InputNumber);
-Vue.use(RadioGroup);
-Vue.use(Radio);
-Vue.use(Checkbox);
-Vue.use(CheckboxGroup);
-Vue.use(TimePicker);
-Vue.use(Upload);
-Vue.use(Steps);
-Vue.use(Switch);
 
 // import * as sourceBinding from "./source-binding";
 

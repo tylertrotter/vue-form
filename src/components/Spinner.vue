@@ -3,7 +3,10 @@
 </template>
 
 <script>
-import { VueModel } from "../imports";
+import { VueModel, Vue } from "../imports";
+import { InputNumber } from 'element-ui';
+Vue.use(InputNumber);
+
 export default {
 	name: 'c-spinner',
 	mixins: [VueModel.mixins.SourceConsumer],

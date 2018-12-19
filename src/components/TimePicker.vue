@@ -10,7 +10,10 @@
 </template>
 
 <script>
-	import CInput from "./Input.vue";
+	import { Vue } from "../imports";
+	import { TimePicker } from 'element-ui';
+	Vue.use(TimePicker);
+
 	export default {
 		name: 'c-time',
 		data() {
