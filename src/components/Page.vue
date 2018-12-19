@@ -35,6 +35,7 @@ export default {
 	methods: {
 		transitionDone() {
 			this.$parent.$refs.form.style.height = 'initial';
+			this.$parent.$refs.form.style.overflow = 'initial';
 		}
 	}
 };

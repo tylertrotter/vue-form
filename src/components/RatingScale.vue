@@ -1,5 +1,5 @@
 <template>
-	<table class="c-rating-scale">
+	<table class="c-rating-scale" :class="{vertical: isVertical}">
 		<thead>
 			<th></th>
 			<th v-for="(answer, index) in answers" :key="index">{{answer}}</th>
@@ -29,6 +29,8 @@ export default {
   props: ["error"],
   data() {
     return {
+			minHorizontalWidth: null,
+			isVertical: false,
       questions: [
         "How happy are you with Vue.js",
         "How do you like SFCs?",
@@ -45,7 +47,29 @@ export default {
 				"11"
       ]
     };
-  }
+	},
+	created() {
+		window.addEventListener("resize", this.handleResize);
+	},
+  mounted() {
+		this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  methods: {
+    handleResize() {
+			let formWidth = document.querySelector('.c-body').clientWidth;
+			if(this.$el.clientWidth > formWidth){
+				this.minHorizontalWidth = this.$el.clientWidth;
+				this.isVertical = true;
+			}
+
+			if(formWidth >= this.minHorizontalWidth){
+				this.isVertical = false;
+			}
+		}
+	}
 };
 </script>
 
@@ -57,7 +81,7 @@ export default {
 	width: 100%;
 
 	tbody:nth-child(even) {
-		background: $neutral-bg;
+		@include bg-color($form-text);
 	}
 
 	td,
@@ -77,28 +101,21 @@ export default {
   display: none;
 }
 
-@mixin rating-scale--one-col {
-  .c-rating-scale {
-    thead {
-      display: none;
-    }
-    td,
-    th {
-      display: block;
-      text-align: left;
-    }
-  }
 
-  .c-rating-scale--option span {
-    display: inline-block;
-  }
+.c-rating-scale.vertical {
+	thead {
+		display: none;
+	}
+	td,
+	th {
+		display: block;
+		text-align: left;
+	}
 }
 
-.cg:not([data-width~="1000"]) .c-field:not(.c-col-24) {
-  @include rating-scale--one-col;
+.vertical .c-rating-scale--option span {
+	display: inline-block;
 }
 
-.cg:not([data-width~="625"]) {
-  @include rating-scale--one-col;
-}
+
 </style>

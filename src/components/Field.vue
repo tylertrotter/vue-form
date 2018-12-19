@@ -64,13 +64,12 @@ export default {
 	}
 
 	.c-section-container {
-		background: $neutral-bg;
+
 		padding: $gutter/2;
 	}
 
 	.c-section-container:nth-child(odd) {
 		background: transparent;
-		border-bottom: 2px solid $neutral-bg;
 	}
 
 	$section-left-padding: 36px;

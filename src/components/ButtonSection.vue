@@ -6,7 +6,7 @@
 			<c-button type="submit" class="c-button--primary">Submit</c-button>
 		</div>
 		<div class="c-col-12 c-right">
-			<c-button @click.native="openSave" class="c-button--secondary">Save</c-button>
+			<c-button @click.native="openSave" class="c-button--tertiary">Save</c-button>
 		</div>
 	</c-row>
 </template>

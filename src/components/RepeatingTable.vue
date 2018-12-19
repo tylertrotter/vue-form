@@ -95,8 +95,4 @@
 	.c-button--remove-row {
 		margin-right: $gutter/8;
 	}
-
-	.c-plus{
-		stroke: $neutral;
-	}
 </style>

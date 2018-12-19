@@ -42,16 +42,6 @@ export function createModel() {
 						formType.addProperty("Textarea", String, false, false, { label: 'Text' });
 
 
-
-
-
-
-
-
-
-
-
-
             formType.addProperty("Name3", String, false, false, { label: 'Name 3' });
             formType.addProperty("Checkbox2", Boolean, false, false, { label: 'Checkbox 2' });
 

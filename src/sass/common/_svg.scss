@@ -1,0 +1,25 @@
+.cg{
+
+	svg {
+		width: 1.5em;
+		vertical-align: middle;
+	}
+
+	path {
+		stroke-width: 1;
+	}
+
+	circle {
+		fill: transparent;
+	}
+}
+
+// General remove button
+// May be overridden by components
+.i-ex path {
+	stroke: $negative-reverse;
+}
+
+.i-ex circle {
+	fill: $negative;
+}

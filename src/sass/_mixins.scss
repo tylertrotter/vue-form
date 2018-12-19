@@ -19,8 +19,10 @@
 	font-size: $input-font-size;
 
 	outline-width: $input-border-width;
+	width: 100%;
 
-	// This is obviously not spacing
+	// These are obviously not spacing
+	font-family: $typeface;
 	color: $input-color;
 }
 
@@ -37,28 +39,46 @@
 }
 
 @mixin input-appearance {
+	width: 100%;
 	background: $input-bg;
 	border-color: $input-border-color;
 	@include input-border;
 }
 
-$disabled-stripe: rgba($neutral-reverse, .15);
 @mixin disabled-input {
-	background: $neutral;
-	// background-image: linear-gradient(45deg, $disabled-stripe 4.55%, transparent 4.55%, transparent 50%, $disabled-stripe 50%, $disabled-stripe 54.55%, transparent 54.55%, transparent 100%);
-	// background-size: 5px 5px;
-	color: $neutral-reverse;
+	@if color-is-light($input-bg){
+		background: darken($input-bg, 10);
+		color: lighten($input-color, 10);
+	}@else{
+		background: lighten($input-bg, 10);
+		color: darken($input-color, 10);
+	}
 	cursor: not-allowed;
 }
 
 @mixin break-word {
 	overflow-wrap: break-word;
   word-wrap: break-word;
-	// word-break: break-all;
 	break-inside: avoid;
 }
 
 @mixin helptext {
 	font-size: $small-text;
   padding: $gutter/4 0;
+}
+
+@mixin bg-color($text-color){
+	@if color-is-light($text-color){
+		background: rgba(darken($text-color, 5), .1);
+	}@else {
+		background: rgba(lighten($text-color, 5), .05);
+	}
+}
+
+@mixin bg-color-alt($text-color){
+	@if color-is-light($text-color){
+		background: rgba(darken($text-color, 10), .15);
+	}@else {
+		background: rgba(lighten($text-color, 5), .1);
+	}
 }

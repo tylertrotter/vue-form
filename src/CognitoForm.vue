@@ -19,7 +19,7 @@
 
 				<c-row>
 					<c-field source="Name1" class="c-col-24">
-						<c-name :optionalParts="{title: false, middleInitial: false, middleName: false, suffix: false}" />
+						<c-name :optionalParts="{title: true, middleInitial: true, middleName: false, suffix: true}" />
 					</c-field>
 				</c-row>
 
@@ -34,9 +34,15 @@
 							:options="[
 								{label: 'First Choice', checked: true},
 								{label: 'Second Choice', checked: false},
+								{label: 'Third Choice', checked: false},
+								{label: 'First Choice', checked: true},
+								{label: 'Second Choice', checked: false},
+								{label: 'Third Choice', checked: false},
+									{label: 'First Choice', checked: true},
+								{label: 'Second Choice', checked: false},
 								{label: 'Third Choice', checked: false}
 							]"
-							:columns="30"
+							:columns="3"
 						/>
 					</c-field>
 				</c-row>
@@ -254,34 +260,33 @@
 </template>
 
 <script>
-import CPageProgress from './components/PageProgress.vue';
-import CPage from './components/Page.vue';
-import CRow from './components/Row.vue';
-import CRepeatingData from './components/RepeatingData.vue';
-import CRepeatingSection from './components/RepeatingSection.vue';
-import CSection from './components/Section.vue';
-import CField from './components/Field.vue';
+	import CPageProgress from './components/PageProgress.vue';
+	import CPage from './components/Page.vue';
+	import CRow from './components/Row.vue';
+	import CRepeatingData from './components/RepeatingData.vue';
+	import CRepeatingSection from './components/RepeatingSection.vue';
+	import CSection from './components/Section.vue';
+	import CField from './components/Field.vue';
 
-import CInput from './components/Input.vue';
-import CName from './components/Name.vue';
-import CPhone from './components/Phone.vue';
-import CAddress from './components/Address.vue';
-import CSpinner from './components/Spinner.vue';
+	import CInput from './components/Input.vue';
+	import CName from './components/Name.vue';
+	import CPhone from './components/Phone.vue';
+	import CAddress from './components/Address.vue';
+	import CSpinner from './components/Spinner.vue';
 
-import CSelect from './components/Select.vue';
-import CDatePicker from './components/DatePicker.vue';
-import CTimePicker from './components/TimePicker.vue';
+	import CSelect from './components/Select.vue';
+	import CDatePicker from './components/DatePicker.vue';
+	import CTimePicker from './components/TimePicker.vue';
 
-import CRatingScale from './components/RatingScale.vue';
-import CToggle from './components/Toggle.vue';
+	import CRatingScale from './components/RatingScale.vue';
+	import CToggle from './components/Toggle.vue';
 
-import CCheckableGroup from './components/CheckableGroup.vue';
-import CSignature from './components/Signature.vue';
-import CUpload from './components/Upload.vue';
-import CSaveResumeDialog from './components/SaveResumeDialog.vue';
+	import CCheckableGroup from './components/CheckableGroup.vue';
+	import CSignature from './components/Signature.vue';
+	import CUpload from './components/Upload.vue';
+	import CSaveResumeDialog from './components/SaveResumeDialog.vue';
 
-import {EventBus} from './event-bus.js';
-
+	import {EventBus} from './event-bus.js';
 export default {
 	name: 'c-form',
 	props: ['eid'],
@@ -321,7 +326,6 @@ export default {
 	},
   mounted() {
 		this.handleResize();
-		EventBus.$emit('form-mounted', this);
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
@@ -344,11 +348,11 @@ export default {
 </script>
 
 <style lang="scss">
-	@import './sass/_theme';
-	@import './sass/_field-style';
 	@import './sass/common/_grid';
+	@import './sass/common/_typography';
+	@import './sass/common/_svg';
 
-	[id="c-form"] * {
+.cg * {
 		box-sizing: border-box;
 	}
 
@@ -376,134 +380,18 @@ export default {
 		flex: 1 1 2.5em;
 	}
 
-	// [data-width~="500"]{
-		div.c-row {
-			display: flex;
-			align-items: flex-start;
-			flex-wrap: wrap;
-			width: calc(100% + #{$gutter}/2);
-			margin-left: -$gutter/4;
-
-			& > * {
-				margin-left: $gutter/4;
-				margin-right: $gutter/4;
-			}
-		}
-	// }
-
-	// [class*="c-col-"]:last-child {
-	// 	flex-grow: 0;
-	// }
-
-	.c-outdent {
-		// Shift the page container to accomodate c-field gutter padding
-		margin-left: -$gutter/2;
-		width: calc(100% + #{$gutter});
-	}
-	.c-indent {
-		margin-left: $gutter/2;
-		margin-right: $gutter/2;
-	}
-
-	.el-input,
-	textarea,
-	[type="text"],
-	[type="tel"],
-	[type="password"],
-	[type="date"],
-	[type="email"],
-	[type="time"],
-	[type="password"]{
-		width: 100%;
-		font-family: $typeface;
-	}
-
-	.el-textarea {
+	// div.c-row to distinguish from trs
+	div.c-row {
 		display: flex;
-	}
-	.el-textarea__inner {
-		resize: vertical;
-	}
+		align-items: flex-start;
+		flex-wrap: wrap;
+		width: calc(100% + #{$gutter}/2);
+		margin-left: -$gutter/4;
 
-	.el-input > input,
-	.el-textarea > textarea {
-		border: 0;
-		background: transparent;
-	}
-
-.el-input,
-.el-textarea{
-		@include input-appearance;
-		overflow: hidden;
-	}
-
-	.c-section {
-		position: relative;
-		background: $neutral-bg;
-		padding: $gutter/2;
-		border-radius: $border-radius;
-	}
-
-	.c-section:nth-child(even){
-		background: $neutral-bg-alt;
-	}
-
-
-	///////////////////////
-	// End Structural CSS
-	///////////////////////
-
-	[id="c-form"] {
-		h1, h2, h3, h4, h5, h6 {
-			margin-top: 0;
-			margin-bottom: 0;
+		& > * {
+			margin-left: $gutter/4;
+			margin-right: $gutter/4;
 		}
-
-		h1:not(:last-child),
-		h2:not(:last-child),
-		h3:not(:last-child),
-		h4:not(:last-child),
-		h5:not(:last-child),
-		h6:not(:last-child) {
-			margin-bottom: $gutter/3;
-		}
-
-		// General theme settings
-		textarea,
-		[type="text"],
-		[type="tel"],
-		[type="password"],
-		[type="date"],
-		[type="email"],
-		select,
-		.c-readonly {
-			@include input-spacing;
-		}
-
-		.c-readonly {
-			border-color: transparent;
-			@include input-border;
-		}
-	}
-
-	.c-negative-color {
-		background-color: $negative;
-		fill: $negative;
-	}
-
-	.c-negative-reverse {
-		background-color: $negative-reverse;
-		fill: $negative-reverse;
-		color: $negative-reverse;
-		stroke: $negative-reverse;
-	}
-
-	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
-	// Allowing us to use the field component outside of 24-column grid context.
-	div[class*='c-col-'],
-	.c-container,
-	.c-padding {
-		padding: $gutter/2;
 	}
 
 	// intra field rows
@@ -516,29 +404,51 @@ export default {
 		margin-top: -$gutter/4;
 	}
 
+	.c-outdent {
+		// Shift the page container to accomodate c-field gutter padding
+		margin-left: -$gutter/2;
+		width: calc(100% + #{$gutter});
+	}
+
+	// messed up
+	.c-indent {
+		margin-left: $gutter/2;
+		margin-right: $gutter/2;
+	}
+
+	.c-section {
+		position: relative;
+		@include bg-color($form-text);
+		padding: $gutter/2;
+		border-radius: $border-radius;
+	}
+
+	.c-section:nth-child(even){
+		@include bg-color-alt($form-text);
+	}
+
+	.c-section + .c-section {
+		margin-top: $input-border-width;
+	}
+
+	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
+	// Allowing us to use the field component outside of 24-column grid context.
+	div[class*='c-col-'],
+	.c-container,
+	.c-padding {
+		padding: $gutter/2;
+	}
+
 	.c-right {
 		text-align: right;
 	}
 
-	// SVGs
-	.i-ex path {
-		stroke-width: 1.25;
-		stroke: $negative-reverse;
-	}
-	.i-ex circle {
-		fill: $negative;
-	}
-</style>
-
-<style scoped lang="scss">
-	@import './sass/theme';
-	@import './sass/field-style.scss';
-
-	[id="c-form"] {
+	.cg {
 		background: $form-bg;
+		background-image: url('https://images.unsplash.com/photo-1545179920-16c9617c2b60?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80');
 		max-width: $form-width;
 		margin: 0 auto;
-		overflow: hidden;
+		color: $form-text;
 		font-family: $typeface;
 	}
 

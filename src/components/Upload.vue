@@ -30,17 +30,19 @@
 
 <style lang="scss">
 	.el-upload {
-		background: $neutral-bg;
+		@include bg-color($form-text);
+		box-shadow: inset 0 0 0 $input-border-width*3 $form-bg;
 		border: $input-border-width $input-border-color $upload-border-style;
 		border-radius: $border-radius;
 		padding: $gutter*.75;
 		text-align: center;
 
 		svg {
-			max-width: 75px;
+			width: 2em;
+			margin-bottom: $gutter/3;
 
 			path {
-				fill: $neutral-reverse;
+				fill: rgba($form-text, .5);
 			}
 		}
 	}

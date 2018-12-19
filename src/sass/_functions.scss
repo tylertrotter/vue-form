@@ -1,3 +1,9 @@
-@function columns($columns) {
-	@return $columns / 24 * 100%;
+@function color-is-light($hex-color) {
+  $red: red(rgba($hex-color, 1.0));
+  $green: green(rgba($hex-color, 1.0));
+  $blue: blue(rgba($hex-color, 1.0));
+
+  $lightness: ($red * 0.2126 + $green * 0.7152 + $blue * 0.0722) / 255;
+
+  @return $lightness > .6;
 }

@@ -39,6 +39,7 @@
 
 				// set form to that height
 				form.style.height = formHeight + 'px';
+				form.style.overflow = 'hidden';
 
 				// set enter and leave els to position absolute (Done in CSS)
 

@@ -28,16 +28,27 @@ $primary-reverse: white;
 // Element's Primary Color
 $--color-primary: $primary;
 
+
+
+$midnight: #172d35;
+$warm: #352317;
+$light: #eae6e1;
+
 // Specific Colors
-$form-bg: white;
-$neutral: darken($form-bg, 15);
-$neutral-reverse: darken($form-bg, 80);
-$btn-primary-bg: $primary;
-$btn-primary-text: $primary-reverse;
-$neutral-bg: rgba($neutral, .2);
-$neutral-bg-alt: rgba($neutral, .5);
+$form-bg: black;
+$form-text: white;
+
 
 // Button Styles
+$btn-primary-bg: $primary;
+$btn-primary-text: $primary-reverse;
+
+$btn-secondary-bg: mix($primary, white, 20%);
+$btn-secondary-text: $primary;
+
+$btn-tertiary-bg: $primary;
+$btn-tertiary-text: $primary-reverse;
+
 $button-font-size: 16px;
 $button-padding: $gutter/3;
 $button-border-color: #D85427;
@@ -49,9 +60,9 @@ $input-font-size: 16px;
 $input-padding-v: $gutter/3;
 $input-padding-h: $gutter/4;
 $input-radius: $border-radius*.75;
-$input-bg: white;
-$input-color: gray;
-$input-border-color: #ccc;
+$input-bg: $form-bg;
+$input-color: $form-text;
+$input-border-color: rgba($form-text, .3);
 $input-border-width: 1px;
 $input-border-style: solid;
 $underline: false;

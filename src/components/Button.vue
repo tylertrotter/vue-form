@@ -21,23 +21,23 @@
 		border: 0;
 		background: transparent;
 		padding: 0;
+	}
+
+	.c-button--primary,
+	.c-button--secondary,
+	.c-button--tertiary {
+		font-size: $button-font-size;
+		padding: $button-padding;
+		border-radius: $button-border-radius;
 
 		svg {
-			width: 1.2em;
-			height: 1.2em;
+			width: 1.15em;
 			vertical-align: bottom;
 		}
 
 		svg:not(:last-child){
 			margin-right: .3em;
 		}
-	}
-
-	.c-button--primary,
-	.c-button--secondary {
-		font-size: $button-font-size;
-		padding: $button-padding;
-		border-radius: $button-border-radius;
 	}
 
 	.c-button--primary {
@@ -47,9 +47,18 @@
 	}
 
 	.c-button--secondary {
-		background: $neutral-reverse;
-		color: $neutral;
-		border: $input-border-width $neutral-reverse $input-border-style;
+		background: $btn-secondary-bg;
+		color: $btn-secondary-text;
+		border: $input-border-width $btn-secondary-bg $input-border-style;
+		svg {
+			stroke: $btn-secondary-text;
+		}
+	}
+
+	.c-button--tertiary {
+		background: $form-bg;
+		color: $form-text;
+		border: $input-border-width $btn-primary-bg $input-border-style;
 	}
 </style>
 
