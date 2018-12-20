@@ -93,7 +93,7 @@
 				<!-- number, website, currency fields -->
 
 				<c-row>
-					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-24">
+					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-22">
 						<c-rating-scale />
 					</c-field>
 				</c-row>
@@ -109,29 +109,38 @@
 				</c-row>
 
 				<c-row>
-					<c-repeating-data class="c-col-24">
-						<c-repeating-section>
-							<c-row>
-								<c-field source="Name1" label="Your Name" class="c-col-8">
-									<c-input type="text" />
-								</c-field>
-								<c-field source="Name1" label="Your Email" class="c-col-8">
-									<c-select />
-								</c-field>
-							</c-row>
-						</c-repeating-section>
+					<c-field class="c-col-24">
+						<c-repeating-data>
+							<c-repeating-section>
+								<c-row>
+									<c-field source="Name1" label="Your Name" class="c-col-8">
+										<c-input type="text" />
+									</c-field>
+									<c-field source="Name1" label="Your Email" class="c-col-8">
+										<c-select />
+									</c-field>
+								</c-row>
+									<c-row>
+										<c-section source="Section2" class="c-col-24">
+											<c-field source="SectionText" class="c-col-12">
+												<c-input type="text" />
+											</c-field>
+										</c-section>
+									</c-row>
+							</c-repeating-section>
 
-						<c-repeating-section>
-							<c-row>
-								<c-field source="Name1" label="Your Name" class="c-col-8">
-									<c-input type="text" />
-								</c-field>
-								<c-field source="Name1" label="Your Email" class="c-col-8">
-									<c-select />
-								</c-field>
-							</c-row>
-						</c-repeating-section>
-					</c-repeating-data>
+							<c-repeating-section>
+								<c-row>
+									<c-field source="Name1" label="Your Name" class="c-col-8">
+										<c-input type="text" />
+									</c-field>
+									<c-field source="Name1" label="Your Email" class="c-col-8">
+										<c-select />
+									</c-field>
+								</c-row>
+							</c-repeating-section>
+						</c-repeating-data>
+					</c-field>
 				</c-row>
 
 				<c-row>
@@ -152,43 +161,45 @@
 				</c-row>
 
 				<c-row>
+					<c-field class="c-col-24">
 						<c-repeating-data :is-table="true">
 
-						<template slot="thead">
-							<th>Your Name</th>
-							<th>Your Email</th>
-							<th>Your Phone Number</th>
-						</template>
+							<template slot="thead">
+								<th>Your Name</th>
+								<th>Your Email</th>
+								<th>Your Phone Number</th>
+							</template>
 
-						<c-repeating-section>
-							<c-row>
-								<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
-									<c-input type="text"/>
-								</c-field>
-								<c-field source="Name1" label="Your Email" class="c-col-8">
-									<c-select />
-								</c-field>
-								<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-									<c-input type="text" />
-								</c-field>
-							</c-row>
-						</c-repeating-section>
+							<c-repeating-section>
+								<c-row>
+									<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
+										<c-input type="text"/>
+									</c-field>
+									<c-field source="Name1" label="Your Email" class="c-col-8">
+										<c-select />
+									</c-field>
+									<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+										<c-input type="text" />
+									</c-field>
+								</c-row>
+							</c-repeating-section>
 
-						<c-repeating-section>
-							<c-row>
-								<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
-									<c-input type="text" />
-								</c-field>
-								<c-field source="Name1" label="Your Email" class="c-col-8">
-									<c-select />
-								</c-field>
-								<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-									<c-input type="text" />
-								</c-field>
-							</c-row>
-						</c-repeating-section>
+							<c-repeating-section>
+								<c-row>
+									<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
+										<c-input type="text" />
+									</c-field>
+									<c-field source="Name1" label="Your Email" class="c-col-8">
+										<c-select />
+									</c-field>
+									<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
+										<c-input type="text" />
+									</c-field>
+								</c-row>
+							</c-repeating-section>
 
-					</c-repeating-data >
+						</c-repeating-data >
+					</c-field>
 				</c-row>
 
 			</c-page>
@@ -287,64 +298,68 @@
 	import CSaveResumeDialog from './components/SaveResumeDialog.vue';
 
 	import {EventBus} from './event-bus.js';
-export default {
-	name: 'c-form',
-	props: ['eid'],
+	import { debouncedResize } from './debounce.js';
 
-	data: function() {
-		return Cognito.Forms.FormEntry.meta.get(this.eid);
-	},
-	components: {
-		CPage,
-		CPageProgress,
-		CRow,
-		CRepeatingData,
-		CRepeatingSection,
-		CSection,
-		CField,
+	export default {
+		name: 'c-form',
+		props: ['eid'],
 
-		CInput,
-		CName,
-		CAddress,
-		CPhone,
-		CSpinner,
+		data: function() {
+			return Cognito.Forms.FormEntry.meta.get(this.eid);
+		},
+		components: {
+			CPage,
+			CPageProgress,
+			CRow,
+			CRepeatingData,
+			CRepeatingSection,
+			CSection,
+			CField,
 
-		CSelect,
-		CDatePicker,
-		CTimePicker,
+			CInput,
+			CName,
+			CAddress,
+			CPhone,
+			CSpinner,
 
-		CToggle,
-		CCheckableGroup,
-		CRatingScale,
+			CSelect,
+			CDatePicker,
+			CTimePicker,
 
-		CSignature,
-		CUpload,
-		CSaveResumeDialog
-	},
-	created() {
-		window.addEventListener("resize", this.handleResize);
-	},
-  mounted() {
-		this.handleResize();
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-  methods: {
-    handleResize() {
-      // Add classes for every 100px width
-      var width = Math.ceil(this.$el.clientWidth / 25) * 25;
-			var widths = [];
+			CToggle,
+			CCheckableGroup,
+			CRatingScale,
 
-      for (var size = width; size >= 200; size = size - 25) {
-				if(size <= 650 || size % 100 === 0)
-        widths.push(size);
+			CSignature,
+			CUpload,
+			CSaveResumeDialog
+		},
+		created() {
+			window.addEventListener("resize", this.handleResize);
+		},
+		mounted() {
+			this.handleResize();
+		},
+		destroyed() {
+			window.removeEventListener("resize", this.handleResize);
+		},
+		methods: {
+			handleResize() {
+				debouncedResize(() => {
+					// Add classes for every 100px width
+					var width = Math.ceil(this.$el.clientWidth / 25) * 25;
+					var widths = [];
+
+					for (var size = width; size >= 200; size = size - 25) {
+						if(size <= 650 || size % 100 === 0)
+						widths.push(size);
+					}
+
+					this.$el.setAttribute('data-width', widths.join(" "));
+				})();
 			}
-
-			this.$el.setAttribute('data-width', widths.join(" "));
 		}
 	}
-}
 </script>
 
 <style lang="scss">
@@ -406,29 +421,9 @@ export default {
 
 	.c-outdent {
 		// Shift the page container to accomodate c-field gutter padding
+		// only used for c-page
 		margin-left: -$gutter/2;
 		width: calc(100% + #{$gutter});
-	}
-
-	// messed up
-	.c-indent {
-		margin-left: $gutter/2;
-		margin-right: $gutter/2;
-	}
-
-	.c-section {
-		position: relative;
-		@include bg-color($form-text);
-		padding: $gutter/2;
-		border-radius: $border-radius;
-	}
-
-	.c-section:nth-child(even){
-		@include bg-color-alt($form-text);
-	}
-
-	.c-section + .c-section {
-		margin-top: $input-border-width;
 	}
 
 	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
@@ -437,10 +432,6 @@ export default {
 	.c-container,
 	.c-padding {
 		padding: $gutter/2;
-	}
-
-	.c-right {
-		text-align: right;
 	}
 
 	.cg {

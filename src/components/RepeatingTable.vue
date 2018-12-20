@@ -1,6 +1,6 @@
 <template>
-	<div class="c-repeating-table c-region c-indent">
-		<table>
+
+		<table class="c-repeating-table c-region">
 			<thead>
 				<th><!-- Corresponds to X buttons --></th>
 				<slot name="thead"></slot>
@@ -17,23 +17,34 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td><c-button class="c-button--secondary"><i-plus /> Add</c-button></td>
+					<td><c-button class="c-button--secondary c-repeating-data--add-button"><i-plus /> Add</c-button></td>
 				</tr>
 			</tfoot>
 		</table>
-	</div>
+
 </template>
 
 <script>
+	import { containerQuery } from "./../container-query";
 	import CButton from './Button.vue';
 	import IPlus from './../assets/plus.svg';
 
 	export default {
 		name: 'c-repeating-table',
 		components: { CButton, IPlus },
+		mixins: [containerQuery],
 		data(){
 			return {
 				containerIsTable: this.$parent.currentType === 'c-repeating-table'
+			}
+		},
+		watch: {
+			narrowField: function(){
+				if(this.narrowField){
+					this.$parent.currentType = 'div'
+				}else{
+					this.$parent.currentType = 'c-repeating-table'
+				}
 			}
 		}
 	}
@@ -45,14 +56,11 @@
 
 	.c-repeating-table {
 		width: 100%;
+		border-spacing: $table-border-spacing;
 
 		.c-readonly {
 			@include input-appearance;
 			@include disabled-input;
-		}
-
-		table {
-			border-spacing: $table-border-spacing;
 		}
 
 		td {
@@ -62,6 +70,7 @@
 		.el-input,
 		.c-readonly {
 			border-radius: 0;
+			min-width: 150px;
 		}
 
 		tbody {
@@ -85,7 +94,9 @@
 	}
 
 	.c-repeating-table--summary td {
-		padding: $input-padding-v $input-padding-h;
+		padding-top: $input-padding-v;
+		padding-left: $input-padding-h;
+		padding-right: $input-padding-h;
 	}
 
 	.top-left-corner .el-input {

@@ -1,11 +1,10 @@
 <template>
 	<c-row>
-		<div class="c-col-12">
+		<div class="c-col-24">
 			<c-button v-if="!firstPage" class="c-button--secondary">Back</c-button>
 			<c-button v-if="!lastPage" class="c-button--secondary">Next</c-button>
 			<c-button type="submit" class="c-button--primary">Submit</c-button>
-		</div>
-		<div class="c-col-12 c-right">
+
 			<c-button @click.native="openSave" class="c-button--tertiary">Save</c-button>
 		</div>
 	</c-row>

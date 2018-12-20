@@ -1,5 +1,5 @@
 <template>
-	<table class="c-rating-scale" :class="{vertical: isVertical}">
+	<table class="c-rating-scale" :class="{'c-narrow': narrowField}">
 		<thead>
 			<th></th>
 			<th v-for="(answer, index) in answers" :key="index">{{answer}}</th>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { containerQuery } from "./../container-query";
 import CRadio from "./Radio.vue";
 
 export default {
@@ -26,11 +27,10 @@ export default {
   components: {
     CRadio
   },
-  props: ["error"],
+	props: ["error"],
+	mixins: [containerQuery],
   data() {
     return {
-			minHorizontalWidth: null,
-			isVertical: false,
       questions: [
         "How happy are you with Vue.js",
         "How do you like SFCs?",
@@ -47,28 +47,6 @@ export default {
 				"11"
       ]
     };
-	},
-	created() {
-		window.addEventListener("resize", this.handleResize);
-	},
-  mounted() {
-		this.handleResize();
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-  methods: {
-    handleResize() {
-			let formWidth = document.querySelector('.c-body').clientWidth;
-			if(this.$el.clientWidth > formWidth){
-				this.minHorizontalWidth = this.$el.clientWidth;
-				this.isVertical = true;
-			}
-
-			if(formWidth >= this.minHorizontalWidth){
-				this.isVertical = false;
-			}
-		}
 	}
 };
 </script>
@@ -102,7 +80,7 @@ export default {
 }
 
 
-.c-rating-scale.vertical {
+.c-rating-scale.c-narrow {
 	thead {
 		display: none;
 	}
@@ -113,7 +91,7 @@ export default {
 	}
 }
 
-.vertical .c-rating-scale--option span {
+.c-narrow .c-rating-scale--option span {
 	display: inline-block;
 }
 

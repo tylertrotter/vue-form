@@ -5,6 +5,7 @@
 		required ? 'c-required' : ''
 		]"
 	 	:is="this.$parent.$parent.$parent.$parent.currentType && this.$parent.$parent.$parent.$parent.currentType === 'c-repeating-table' ? 'td' : 'div'"
+		 ref="field"
 	>
 		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.$parent.currentType !== 'c-repeating-table' ">{{fieldLabel}}</label>
 		<slot></slot>
@@ -35,12 +36,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	// Just to get sandbox working
-	@import "../sass/_theme";
-	@import "../sass/_field-style";
-	@import "../sass/_mixins.scss";
-	// End sandbox only code
-
 	.c-label {
 		display: block;
 		font-family: $label-typeface;
@@ -61,34 +56,6 @@ export default {
 		padding: $gutter/4;
 		color: $negative-reverse;
 		font-size: $small-text;
-	}
-
-	.c-section-container {
-
-		padding: $gutter/2;
-	}
-
-	.c-section-container:nth-child(odd) {
-		background: transparent;
-	}
-
-	$section-left-padding: 36px;
-
-	.c-repeating-section .c-section-container {
-		position: relative;
-		padding-left: $section-left-padding;
-	}
-
-	.remove-section-button {
-		width: $section-left-padding/1.75;
-		height: $section-left-padding/1.75;
-		margin-left: $section-left-padding * -0.6 - 5;
-		margin-right: 5px;
-		display: inline-block;
-	}
-
-	.add-section-button {
-		margin-top: $gutter/3;
 	}
 
 	// Should I add a c-container class to this and sections so they can share some styles?

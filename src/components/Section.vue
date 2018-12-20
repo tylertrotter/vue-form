@@ -22,6 +22,19 @@
 </script>
 
 <style lang="scss">
+	.c-section {
+		position: relative;
+		@include bg-color($form-text);
+		padding: $gutter/2;
+		border-radius: $border-radius;
+	}
 
+	.c-section:nth-child(even){
+		@include bg-color-alt($form-text);
+	}
+
+	.c-section + .c-section {
+		margin-top: $input-border-width;
+	}
 </style>
 

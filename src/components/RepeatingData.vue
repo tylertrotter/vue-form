@@ -3,38 +3,36 @@
 		<component :is="currentType" class="c-repeating-data">
 			<template v-if="currentType === 'c-repeating-table'" slot="thead"><slot name="thead"></slot></template>
 			<slot></slot>
-			<!-- <c-button>Add</c-button> -->
+			<c-button v-if="currentType === 'div'" class="c-button--secondary c-repeating-data--add-button"><i-plus /> Add</c-button>
 		</component>
 	</keep-alive>
 </template>
 
 <script>
-	import CRepeatingTable from './RepeatingTable.vue';
+
+	import CRepeatingTable from "./RepeatingTable.vue";
+	import CButton from "./Button.vue";
+	import IPlus from './../assets/plus.svg';
 
 	export default {
-		name: 'c-repeating-data',
+		name: "c-repeating-data",
 		props: ['isTable'],
+
 		components: {
-			CRepeatingTable
+			CRepeatingTable,
+			CButton,
+			IPlus
 		},
 		data() {
 			return {
 				currentType: this.$props.isTable ? 'c-repeating-table' : 'div'
 			}
-		},
-		created() {
-			window.addEventListener("resize", this.handleResize);
-		},
-		mounted() {
-			this.handleResize();
-		},
-		methods: {
-			handleResize() {
-				if( this.$props.isTable === true && this.$el.clientWidth > 600 )
-					this.currentType = 'c-repeating-table'
-				else
-					this.currentType = 'div'
-			}
 		}
 	}
 </script>
+
+<style lang="scss">
+	.c-repeating-data--add-button {
+		margin-top: $gutter/2;
+	}
+</style>
