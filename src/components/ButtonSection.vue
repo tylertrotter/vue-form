@@ -1,44 +1,56 @@
 <template>
-	<c-row>
-		<div class="c-col-24">
-			<c-button v-if="!firstPage" class="c-button--secondary">Back</c-button>
-			<c-button v-if="!lastPage" class="c-button--secondary">Next</c-button>
-			<c-button type="submit" class="c-button--primary">Submit</c-button>
+	<div class="c-button-section c-col-24">
+		<!-- These goto() page numbers are hardcoded right now. Not really sure where to save current page. -->
+		<c-button v-if="!firstPage" @click.native="goto(1)" class="c-button--secondary">Back</c-button>
+		<c-button v-if="!lastPage" @click.native="goto(2)" class="c-button--secondary">Next</c-button>
+		<c-button type="submit" class="c-button--primary">Submit</c-button>
 
-			<c-button @click.native="openSave" class="c-button--tertiary">Save</c-button>
-		</div>
-	</c-row>
+		<c-button @click.native="openSave" class="c-button--save c-button--tertiary">Save</c-button>
+	</div>
 </template>
 
 
 <script>
-import CButton from "./Button.vue";
-import CSection from "./Section.vue";
-import CRow from "./Row.vue";
+	import {goToPage} from "./../go-to-page";
+	import CButton from "./Button.vue";
+	import CSection from "./Section.vue";
+	import CRow from "./Row.vue";
 
-import {EventBus} from './../event-bus.js';
+	import {EventBus} from "./../event-bus.js";
 
-export default {
-  name: "c-button-section",
-  components: {
-    CButton,
-    CSection,
-    CRow
-	},
-	data() {
-		return {
-			firstPage: this.$parent.$attrs.first,
-			lastPage: this.$parent.$attrs.last
+	export default {
+		name: "c-button-section",
+		components: {
+			CButton,
+			CSection,
+			CRow
+		},
+		mixins: [goToPage],
+		data() {
+			return {
+				firstPage: this.$parent.$attrs.first,
+				lastPage: this.$parent.$attrs.last
+			}
+		},
+		methods: {
+			openSave(){
+				EventBus.$emit("open-modal", "save")
+			}
 		}
-	},
-	methods: {
-		openSave(){
-			EventBus.$emit('open-modal', 'save')
-		}
-	}
-};
+	};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+	.c-button-section {
+		display: flex;
+		justify-content: flex-start;
 
+		button:not(:last-child) {
+			margin-right: $gutter/2;
+		}
+	}
+
+	.c-button--save {
+		margin-left: auto;
+	}
 </style>

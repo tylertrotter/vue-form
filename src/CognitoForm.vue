@@ -443,12 +443,16 @@
 
 	.c-body {
 		position: relative;
-		margin: $form-margins/2 $form-margins;
+		margin-top: $form-margins/2;
+		margin-left: $form-margins;
+		margin-right: $form-margins;
+		padding-bottom: $form-margins/2;
 		transition: all .5s;
 	}
 
 	.cg:not([data-width~="700"]) .c-body {
-		margin: $form-margins/2 $unitless-gutter * .2vw;
+		margin-left: $unitless-gutter * .2vw;
+		margin-right: $unitless-gutter * .2vw;
 	}
 
 	.c-wrapper {

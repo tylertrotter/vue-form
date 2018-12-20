@@ -10,7 +10,8 @@ export function createModel() {
 
 						Cognito.Forms.FormEntry = formType.jstype;
 
-
+						// I don't know, I just need to save this some place.
+						Cognito.Forms.currentPage = 2;
 
 
 
