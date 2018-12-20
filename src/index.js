@@ -2,8 +2,8 @@ import { Vue, VueModel } from "./imports";
 import { createModel } from "./create-model";
 import Form from "./CognitoForm.vue";
 
-import lang from 'element-ui/lib/locale/lang/en';
-import locale from 'element-ui/lib/locale';
+import lang from "element-ui/lib/locale/lang/en";
+import locale from "element-ui/lib/locale";
 locale.use(lang);
 
 
@@ -47,10 +47,6 @@ Cognito.Forms.model.perform(function() {
   Cognito.Forms.model.entry = formEntry;
 
 });
-
-Cognito.Forms.model.junkDrawer = {
-	showSaveModal: false
-};
 
 // console.log(Cognito.Forms.model.entry);
 

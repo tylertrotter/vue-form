@@ -8,11 +8,11 @@
 
 <script>
 import { Vue, VueModel } from "../imports";
-import { Switch } from 'element-ui';
+import { Switch } from "element-ui";
 Vue.use(Switch);
 
 export default {
-	name: 'c-toggle',
+	name: "c-toggle",
 	mixins: [VueModel.mixins.SourceConsumer],
 	data(){
 		return {
@@ -25,23 +25,23 @@ export default {
 	},
 	methods: {
 		handleChange(value, ev) {
-			this.$emit('change', value, ev);
+			this.$emit("change", value, ev);
 			// temporary - to make it work
 			this.$source.value = value;
 		}
 	},
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
 	props: [
-		'active-text',
-		'inactive-text',
-		'value'
+		"active-text",
+		"inactive-text",
+		"value"
 	]
 };
 </script>
 
 <style lang="scss">
-	@import '../sass/theme-chalk-master/src/switch';
+	@import "../sass/theme-chalk-master/src/switch";
 </style>

@@ -6,16 +6,16 @@
 </template>
 
 <script>
-	import CButton from './Button.vue';
-	import CRepeatingSection from './RepeatingSection.vue';
-	import IEx from './../assets/ex.svg';
+	import CButton from "./Button.vue";
+	import CRepeatingSection from "./RepeatingSection.vue";
+	import IEx from "./../assets/ex.svg";
 
 	export default {
-		name: 'c-field-row',
+		name: "c-field-row",
 		components: { CButton, IEx, CRepeatingSection },
 		data(){
 			return {
-				containerIsTable: this.$parent.$parent.$parent.currentType === 'c-repeating-table'
+				containerIsTable: this.$parent.$parent.$parent.currentType === "c-repeating-table"
 			}
 		}
   };

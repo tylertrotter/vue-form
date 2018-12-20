@@ -5,21 +5,21 @@
 </template>
 
 <script>
-	import {EventBus} from './../event-bus.js';
+	import {EventBus} from "./../event-bus.js";
 	import { Vue } from "../imports";
-	import { Dialog } from 'element-ui';
+	import { Dialog } from "element-ui";
 	Vue.use(Dialog);
 
 	export default {
-		name: 'c-dialog',
-		props: ['title'],
+		name: "c-dialog",
+		props: ["title"],
 		data(){
 			return {
 				dialogVisible: false
 			}
 		},
 		mounted() {
-			EventBus.$on('open-modal', name => {
+			EventBus.$on("open-modal", name => {
 				this.dialogVisible = true;
 			});
 		}
@@ -27,6 +27,6 @@
 </script>
 
 <style lang="scss">
-	@import '../sass/theme-chalk-master/src/dialog';
+	@import "../sass/theme-chalk-master/src/dialog";
 
 </style>

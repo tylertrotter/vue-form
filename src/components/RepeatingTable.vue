@@ -26,24 +26,24 @@
 
 <script>
 	import { containerQuery } from "./../container-query";
-	import CButton from './Button.vue';
-	import IPlus from './../assets/plus.svg';
+	import CButton from "./Button.vue";
+	import IPlus from "./../assets/plus.svg";
 
 	export default {
-		name: 'c-repeating-table',
+		name: "c-repeating-table",
 		components: { CButton, IPlus },
 		mixins: [containerQuery],
 		data(){
 			return {
-				containerIsTable: this.$parent.currentType === 'c-repeating-table'
+				containerIsTable: this.$parent.currentType === "c-repeating-table"
 			}
 		},
 		watch: {
 			narrowField: function(){
 				if(this.narrowField){
-					this.$parent.currentType = 'div'
+					this.$parent.currentType = "div"
 				}else{
-					this.$parent.currentType = 'c-repeating-table'
+					this.$parent.currentType = "c-repeating-table"
 				}
 			}
 		}

@@ -29,35 +29,25 @@
 					</c-field>
 
 					<c-field source="ChoiceRadio" class="c-col-12">
-						<c-checkable-group
-							type="radio"
-							:options="[
-								{label: 'First Choice', checked: true},
-								{label: 'Second Choice', checked: false},
-								{label: 'Third Choice', checked: false},
-								{label: 'First Choice', checked: true},
-								{label: 'Second Choice', checked: false},
-								{label: 'Third Choice', checked: false},
-									{label: 'First Choice', checked: true},
-								{label: 'Second Choice', checked: false},
-								{label: 'Third Choice', checked: false}
-							]"
-							:columns="3"
-						/>
+						<c-checkable-group :columns="3">
+							<c-radio-group pre-checked="Option C">
+								<c-radio label="Option A" />
+								<c-radio label="Option B" />
+								<c-radio label="Option C" />
+							</c-radio-group>
+						</c-checkable-group>
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field source="ChoiceCheckboxes" class="c-col-12">
-						<c-checkable-group
-							type="checkbox"
-							:options="[
-								{label: 'First Choice', checked: true},
-								{label: 'Second Choice', checked: false},
-								{label: 'Third Choice', checked: false}
-							]"
-							:columns="0"
-						/>
+						<c-checkable-group :columns="3">
+							<c-checkbox-group :pre-checked="['Option A', 'Option C']">
+								<c-checkbox label="Option A" />
+								<c-checkbox label="Option B" />
+								<c-checkbox label="Option C" />
+							</c-checkbox-group>
+						</c-checkable-group>
 					</c-field>
 					<c-field source="Password" class="c-col-12">
 						<c-input type="password" />
@@ -289,10 +279,14 @@
 	import CDatePicker from './components/DatePicker.vue';
 	import CTimePicker from './components/TimePicker.vue';
 
+	import CCheckableGroup from './components/CheckableGroup.vue';
+	import CCheckboxGroup from './components/CheckboxGroup.vue';
+	import CCheckbox from './components/Checkbox.vue';
+	import CRadioGroup from './components/RadioGroup.vue';
+	import CRadio from './components/Radio.vue';
 	import CRatingScale from './components/RatingScale.vue';
 	import CToggle from './components/Toggle.vue';
 
-	import CCheckableGroup from './components/CheckableGroup.vue';
 	import CSignature from './components/Signature.vue';
 	import CUpload from './components/Upload.vue';
 	import CSaveResumeDialog from './components/SaveResumeDialog.vue';
@@ -328,6 +322,10 @@
 
 			CToggle,
 			CCheckableGroup,
+			CCheckboxGroup,
+			CCheckbox,
+			CRadioGroup,
+			CRadio,
 			CRatingScale,
 
 			CSignature,

@@ -1,11 +1,11 @@
 <template>
 	<div :class="[
-		`c-field`,
+		'c-field',
 		error ? 'c-error' : '',
 		required ? 'c-required' : ''
 		]"
 	 	:is="this.$parent.$parent.$parent.$parent.currentType && this.$parent.$parent.$parent.$parent.currentType === 'c-repeating-table' ? 'td' : 'div'"
-		 ref="field"
+		ref="field"
 	>
 		<label class="c-label" v-if="fieldLabel && this.$parent.$parent.$parent.$parent.currentType !== 'c-repeating-table' ">{{fieldLabel}}</label>
 		<slot></slot>
@@ -16,7 +16,7 @@
 
 <script>
 import { VueModel } from "../imports";
-import {EventBus} from './../event-bus.js';
+import {EventBus} from "./../event-bus.js";
 
 export default {
   name: "c-field",

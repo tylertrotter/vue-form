@@ -1,4 +1,4 @@
-import { debouncedResize } from './debounce.js';
+import { debouncedResize } from "./debounce.js";
 
 export const containerQuery = {
 	data(){
@@ -23,7 +23,7 @@ export const containerQuery = {
 				const field = findField(this);
 				if(field){
 					const fieldStyle = window.getComputedStyle(field);
-					const fieldPadding = parseInt(fieldStyle.getPropertyValue('padding-left'), 10) + parseInt(fieldStyle.getPropertyValue('padding-right'), 10);
+					const fieldPadding = parseInt(fieldStyle.getPropertyValue("padding-left"), 10) + parseInt(fieldStyle.getPropertyValue("padding-right"), 10);
 					let fieldWidth = field.clientWidth - fieldPadding;
 
 					if( componentWidth > fieldWidth){

@@ -1,18 +1,20 @@
 <template>
-	<el-radio v-model="radio" :label="label" @change="handleChange">{{label}}</el-radio>
+	<el-radio :label="label" @change="handleChange">{{label}}</el-radio>
 </template>
 
 <script>
-	import { Vue } from "../imports";
-	import { Radio, RadioGroup } from 'element-ui';
+	import { VueModel, Vue } from "../imports";
+	import { Radio, RadioGroup } from "element-ui";
 	Vue.use(Radio);
 	Vue.use(RadioGroup);
 
 	export default {
-		name: 'c-radio',
+		name: "c-radio",
+		mixins: [VueModel.mixins.SourceConsumer],
 		data () {
       return {
-        radio: this.value
+				radio: this.value,
+				// value: this.value
       };
 		},
 		// temporary - to make it work
@@ -21,18 +23,18 @@
 		},
 		methods: {
 			handleChange(value, ev) {
-				this.$emit('change', value, ev);
+				this.$emit("change", value, ev);
 				// temporary - to make it work
 				this.$source.value = value;
 			}
 		},
 		model: {
-			prop: 'value',
-			event: 'change'
+			prop: "value",
+			event: "change"
 		},
 		props: [
-			'name',
-			'label'
+			"name",
+			"label"
 		]
   };
 </script>

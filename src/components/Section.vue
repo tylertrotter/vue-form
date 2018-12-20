@@ -8,14 +8,14 @@
 </template>
 
 <script>
-	import CRow from './Row.vue';
+	import CRow from "./Row.vue";
 
 	export default {
-		name: 'c-section',
+		name: "c-section",
 		components: { CRow },
 		data(){
 			return {
-				containerIsTable: this.$parent.$parent.currentType === 'c-repeating-table'
+				containerIsTable: this.$parent.$parent.currentType === "c-repeating-table"
 			}
 		}
 	}

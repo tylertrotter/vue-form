@@ -1,22 +1,22 @@
 <template>
 	<div>
-		<div v-if="isReadonly" class="c-readonly">{{value || '&nbsp;'}}</div>
+		<div v-if="isReadonly" class="c-readonly">{{value || "&nbsp;"}}</div>
 		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" :placeholder="placeholder" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
 	</div>
 </template>
 
 <script>
 	import { VueModel, Vue } from "../imports";
-	import { Input } from 'element-ui';
+	import { Input } from "element-ui";
 	Vue.use(Input);
 
 	export default {
-		name: 'c-input',
+		name: "c-input",
 		mixins: [VueModel.mixins.SourceConsumer],
-		props: ['type', 'text', 'mask', 'placeholder'],
+		props: ["type", "text", "mask", "placeholder"],
 		model: {
-			prop: 'text',
-			event: 'change'
+			prop: "text",
+			event: "change"
 		},
 		data: function() {
 			return {

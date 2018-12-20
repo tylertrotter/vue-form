@@ -10,17 +10,17 @@
 
 <script>
 	import { VueModel } from "../imports";
-	import CButton from './Button.vue';
-	import IEx from './../assets/ex.svg';
-	import CSection from './Section.vue';
+	import CButton from "./Button.vue";
+	import IEx from "./../assets/ex.svg";
+	import CSection from "./Section.vue";
 
 	export default {
-		name: 'c-repeating-section',
+		name: "c-repeating-section",
 		components: { CButton, IEx, CSection },
 		mixins: [VueModel.mixins.SourceProvider],
 		data(){
 			return {
-				containerIsTable: this.$parent.$parent.currentType === 'c-repeating-table'
+				containerIsTable: this.$parent.$parent.currentType === "c-repeating-table"
 			}
 		},
 		methods: {

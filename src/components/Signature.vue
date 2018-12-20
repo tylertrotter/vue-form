@@ -10,12 +10,12 @@
 </template>
 
 <script>
-	import VueSignaturePad from 'vue-signature-pad';
-	import CButton from './Button.vue';
-	import IEx from './../assets/ex.svg';
+	import VueSignaturePad from "vue-signature-pad";
+	import CButton from "./Button.vue";
+	import IEx from "./../assets/ex.svg";
 
 	export default {
-		name: 'c-signature',
+		name: "c-signature",
 		components: { VueSignaturePad, CButton, IEx },
 		data() {
 			return {
@@ -48,7 +48,7 @@
 			});
 
 			function resizeCanvas() {
-				const canvas = sigEl.querySelector('canvas');
+				const canvas = sigEl.querySelector("canvas");
 				const ratio =  Math.max(window.devicePixelRatio || 1, 1);
 				canvas.width = canvas.offsetWidth * ratio;
 				canvas.height = canvas.offsetHeight * ratio;

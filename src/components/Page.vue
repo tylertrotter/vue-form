@@ -9,10 +9,11 @@
 
 <script>
 
-import {EventBus} from './../event-bus.js';
-import CButtonSection from './ButtonSection'
+import {EventBus} from "./../event-bus.js";
+import CButtonSection from "./ButtonSection";
+
 export default {
-	name: 'c-page',
+	name: "c-page",
 	props: {
 		page: Number
 	},
@@ -23,7 +24,7 @@ export default {
 		}
 	},
 	mounted() {
-		EventBus.$on('page-number-updated', newPageNum => {
+		EventBus.$on("page-number-updated", newPageNum => {
 			this.currentPage = newPageNum;
 		});
 	},
@@ -34,8 +35,8 @@ export default {
 	},
 	methods: {
 		transitionDone() {
-			this.$parent.$refs.form.style.height = 'initial';
-			this.$parent.$refs.form.style.overflow = 'initial';
+			this.$parent.$refs.form.style.height = "initial";
+			this.$parent.$refs.form.style.overflow = "initial";
 		}
 	}
 };

@@ -20,16 +20,16 @@
 </template>
 
 <script>
-	import CDialog from './Dialog.vue';
-	import CRow from './Row.vue';
-	import CField from './Field.vue';
-	import CInput from './Input.vue';
-	import CButton from './Button.vue';
+	import CDialog from "./Dialog.vue";
+	import CRow from "./Row.vue";
+	import CField from "./Field.vue";
+	import CInput from "./Input.vue";
+	import CButton from "./Button.vue";
 
 	export default {
-		name: 'c-save-resume-dialog',
+		name: "c-save-resume-dialog",
 		components: { CDialog, CRow, CButton, CField, CInput },
-		props: ['title']
+		props: ["title"]
 	}
 </script>
 

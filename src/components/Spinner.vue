@@ -4,11 +4,11 @@
 
 <script>
 import { VueModel, Vue } from "../imports";
-import { InputNumber } from 'element-ui';
+import { InputNumber } from "element-ui";
 Vue.use(InputNumber);
 
 export default {
-	name: 'c-spinner',
+	name: "c-spinner",
 	mixins: [VueModel.mixins.SourceConsumer],
 	data(){
 		return {
@@ -17,27 +17,27 @@ export default {
 	},
 	methods: {
 		handleChange(value, ev) {
-			this.$emit('change', value, ev);
+			this.$emit("change", value, ev);
 			// temporary - to make it work
 			this.$source.value = value;
 		}
 	},
 	props: [
-		'min',
-		'max',
-		'step'
+		"min",
+		"max",
+		"step"
 	]
 };
 </script>
 
 <style lang="scss">
-	@import '../sass/theme-chalk-master/src/input-number';
+	@import "../sass/theme-chalk-master/src/input-number";
 
 	.el-icon-minus:before{
-		content: '-';
+		content: "-";
 	}
 
 	.el-icon-plus:before{
-		content: '+';
+		content: "+";
 	}
 </style>

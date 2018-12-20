@@ -12,12 +12,11 @@
 
 	import CRepeatingTable from "./RepeatingTable.vue";
 	import CButton from "./Button.vue";
-	import IPlus from './../assets/plus.svg';
+	import IPlus from "./../assets/plus.svg";
 
 	export default {
 		name: "c-repeating-data",
-		props: ['isTable'],
-
+		props: ["isTable"],
 		components: {
 			CRepeatingTable,
 			CButton,
@@ -25,7 +24,7 @@
 		},
 		data() {
 			return {
-				currentType: this.$props.isTable ? 'c-repeating-table' : 'div'
+				currentType: this.$props.isTable ? "c-repeating-table" : "div"
 			}
 		}
 	}

@@ -7,11 +7,11 @@
 
 <script>
 	import { Vue } from "./../imports";
-	import { Button } from 'element-ui';
+	import { Button } from "element-ui";
 	Vue.use(Button);
 
 	export default {
-		name: 'c-button'
+		name: "c-button"
   };
 </script>
 

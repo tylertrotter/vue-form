@@ -1,20 +1,20 @@
 <template>
-	<el-checkbox v-model="inputModel" @focus="handleFocus" @blur="handleBlur" @change="handleChange" >{{inputLabel}}</el-checkbox>
+	<el-checkbox :label="inputLabel" @focus="handleFocus" @blur="handleBlur" @change="handleChange" >{{inputLabel}}</el-checkbox>
 </template>
 
 <script>
 import { Vue, VueModel } from "../imports";
-import { Checkbox, CheckboxGroup } from 'element-ui';
+import { Checkbox, CheckboxGroup } from "element-ui";
 Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
 
 export default {
-	name: 'c-checkbox',
+	name: "c-checkbox",
 	mixins: [VueModel.mixins.SourceConsumer],
-	props: ['label', 'checked'],
+	props: ["label", "checked"],
 	model: {
-		prop: 'checked',
-		event: 'change'
+		prop: "checked",
+		event: "change"
 	},
 	data: function() {
 		return {
@@ -70,10 +70,10 @@ export default {
 		handleChange(value, ev) {
 			// NOTE: Could do some validation in here?
 			// console.log("Received 'c-checkbox' change event");
-			this.$emit('change', value, ev);
-			if (this.$source) {
-				this.$source.value = value;
-			}
+			// this.$emit('change', value, ev);
+			// if (this.$source) {
+			// 	this.$source.value = value;
+			// }
 		}
 	}
 };

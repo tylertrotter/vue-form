@@ -21,11 +21,11 @@
 
 <script>
 import { VueModel, Vue } from "../imports";
-import { Select } from 'element-ui';
+import { Select } from "element-ui";
 Vue.use(Select);
 
 export default {
-	name: 'c-select',
+	name: "c-select",
 	mixins: [VueModel.mixins.SourceConsumer],
 	computed: {
 		selectedValue: {
@@ -44,7 +44,7 @@ export default {
 	},
 	methods: {
 		handleChange(value, ev) {
-			this.$emit('change', value, ev);
+			this.$emit("change", value, ev);
 
 			// temporary - to make it work
 			this.$source.value = value;
@@ -52,30 +52,16 @@ export default {
 		handleNativeChange(ev) {
 			let value = ev.target.value;
 
-			this.$emit('change', value, ev);
+			this.$emit("change", value, ev);
 
 			// temporary - to make it work
 			this.$source.value = value;
 		}
 	},
 	model: {
-		prop: 'value',
-		event: 'change'
+		prop: "value",
+		event: "change"
 	},
-	props: ['label', 'value', 'native']
+	props: ["label", "value", "native"]
 };
 </script>
-
-<style scoped lang="scss">
-	// @import '../sass/theme-chalk-master/src/select';
-
-	.el-input {
-		// @include input-spacing;
-
-		input {
-			border: 0;
-			background: transparent;
-		}
-	}
-</style>
-
