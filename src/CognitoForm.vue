@@ -83,8 +83,21 @@
 				<!-- number, website, currency fields -->
 
 				<c-row>
-					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-22">
-						<c-rating-scale />
+					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-24">
+						<c-rating-scale
+							:questions="[
+								'How happy are you with Vue.js',
+								'How do you like SFCs?',
+								'How you liking this rating scale component?'
+							]"
+							:answers="[
+								'Very Unsatisfied',
+								'Unsatisfied',
+								'Neutral',
+								'Satisfied',
+								'Very Satisfied'
+      				]"
+						/>
 					</c-field>
 				</c-row>
 
@@ -439,6 +452,8 @@
 		margin: 0 auto;
 		color: $form-text;
 		font-family: $typeface;
+		font-size: $font-size;
+		line-height: 1.4;
 	}
 
 	.c-body {
@@ -450,17 +465,21 @@
 		transition: all .5s;
 	}
 
-	.cg:not([data-width~="700"]) .c-body {
-		margin-left: $unitless-gutter * .2vw;
-		margin-right: $unitless-gutter * .2vw;
+	.cg:not([data-width~="900"]) {
+		font-size: $font-size - 1px;
+	}
+
+	.cg:not([data-width~="900"]) .c-body {
+		margin-left: $unitless-gutter * .15vw;
+		margin-right: $unitless-gutter * .15vw;
 	}
 
 	.c-wrapper {
 		padding: $form-margins/2 $form-margins;
 	}
 
-	.cg:not([data-width~="700"]) .c-wrapper {
-		padding: $form-margins/2 $unitless-gutter * .2vw;
+	.cg:not([data-width~="900"]) .c-wrapper {
+		padding: $form-margins/2 $unitless-gutter * .15vw;
 	}
 
 	.c-wrapper:first-child {
