@@ -83,3 +83,8 @@
 		background: rgba(lighten($text-color, 5), .1);
 	}
 }
+
+@mixin label{
+	font-family: $label-typeface;
+	margin-bottom: $gutter/4;
+}

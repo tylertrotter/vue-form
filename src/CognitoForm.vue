@@ -104,7 +104,7 @@
 				<!-- Price and Content -->
 
 				<c-row>
-					<c-section source="Section1" class="c-col-24">
+					<c-section source="Section1" heading="Section" class="c-col-24">
 						<c-field source="SectionText" class="c-col-12">
 							<c-input type="text" />
 						</c-field>
@@ -113,8 +113,9 @@
 
 				<c-row>
 					<c-field class="c-col-24">
-						<c-repeating-data>
-							<c-repeating-section>
+						<c-repeating-data heading="Repeating Section">
+
+							<c-repeating-section v-for="i in 1" :key="i" :index="i">
 								<c-row>
 									<c-field source="Name1" label="Your Name" class="c-col-8">
 										<c-input type="text" />
@@ -132,16 +133,6 @@
 									</c-row>
 							</c-repeating-section>
 
-							<c-repeating-section>
-								<c-row>
-									<c-field source="Name1" label="Your Name" class="c-col-8">
-										<c-input type="text" />
-									</c-field>
-									<c-field source="Name1" label="Your Email" class="c-col-8">
-										<c-select />
-									</c-field>
-								</c-row>
-							</c-repeating-section>
 						</c-repeating-data>
 					</c-field>
 				</c-row>
@@ -165,7 +156,7 @@
 
 				<c-row>
 					<c-field class="c-col-24">
-						<c-repeating-data :is-table="true">
+						<c-repeating-data :is-table="true" heading="Repeating Table">
 
 							<template slot="thead">
 								<th>Your Name</th>
@@ -173,24 +164,10 @@
 								<th>Your Phone Number</th>
 							</template>
 
-							<c-repeating-section>
+							<c-repeating-section v-for="i in 1" :key="i" :index="i">
 								<c-row>
 									<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
 										<c-input type="text"/>
-									</c-field>
-									<c-field source="Name1" label="Your Email" class="c-col-8">
-										<c-select />
-									</c-field>
-									<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
-										<c-input type="text" />
-									</c-field>
-								</c-row>
-							</c-repeating-section>
-
-							<c-repeating-section>
-								<c-row>
-									<c-field source="Name1" readonly="true" value="John Doe" label="Your Name" class="c-col-8">
-										<c-input type="text" />
 									</c-field>
 									<c-field source="Name1" label="Your Email" class="c-col-8">
 										<c-select />
@@ -209,62 +186,10 @@
 
 			<c-page :page="2" :last="true">
 				<c-row>
-					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-12">
-						<c-rating-scale />
-					</c-field>
-					<c-field source="RatingScale3" required="true" label="Rating Scale" class="c-col-12">
-						<c-rating-scale />
-					</c-field>
-				</c-row>
-				<!--
-				<c-row>
-					<c-field source="DatePicker1" label="Element's Date Picker" error="使用农历!" class="c-col-6">
-						<c-date-picker />
-					</c-field>
-					<c-field source="Select1" label="Element's Select" class="c-col-12">
-						<c-select />
-					</c-field>
 					<c-field source="Spinner1" title="Spinner" class="c-col-6">
-						<c-input />
+						<c-spinner />
 					</c-field>
 				</c-row>
-				<c-row>
-					<c-field source="Name3" title="Your Name" class="c-col-18">
-						<c-input type="text" />
-					</c-field>
-					<c-field source="Toggle1" required="true" label="Toggle" class="c-col-6">
-						<c-toggle active-text="Most Absolutely" inactive-text="No" />
-					</c-field>
-				</c-row>
-				<c-row>
-					<c-section class="c-col-24">
-						<c-row>
-							<c-field label="Your Email" class="c-col-6">
-								<c-input type="email" />
-							</c-field>
-							<c-field required="true" label="Your Email" class="c-col-18">
-								<c-input type="email" />
-							</c-field>
-						</c-row>
-					</c-section>
-				</c-row>
-				<c-row>
-					<c-field source="Checkbox2" label="Do you agree?" class="c-col-6">
-						<c-checkbox />
-					</c-field>
-					<c-field source="Email4" label="Your Email" error="Something is wrong" class="c-col-6">
-						<c-input type="email" />
-					</c-field>
-					<c-field source="Name1" label="Your Name" class="c-col-12">
-						<c-input type="text" />
-					</c-field>
-				</c-row>
-				<c-row>
-					<c-field source="Name2" label="Your Name" class="c-col-12">
-						<c-input type="text" />
-					</c-field>
-				</c-row>
-				-->
 			</c-page>
 
 			<c-save-resume-dialog />

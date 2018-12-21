@@ -2,7 +2,7 @@
 	<div :class="containerIsTable ? '' : 'c-section c-section--repeating'" :is="containerIsTable ? 'tbody' : 'div'">
 		<div v-if="!containerIsTable">
 			<c-button class="c-remove"><i-ex /></c-button>
-			<h2>Section Title</h2>
+			<h2>{{this.$parent.$props.heading}} {{index}}</h2>
 		</div>
 		<slot></slot>
 	</div>
@@ -12,12 +12,12 @@
 	import { VueModel } from "../imports";
 	import CButton from "./Button.vue";
 	import IEx from "./../assets/ex.svg";
-	import CSection from "./Section.vue";
 
 	export default {
 		name: "c-repeating-section",
-		components: { CButton, IEx, CSection },
+		components: { CButton, IEx },
 		mixins: [VueModel.mixins.SourceProvider],
+		props: ["index"],
 		data(){
 			return {
 				containerIsTable: this.$parent.$parent.currentType === "c-repeating-table"

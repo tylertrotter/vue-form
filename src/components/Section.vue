@@ -1,7 +1,7 @@
 <template>
 	<div class="c-region">
 		<div class="c-section">
-			<h2>Section Title</h2>
+			<h2>{{heading}}</h2>
 			<slot></slot>
 		</div>
 	</div>
@@ -12,6 +12,7 @@
 
 	export default {
 		name: "c-section",
+		props: ["heading"],
 		components: { CRow },
 		data(){
 			return {

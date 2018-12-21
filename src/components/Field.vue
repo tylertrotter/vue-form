@@ -38,8 +38,7 @@ export default {
 <style scoped lang="scss">
 	.c-label {
 		display: block;
-		font-family: $label-typeface;
-		margin-bottom: $gutter/4;
+		@include label;
 	}
 
 	.c-required .c-label:after {

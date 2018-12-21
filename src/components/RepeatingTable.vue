@@ -1,6 +1,7 @@
 <template>
 
 		<table class="c-repeating-table c-region">
+			<caption>{{this.$parent.$props.heading}}</caption>
 			<thead>
 				<th><!-- Corresponds to X buttons --></th>
 				<slot name="thead"></slot>
@@ -57,6 +58,11 @@
 	.c-repeating-table {
 		width: 100%;
 		border-spacing: $table-border-spacing;
+
+		caption {
+			@include label;
+			text-align: left;
+		}
 
 		.c-readonly {
 			@include input-appearance;

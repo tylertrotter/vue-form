@@ -1,7 +1,9 @@
 <template>
 	<keep-alive>
 		<component :is="currentType" class="c-repeating-data">
-			<template v-if="currentType === 'c-repeating-table'" slot="thead"><slot name="thead"></slot></template>
+			<template v-if="currentType === 'c-repeating-table'" slot="thead">
+				<slot name="thead"></slot>
+			</template>
 			<slot></slot>
 			<c-button v-if="currentType === 'div'" class="c-button--secondary c-repeating-data--add-button"><i-plus /> Add</c-button>
 		</component>
@@ -16,7 +18,7 @@
 
 	export default {
 		name: "c-repeating-data",
-		props: ["isTable"],
+		props: ["isTable", "heading"],
 		components: {
 			CRepeatingTable,
 			CButton,
