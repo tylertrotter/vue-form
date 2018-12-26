@@ -25,5 +25,5 @@
 </script>
 
 <style lang="scss">
-	@import "../sass/theme-chalk-master/src/time-picker";
+	// @import "../sass/theme-chalk-master/src/time-picker";
 </style>

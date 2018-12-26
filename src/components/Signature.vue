@@ -1,10 +1,10 @@
 <template>
-	<div class="c-signature" :class="{readonly: isReadonly}">
+	<div :class="$style.signature">
 		<!-- Need to get sass variables converted to JS so I can populate penColor (and for many other reasons) -->
-		<VueSignaturePad ref="signaturePad" :options="{ onEnd, penColor: 'black'}" />
-		<div class="c-signature-symbol">
+		<VueSignaturePad ref="signaturePad" :options="{ onEnd, penColor: myColor}" />
+		<div :class="$style.symbol">
 			<c-button v-if="hasMark" @click.native="clear"><i-ex /></c-button>
-			<span class="c-signature-empty-symbol" v-else>&times;</span>
+			<span :class="$style['empty-symbol']" v-else>&times;</span>
 		</div>
 	</div>
 </template>
@@ -21,6 +21,7 @@
 			return {
 				hasMark: null,
 				isReadonly: this.$parent.$attrs.readonly,
+				myColor: this.$style['form-text']
 			}
 		},
 		methods: {
@@ -55,18 +56,24 @@
 				canvas.getContext("2d").scale(ratio, ratio);
 			}
 		},
-
+		created(){
+			console.log(window.getComputedStyle(document.getElementById('c-form')).color);
+		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" module>
 	// z-index situation
 	// ------------------
 	// X button on top
 	// then canvas
 	// then signature line
 
-	.c-signature {
+	:export {
+		form-text: $form-text;
+	}
+
+	.signature {
 		position: relative;
 		height: 200px;
 		border-radius: $border-radius;
@@ -101,7 +108,7 @@
 		}
 	}
 
-	.c-signature-symbol {
+	.symbol {
 		position: absolute;
 		z-index: 2;
 		bottom: 40px;
@@ -112,7 +119,7 @@
 		}
 	}
 
-	.c-signature-empty-symbol {
+	.empty-symbol {
 			display: block;
 			font-size: 1.5em;
 			line-height: .6;

@@ -20,7 +20,7 @@ export function createModel() {
 
 						formType.addProperty("Name1", String, false, false, { label: 'Name' });
 
-						formType.addProperty("ChoiceSelect", String, false, false, { label: 'Choice Drop Down' });
+						formType.addProperty("ChoiceSelect", String, false, false, { label: 'Choice Drop Down', options: [{value: 'Option A', label: 'Option A'}, {value: 'Option B', label: 'Option B'}]});
 						formType.addProperty("ChoiceRadio", String, false, false, { label: 'Choice Radio Buttons' });
 
 						formType.addProperty("ChoiceCheckboxes", Object, false, false, { label: 'Choice Checkboxes' });

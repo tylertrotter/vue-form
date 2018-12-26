@@ -43,5 +43,5 @@ export default {
 </script>
 
 <style lang="scss">
-	@import "../sass/theme-chalk-master/src/switch";
+	// @import "../sass/theme-chalk-master/src/switch";
 </style>

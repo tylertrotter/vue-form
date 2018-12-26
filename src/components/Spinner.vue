@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss">
-	@import "../sass/theme-chalk-master/src/input-number";
+	// @import "../sass/theme-chalk-master/src/input-number";
 
 	.el-icon-minus:before{
 		content: "-";

@@ -5,7 +5,7 @@ $gutter: $unitless-gutter * 1px;
 $form-margins: $unitless-gutter * 1.5px;
 $small-text: .8em;
 
-$border-radius: 0;
+$border-radius: 10px;
 
 // Typeography
 $typeface: Arial;
@@ -37,7 +37,7 @@ $light: #eae6e1;
 
 // Specific Colors
 $form-bg: black;
-$form-text: white;
+$form-text: rgb(128, 255, 128);
 
 
 // Button Styles
@@ -57,9 +57,9 @@ $button-border-radius: $border-radius * .75 !default;
 $button-border-radius: 4px;
 
 // Field Style
-$input-font-size: 16px;
-$input-padding-v: $gutter/3;
-$input-padding-h: $gutter/4;
+$input-font-size: 34px;
+$input-padding-v: $gutter/2;
+$input-padding-h: $gutter/2;
 $input-radius: $border-radius*.75;
 $input-bg: $form-bg;
 $input-color: $form-text;
@@ -71,6 +71,9 @@ $underline: false;
 $upload-border-style: dashed;
 
 $table-border-spacing: 0;
+
+// SVG
+$icon-weight: 1;
 
 // Animation
 $page-transition-duration: 1s;

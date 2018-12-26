@@ -25,7 +25,7 @@
 
 				<c-row>
 					<c-field source="ChoiceSelect" class="c-col-12">
-						<c-select>sadfasdf</c-select>
+						<c-select />
 					</c-field>
 
 					<c-field source="ChoiceRadio" class="c-col-12">
@@ -66,9 +66,9 @@
 					<c-field source="Toggle1" class="c-col-12">
 						<c-toggle active-text="Yes" inactive-text="No" />
 					</c-field>
-					<c-field source="DatePicker1" class="c-col-12">
+					<!-- <c-field source="DatePicker1" class="c-col-12">
 						<c-date-picker />
-					</c-field>
+					</c-field> -->
 				</c-row>
 
 				<c-row>
@@ -214,7 +214,7 @@
 	import CSpinner from './components/Spinner.vue';
 
 	import CSelect from './components/Select.vue';
-	import CDatePicker from './components/DatePicker.vue';
+	// import CDatePicker from './components/DatePicker.vue';
 	import CTimePicker from './components/TimePicker.vue';
 
 	import CCheckableGroup from './components/CheckableGroup.vue';
@@ -255,7 +255,7 @@
 			CSpinner,
 
 			CSelect,
-			CDatePicker,
+			// CDatePicker,
 			CTimePicker,
 
 			CToggle,
@@ -370,9 +370,10 @@
 		padding: $gutter/2;
 	}
 
-	.cg {
+	.cg,
+	.el-popper {
 		background: $form-bg;
-		background-image: url('https://images.unsplash.com/photo-1545179920-16c9617c2b60?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80');
+		// background-image: url('https://images.unsplash.com/photo-1545179920-16c9617c2b60?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80');
 		max-width: $form-width;
 		margin: 0 auto;
 		color: $form-text;

@@ -8,7 +8,7 @@
 				{{ item.displayValue }}
 			</option>
 		</select>
-		<el-select v-else v-model="selectedValue" @change="handleChange">
+		<el-select v-else v-model="selectedValue" @change="handleChange" allow-create filterable>
 			<el-option
 				v-for="item in options"
 				:key="item.value"
@@ -39,7 +39,7 @@ export default {
 		},
 		options: function() {
 			// TODO: Expand on this logic...
-			return this.$source.options;
+			return [{value: 'Option A', label: 'Option A'}, {value: 'Option B', label: 'Option B'}, {value: 'Option C', label: 'Option C'}]//this.$source.options;
 		}
 	},
 	methods: {
@@ -65,3 +65,40 @@ export default {
 	props: ["label", "value", "native"]
 };
 </script>
+
+<style lang="scss">
+
+	@import "../sass/theme-chalk-master/src/select";
+
+	.el-select .is-focus.el-input {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	.el-input__suffix {
+    position: absolute;
+    height: 100%;
+    right: $input-padding-h;
+    top: 0;
+    pointer-events: none;
+}
+
+	.el-input__suffix i {
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: center center;
+		width: $input-font-size;
+		display: inline-block;
+	}
+
+	.el-select .el-input .el-select__caret {
+		transition: all .3s;
+	}
+	.el-select .el-input .el-select__caret.is-reverse {
+		transform: scaleY(-1);
+	}
+
+	.el-select .el-input i {
+		@include chevron();
+	}
+</style>

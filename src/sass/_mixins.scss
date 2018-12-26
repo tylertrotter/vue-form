@@ -88,3 +88,7 @@
 	font-family: $label-typeface;
 	margin-bottom: $gutter/4;
 }
+
+@mixin chevron($color: $form-text, $direction: 0deg) {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='#{$input-font-size}' viewBox='0 0 12 12'%3E%3Cpolyline points='1 4 6 9 11 4' style='fill:transparent;stroke:#{$color};stroke-width:#{$icon-weight};transform-origin: center; transform: rotate(#{$direction});'/%3E%3C/svg%3E");
+}

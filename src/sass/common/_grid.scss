@@ -1,6 +1,6 @@
 @for $i from 1 through 24{
 	.c-col-#{$i} {
-		flex: 2 1 #{400 * $i/24}px;
+		flex: 2 1 #{400 * ($i/24)}px;
 		width: #{$i/24 * 100%};
 	}
 }
