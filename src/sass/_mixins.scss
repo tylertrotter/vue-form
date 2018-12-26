@@ -68,7 +68,7 @@
   padding: $gutter/4 0;
 }
 
-@mixin bg-color($text-color){
+@mixin bg-color($text-color: $form-text){
 	@if color-is-light($text-color){
 		background: rgba(darken($text-color, 5), .1);
 	}@else {
@@ -76,7 +76,7 @@
 	}
 }
 
-@mixin bg-color-alt($text-color){
+@mixin bg-color-alt($text-color: $form-text){
 	@if color-is-light($text-color){
 		background: rgba(darken($text-color, 10), .15);
 	}@else {

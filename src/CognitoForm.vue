@@ -66,9 +66,9 @@
 					<c-field source="Toggle1" class="c-col-12">
 						<c-toggle active-text="Yes" inactive-text="No" />
 					</c-field>
-					<!-- <c-field source="DatePicker1" class="c-col-12">
+					<c-field source="DatePicker1" class="c-col-12">
 						<c-date-picker />
-					</c-field> -->
+					</c-field>
 				</c-row>
 
 				<c-row>
@@ -214,7 +214,7 @@
 	import CSpinner from './components/Spinner.vue';
 
 	import CSelect from './components/Select.vue';
-	// import CDatePicker from './components/DatePicker.vue';
+	import CDatePicker from './components/DatePicker.vue';
 	import CTimePicker from './components/TimePicker.vue';
 
 	import CCheckableGroup from './components/CheckableGroup.vue';
@@ -255,7 +255,7 @@
 			CSpinner,
 
 			CSelect,
-			// CDatePicker,
+			CDatePicker,
 			CTimePicker,
 
 			CToggle,

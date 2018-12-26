@@ -5,7 +5,8 @@ $gutter: $unitless-gutter * 1px;
 $form-margins: $unitless-gutter * 1.5px;
 $small-text: .8em;
 
-$border-radius: 10px;
+$border-radius: 0;
+$circles: true;
 
 // Typeography
 $typeface: Arial;
@@ -16,18 +17,18 @@ $button-typeface: Arial;
 $font-size: 16px;
 
 // General Colors
-$negative: #D85427;
+$negative: #A3340D;
 $negative-reverse: white;
 $positive: green;
-$positive-reverse: white;
-$highlight: #D85427;
-$highlight-reverse: white;
+$positive-reverse: #698215;
+$highlight: #AED136;
+$highlight-reverse: black;
 $primary: #D85427;
 $primary-reverse: white;
 
 
 // Element's Primary Color
-$--color-primary: $primary;
+$--color-primary: $highlight;
 
 
 
@@ -36,8 +37,8 @@ $warm: #352317;
 $light: #eae6e1;
 
 // Specific Colors
-$form-bg: black;
-$form-text: rgb(128, 255, 128);
+$form-bg: white;
+$form-text: $midnight;
 
 
 // Button Styles
@@ -57,16 +58,20 @@ $button-border-radius: $border-radius * .75 !default;
 $button-border-radius: 4px;
 
 // Field Style
-$input-font-size: 34px;
+$input-font-size: 16px;
 $input-padding-v: $gutter/2;
 $input-padding-h: $gutter/2;
 $input-radius: $border-radius*.75;
 $input-bg: $form-bg;
 $input-color: $form-text;
-$input-border-color: rgba($form-text, .3);
-$input-border-width: 1px;
+$input-border-color: rgba($form-text, .1);
+$input-border-width: 3px;
 $input-border-style: solid;
 $underline: false;
+
+// Toggle
+// $--switch-width: $input-font-size * 2;
+// $--switch-height: $input-font-size;
 
 $upload-border-style: dashed;
 
