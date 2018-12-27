@@ -32,7 +32,7 @@
 
 	label {
 		display: block;
-		padding-left: 1.3em;
+		// padding-left: 1.3em;
 		@include break-word;
 	}
 
@@ -46,3 +46,51 @@
 		}
 	}
 }
+
+// Fanciness
+	[type="checkbox"],
+	[type="radio"]{
+		display: none;
+	}
+
+	.el-checkbox__input,
+	.el-radio__input {
+		position: relative;
+		margin-right: .5em;
+	}
+
+	.el-checkbox__inner,
+	.el-radio__inner {
+		display: inline-block;
+		width: $input-font-size + 2;
+		height: $input-font-size + 2;
+		background-color: $form-bg;
+		border: $input-border-width/2 solid $input-border-color;
+		vertical-align: text-top;
+		transition: all .2s;
+	}
+
+	.is-checked .el-checkbox__inner{
+		background-color: $highlight;
+		border-color: $highlight;
+	}
+
+	.el-checkbox__inner {
+		border-radius: $checkbox-radius;
+		background-size: 0%;
+	}
+
+	.is-checked .el-checkbox__inner {
+		@include check($form-bg);
+		background-size: 125%;
+	}
+
+	.el-radio__inner {
+		border-radius: 50%;
+		position: relative;
+
+	}
+
+	.is-checked .el-radio__inner {
+		border: .4em solid $highlight;
+	}

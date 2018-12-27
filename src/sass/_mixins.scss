@@ -70,17 +70,17 @@
 
 @mixin bg-color($text-color: $form-text){
 	@if color-is-light($text-color){
-		background: rgba(darken($text-color, 5), .1);
+		background-color: rgba(darken($text-color, 5), .1);
 	}@else {
-		background: rgba(lighten($text-color, 5), .05);
+		background-color: rgba(lighten($text-color, 5), .05);
 	}
 }
 
 @mixin bg-color-alt($text-color: $form-text){
 	@if color-is-light($text-color){
-		background: rgba(darken($text-color, 10), .15);
+		background-color: rgba(darken($text-color, 10), .15);
 	}@else {
-		background: rgba(lighten($text-color, 5), .1);
+		background-color: rgba(lighten($text-color, 5), .1);
 	}
 }
 
@@ -89,6 +89,18 @@
 	margin-bottom: $gutter/4;
 }
 
+%icon-bg{
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
 @mixin chevron($color: $form-text, $direction: 0deg) {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='#{$input-font-size}' viewBox='0 0 12 12'%3E%3Cpolyline points='1 4 6 9 11 4' style='fill:transparent;stroke:#{$color};stroke-width:#{$icon-weight};transform-origin: center; transform: rotate(#{$direction});'/%3E%3C/svg%3E");
+	@extend %icon-bg;
+}
+
+@mixin check($color: $highlight, $bg: transparent) {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='#{$input-font-size}' viewBox='0 0 12 12'%3E%%3Ccircle cx='6' cy='6' r='5' fill='#{$bg}' /%3E%3Cpolyline points='3 6 5 8 9 4' stroke='#{$color}' stroke-width='#{$icon-weight*1.2}' fill='none'/%3E%3C/svg%3E");
+	@extend %icon-bg;
 }

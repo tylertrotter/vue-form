@@ -85,8 +85,7 @@ export default {
 
 	.el-input__suffix i {
 		height: 100%;
-		background-repeat: no-repeat;
-		background-position: center center;
+
 		width: $input-font-size;
 		display: inline-block;
 	}

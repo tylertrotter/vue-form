@@ -186,7 +186,7 @@
 
 			<c-page :page="2" :last="true">
 				<c-row>
-					<c-field source="Spinner1" title="Spinner" class="c-col-6">
+					<c-field source="Spinner1" title="Spinner" class="c-col-12">
 						<c-spinner />
 					</c-field>
 				</c-row>
@@ -367,7 +367,7 @@
 	div[class*='c-col-'],
 	.c-container,
 	.c-padding {
-		padding: $gutter/2;
+		padding: $gutter/2 ($gutter/2 - $gutter/4);
 	}
 
 	.cg,
@@ -414,5 +414,13 @@
 
 	.c-wrapper:last-child {
 		padding-bottom: $form-margins;
+	}
+
+	.el-icon-close:before {
+		display: block;
+		line-height: 1;
+		content: '\00d7';
+		color: $negative;
+		font-size: 1.4em;
 	}
 </style>

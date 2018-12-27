@@ -1,12 +1,12 @@
 @import "mixins/mixins";
 @import "common/var";
-@import "input";
+// @import "input";
 
 @include b(input-number) {
   position: relative;
   display: inline-block;
-  width: 180px;
-  line-height: #{$--input-height - 2};
+  // width: 180px;
+  // line-height: #{$--input-height - 2};
 
   .el-input {
     display: block;
@@ -22,14 +22,21 @@
   @include e((increase, decrease)) {
     position: absolute;
     z-index: 1;
-    top: 1px;
+		top: 0;
+		bottom: 0;
+		// border: $input-border-width solid $input-border-color;
+		margin: $input-border-width;
     width: $--input-height;
-    height: auto;
+    // height: 100%;
     text-align: center;
-    background: $--background-color-base;
-    color: $--color-text-regular;
+    @include bg-color();
     cursor: pointer;
-    font-size: 13px;
+		font-size: 1.5em;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
+
 
     &:hover {
       color: $--color-primary;
@@ -46,15 +53,15 @@
   }
 
   @include e(increase) {
-    right: 1px;
-    border-radius: 0 $--border-radius-base $--border-radius-base 0;
-    border-left: $--border-base;
+    right: 0;
+    border-radius: 0 #{$input-radius - 2} #{$input-radius - 2} 0;
+    // border-left: 0;
   }
 
   @include e(decrease) {
-    left: 1px;
-    border-radius: $--border-radius-base 0 0 $--border-radius-base;
-    border-right: $--border-base;
+    left: 0;
+    border-radius: #{$input-radius - 2} 0 0 #{$input-radius - 2};
+    // border-right: $input-border-width solid;
   }
 
   @include when(disabled) {

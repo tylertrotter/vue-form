@@ -1,6 +1,25 @@
+// Answer 6 Questions to customize a default theme for all your forms.
+// Or spend more time on editing the nitty-gritty details.
+
+// Pick your background color.
+
+// Pick your text color.
+
+// Pick a highlight color.
+
+// Pick your font.
+
+// Pick your text size.  (slider)
+
+// Do you want rounded corners? (slider)
+
+// [save] - [save and refine further]
+
+
+
 // Structure
 $form-width: 900px;
-$unitless-gutter: 30;
+$unitless-gutter: 35;
 $gutter: $unitless-gutter * 1px;
 $form-margins: $unitless-gutter * 1.5px;
 $small-text: .8em;
@@ -17,7 +36,7 @@ $button-typeface: Arial;
 $font-size: 16px;
 
 // General Colors
-$negative: #A3340D;
+$negative: rgb(235, 86, 81);//#A3340D;
 $negative-reverse: white;
 $positive: green;
 $positive-reverse: #698215;
@@ -40,6 +59,9 @@ $light: #eae6e1;
 $form-bg: white;
 $form-text: $midnight;
 
+// $form-bg: $midnight;
+// $form-text: white;
+
 
 // Button Styles
 $btn-primary-bg: $primary;
@@ -59,26 +81,29 @@ $button-border-radius: 4px;
 
 // Field Style
 $input-font-size: 16px;
-$input-padding-v: $gutter/2;
-$input-padding-h: $gutter/2;
+$input-padding-v: $gutter/3;
+$input-padding-h: $gutter/3;
 $input-radius: $border-radius*.75;
 $input-bg: $form-bg;
 $input-color: $form-text;
-$input-border-color: rgba($form-text, .1);
+$input-border-color: #d0dbdb;
 $input-border-width: 3px;
 $input-border-style: solid;
 $underline: false;
 
-// Toggle
-// $--switch-width: $input-font-size * 2;
-// $--switch-height: $input-font-size;
+// @if ($input-radius < 10px){
+	$checkbox-radius: $input-radius / 2;
+// }@else{
+	// $checkbox-radius: 6px;
+// }
+
 
 $upload-border-style: dashed;
 
 $table-border-spacing: 0;
 
 // SVG
-$icon-weight: 1;
+$icon-weight: 1.5;
 
 // Animation
 $page-transition-duration: 1s;
