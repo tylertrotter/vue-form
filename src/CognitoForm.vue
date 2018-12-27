@@ -423,4 +423,8 @@
 		color: $negative;
 		font-size: 1.4em;
 	}
+
+	:focus {
+		outline: 0;
+	}
 </style>

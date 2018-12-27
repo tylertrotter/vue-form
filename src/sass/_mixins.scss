@@ -44,6 +44,12 @@
 	background: $input-bg;
 	border-color: $input-border-color;
 	@include input-border;
+	transition: border-color .2s;
+
+	&:focus {
+		border-color: $highlight;
+		background: rgba($highlight, .1);
+	}
 }
 
 @mixin disabled-input {
@@ -86,7 +92,8 @@
 
 @mixin label{
 	font-family: $label-typeface;
-	margin-bottom: $gutter/4;
+	margin-bottom: $gutter/6;
+	font-weight: bold;
 }
 
 %icon-bg{

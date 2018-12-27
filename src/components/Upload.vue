@@ -10,7 +10,7 @@
 		action="https://jsonplaceholder.typicode.com/posts/"
 		multiple>
 		<i-upload />
-		<div><c-button>Upload</c-button> or drop files here</div>
+		<div><c-button tabindex="-1">Upload</c-button> or drop files here</div>
 		<div class="c-helptext" slot="tip">jpg/png files with a size less than 500kb</div>
 	</el-upload>
 </template>

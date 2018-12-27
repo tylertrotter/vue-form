@@ -125,14 +125,8 @@
 		resize: vertical;
 	}
 
-	.el-input > input,
-	.el-textarea > textarea {
-		border: 0;
-		background: transparent;
-	}
-
-	.el-input,
-	.el-textarea{
+	.el-input__inner,
+	.el-textarea__inner{
 		@include input-appearance;
 	}
 </style>

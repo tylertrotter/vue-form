@@ -59,8 +59,8 @@ $light: #eae6e1;
 $form-bg: white;
 $form-text: $midnight;
 
-// $form-bg: $midnight;
-// $form-text: white;
+$form-bg: $midnight;
+$form-text: white;
 
 
 // Button Styles
@@ -86,8 +86,8 @@ $input-padding-h: $gutter/3;
 $input-radius: $border-radius*.75;
 $input-bg: $form-bg;
 $input-color: $form-text;
-$input-border-color: #d0dbdb;
-$input-border-width: 3px;
+$input-border-color: #55727b;
+$input-border-width: 1px;
 $input-border-style: solid;
 $underline: false;
 

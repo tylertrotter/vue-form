@@ -32,8 +32,11 @@
 
 	label {
 		display: block;
-		// padding-left: 1.3em;
 		@include break-word;
+
+		// These are to prevent focus indication bleeding into wrong column.
+		padding-bottom: 4px;
+		top: 2px;
 	}
 
 	.el-radio,
@@ -48,15 +51,27 @@
 }
 
 // Fanciness
-	[type="checkbox"],
-	[type="radio"]{
+	.el-checkbox [type="checkbox"],
+	.el-radio [type="radio"]{
 		display: none;
+	}
+
+	.el-radio__label,
+	.el-checkbox__label {
+		padding: 2px 0;
+
+		:focus & {
+			border-bottom: $input-border-width solid $highlight;
+		}
 	}
 
 	.el-checkbox__input,
 	.el-radio__input {
 		position: relative;
-		margin-right: .5em;
+		margin-right: .2em;
+		border-radius: 50%;
+
+
 	}
 
 	.el-checkbox__inner,
@@ -65,9 +80,13 @@
 		width: $input-font-size + 2;
 		height: $input-font-size + 2;
 		background-color: $form-bg;
-		border: $input-border-width/2 solid $input-border-color;
+		border: $input-border-width solid $input-border-color;
 		vertical-align: text-top;
 		transition: all .2s;
+		:focus & {
+			transform: scale(1.15);
+			border-width: $input-border-width + 1px;
+		}
 	}
 
 	.is-checked .el-checkbox__inner{
@@ -82,7 +101,7 @@
 
 	.is-checked .el-checkbox__inner {
 		@include check($form-bg);
-		background-size: 125%;
+		background-size: 160%;
 	}
 
 	.el-radio__inner {
