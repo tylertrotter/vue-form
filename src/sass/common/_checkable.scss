@@ -68,7 +68,7 @@
 	.el-checkbox__input,
 	.el-radio__input {
 		position: relative;
-		margin-right: .2em;
+		margin-right: .4em;
 		border-radius: 50%;
 
 
@@ -86,6 +86,7 @@
 		:focus & {
 			transform: scale(1.15);
 			border-width: $input-border-width + 1px;
+			box-shadow: 0 0 0 1px $highlight;
 		}
 	}
 

@@ -8,13 +8,17 @@ export const goToPage = {
 	},
 	methods: {
 		goto(num){
+			const progressEl = document.querySelector('.c-page-progress');
+			if(num < this.currentPage)
+				progressEl.setAttribute('data-backwards', true);
+			else
+				progressEl.setAttribute('data-backwards', false);
+
 			this.currentPage = num;
 			EventBus.$emit("page-number-updated", this.currentPage);
 
 			// Handle transition
 			const form = this.$root.$el;
-			console.log(this.$root)
-			// debugger;
 
 			// record form height
 			let formHeight = form.clientHeight;

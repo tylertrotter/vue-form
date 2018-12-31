@@ -23,3 +23,8 @@
 .i-ex circle {
 	fill: $negative;
 }
+
+button:focus .i-ex circle {
+	stroke: $form-text;
+	stroke-width: .05em
+}

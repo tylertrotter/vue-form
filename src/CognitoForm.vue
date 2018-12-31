@@ -1,10 +1,12 @@
 <template>
   <form ref="form" id="c-form" class="cg">
 		<header class="c-header c-wrapper">
-			<h1>All Field Types Multipage</h1>
+			<div class="c-row">
+				<h1>All Field Types Multipage</h1>
+			</div>
 		</header>
 		<div class="c-body">
-			<c-page-progress :pages="['Page 1', 'Page2']" />
+			<c-page-progress :pages="['Constantine von Tischendorf', 'Antidisestablishmentarianism']" :show-titles="true" display="steps" />
 
 			<c-page :page="1" :first="true">
 

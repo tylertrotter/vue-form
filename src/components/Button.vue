@@ -37,6 +37,7 @@
 		svg {
 			width: 1.15em;
 			vertical-align: bottom;
+			stroke: currentColor;
 		}
 
 		svg:not(:last-child){
@@ -60,9 +61,7 @@
 		background: $btn-secondary-bg;
 		color: $btn-secondary-text;
 		border: $input-border-width $btn-secondary-bg $input-border-style;
-		svg {
-			stroke: $btn-secondary-text;
-		}
+
 		&:focus {
 			box-shadow: 0 0 0 2px $btn-secondary-bg;
 			border-color: $form-bg;
