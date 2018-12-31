@@ -31,7 +31,7 @@
 					</c-field>
 
 					<c-field source="ChoiceRadio" class="c-col-12">
-						<c-checkable-group :columns="3">
+						<c-checkable-group :columns="3" class="c-fancy">
 							<c-radio-group pre-checked="Option C">
 								<c-radio label="Option A" />
 								<c-radio label="Option B" />
@@ -43,7 +43,7 @@
 
 				<c-row>
 					<c-field source="ChoiceCheckboxes" class="c-col-12">
-						<c-checkable-group :columns="3">
+						<c-checkable-group :columns="3" class="c-fancy">
 							<c-checkbox-group :pre-checked="['Option A', 'Option C']">
 								<c-checkbox label="Option A" />
 								<c-checkbox label="Option B" />

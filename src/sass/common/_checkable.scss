@@ -42,18 +42,20 @@
 	.el-radio,
 	.el-checkbox {
 		position: relative;
+	}
+}
 
-		input {
-			position: absolute;
-			left: 0;
-		}
+.c-checkable-group:not(.c-fancy){
+	input {
+		position: absolute;
+		left: 0;
 	}
 }
 
 // Fanciness
 	.el-checkbox [type="checkbox"],
 	.el-radio [type="radio"]{
-		display: none;
+		@include hidden;
 	}
 
 	.el-radio__label,
@@ -83,11 +85,13 @@
 		border: $input-border-width solid $input-border-color;
 		vertical-align: text-top;
 		transition: all .2s;
-		:focus & {
-			transform: scale(1.15);
-			border-width: $input-border-width + 1px;
-			box-shadow: 0 0 0 1px $highlight;
-		}
+	}
+
+	.el-radio:focus .el-radio__inner,
+	.is-focus .el-checkbox__inner {
+		transform: scale(1.15);
+		// border-width: $input-border-width + 1px;
+		box-shadow: 0 0 0 1px $highlight;
 	}
 
 	.is-checked .el-checkbox__inner{

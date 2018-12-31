@@ -32,24 +32,72 @@
   };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
-	ol {
+	.c-page {
+
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		&[data-page]:after {
+			content: attr(data-page);
+			text-align: right;
+			padding: $gutter $gutter/2 0 0;
+			font-size: $small-text;
+		}
+
+		&[class*="transition"]{
+			position: absolute;
+		}
+	}
+
+	// Not sure these belong here
+	.transition-enter-active, .transition-leave-active {
+		transition: all ease-in-out $page-transition-duration;
+	}
+
+	// Going forward
+	.transition-enter {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+
+	.c-page + .transition-leave-to {
+		transform: translateX(120%);
+	}
+
+	// Going backward
+	.c-page + .transition-enter {
+		transform: translateX(100%);
+	}
+
+	.transition-leave-to {
+		transform: translateX(-120%);
+		opacity: 0;
+	}
+
+	[id="c-form"] {
+		transition: height ease-in-out $page-transition-duration;
+	}
+
+	.c-page-progress {
 		margin: 0 0 $gutter;
 		padding: 0;
 		counter-reset: mycounter;
-	}
 
-	li {
-		padding-top: $gutter/6;
-		padding-bottom: $gutter/6;
-	}
+		li {
+			padding-top: $gutter/6;
+			padding-bottom: $gutter/6;
+		}
 
-	li:not(:last-child) {
-		margin-right: $gutter/4;
-	}
+		li:not(:last-child) {
+			margin-right: $gutter/4;
+		}
 
-	a {
+		a {
 			opacity: .8;
 			text-decoration: none;
 			color: $form-text;
@@ -63,6 +111,7 @@
 				border-bottom: $input-border-width solid $highlight;
 			}
 		}
+	}
 
 	.c-page-progress--steps {
 
