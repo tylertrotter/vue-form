@@ -61,10 +61,11 @@
 	.el-radio__label,
 	.el-checkbox__label {
 		padding: 2px 0;
+	}
 
-		:focus & {
-			border-bottom: $input-border-width solid $highlight;
-		}
+	.is-focus + .el-checkbox__label,
+	:focus .el-radio__label {
+		border-bottom: $input-border-width solid $highlight;
 	}
 
 	.el-checkbox__input,
@@ -90,7 +91,6 @@
 	.el-radio:focus .el-radio__inner,
 	.is-focus .el-checkbox__inner {
 		transform: scale(1.15);
-		// border-width: $input-border-width + 1px;
 		box-shadow: 0 0 0 1px $highlight;
 	}
 

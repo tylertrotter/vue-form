@@ -25,6 +25,6 @@
 }
 
 button:focus .i-ex circle {
-	stroke: $form-text;
+	stroke: rgba($form-text, .3);
 	stroke-width: .05em
 }

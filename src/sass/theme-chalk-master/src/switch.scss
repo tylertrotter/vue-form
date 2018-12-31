@@ -86,21 +86,28 @@
       height: calc(100% - 7px);
 			background-color: $form-bg;
 			box-shadow: 1px 1px 1px rgba(black, .1);
-    }
+		}
+
+		:focus ~ & {
+			box-shadow: 0 0 0 1px $highlight, inset 0 0 0 1px rgba($form-bg, .5);
+		}
   }
 
   @include when(checked) {
     .el-switch__core {
       border-color: $highlight;
 			background-color: $highlight;
-			box-shadow: 0 0 4px $highlight;
+
       &::after {
 				background-color: $form-bg;
 				border-color: transparent;
         left: 100%;
         margin-left: -$input-font-size - 12px;
-      }
-    }
+			}
+		}
+		:focus ~ .el-switch__core {
+			box-shadow: 0 0 7px $highlight, inset 0 0 0 1px $form-bg;
+		}
   }
 
   @include when(disabled) {

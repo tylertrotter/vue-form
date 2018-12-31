@@ -44,7 +44,4 @@ export default {
 
 <style lang="scss">
 	@import "../sass/theme-chalk-master/src/switch";
-	:focus ~ .el-switch__core {
-		box-shadow: 0 0 0 $input-border-width $highlight, inset 0 0 1px $form-bg;
-	}
 </style>
