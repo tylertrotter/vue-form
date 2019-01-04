@@ -437,4 +437,8 @@
 	.el-date-editor input {
 		padding-right: 30px;
 	}
+
+	::placeholder {
+		color: $placholder;
+	}
 </style>

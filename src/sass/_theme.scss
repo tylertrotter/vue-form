@@ -55,6 +55,7 @@ $input-border-color: fade(3) !default;
 $input-border-style: solid !default;
 $underline: false !default;
 $checkbox-radius: null;
+$placholder: rgba($input-color, .4);
 
 // Checkables
 @if ($input-radius > 0){
