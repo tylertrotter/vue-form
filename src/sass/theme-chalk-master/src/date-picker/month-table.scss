@@ -1,7 +1,8 @@
 @import "../common/var";
 
-@include b(month-table) {
-  font-size: 12px;
+.el-month-table,
+.el-year-table{
+  font-size: $small-text;
   margin: -1px;
   border-collapse: collapse;
 
@@ -25,7 +26,7 @@
       height: 32px;
       display: block;
       line-height: 32px;
-      color: $--datepicker-color;
+      // color: $--datepicker-color;
       margin: 0 auto;
 
       &:hover {

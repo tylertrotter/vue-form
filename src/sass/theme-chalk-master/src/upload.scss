@@ -60,7 +60,7 @@
 
 @include b(upload-dragger) {
   @include bg-color();
-	box-shadow: inset 0 0 0 $input-border-width*3 $form-bg;
+	box-shadow: inset 0 0 0 $input-border-width*3 $reverse;
 	border: $input-border-width $input-border-color $upload-border-style;
 	border-radius: $border-radius;
 	padding: $gutter*.75;

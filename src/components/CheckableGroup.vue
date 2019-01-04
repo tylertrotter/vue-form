@@ -16,4 +16,8 @@
 
 <style lang="scss">
 	@import "../sass/common/_checkable.scss";
+
+// #if !chameleon
+	@import "../sass/common/_fancy-checkables.scss";
+// #endif
 </style>

@@ -60,7 +60,7 @@
 
 	// Temporary
 	.c-section--repeating .c-remove {
-		width: $gutter*.75;
+		// width: $gutter*.75;
 		background: transparent;
 		border: 0;
 		padding: 0;

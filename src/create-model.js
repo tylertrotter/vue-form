@@ -88,7 +88,7 @@ export function createModel() {
 
             formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
             formType.addProperty("Select1", String, false, false, { label: 'Select 1' });
-            formType.addProperty("RatingScale2", Object, false, false, { label: 'Rating Scale 2' });
+            formType.addProperty("RatingScale2", String, false, false, { label: 'Rating Scale 2' });
             formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });
 
             var formRepeatingSection1ItemType = model.addType("Cognito.Forms.FormEntryRepeatingSection1Item");

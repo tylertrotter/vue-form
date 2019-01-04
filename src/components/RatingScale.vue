@@ -38,8 +38,8 @@ export default {
 .c-rating-scale {
 	width: 100%;
 
-	tbody:nth-child(even) {
-		@include bg-color($form-text);
+	tbody:nth-child(even) td {
+		@include bg-color($color);
 	}
 
 	td,
@@ -77,6 +77,35 @@ export default {
 
 .c-narrow .c-rating-scale--option span {
 	display: inline-block;
+}
+
+.c-rating-scale:not(.c-narrow) {
+		@if( $border-radius > 0){
+
+		// Round table corners
+		tbody:first-of-type{
+
+			td:first-child {
+				border-top-left-radius: $input-radius;
+			}
+
+			td:last-child {
+				border-top-right-radius: $input-radius;
+			}
+		}
+
+		tbody:last-of-type{
+
+			td:first-child {
+				border-bottom-left-radius: $input-radius;
+			}
+
+			td:last-child {
+				border-bottom-right-radius: $input-radius;
+			}
+		}
+
+	}
 }
 
 // Experimental 45deg label layout

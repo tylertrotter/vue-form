@@ -22,7 +22,8 @@
 				validator: value => {
 					return value === 'steps' || value === 'bar' || value === 'none';
 				}
-			}
+			},
+			transition: String
 		},
 		mixins: [goToPage],
 		mounted() {
@@ -59,26 +60,6 @@
 		transition: all ease-in-out $page-transition-duration;
 	}
 
-	// Going forward
-	.transition-enter {
-		transform: translateX(-100%);
-		opacity: 0;
-	}
-
-	.c-page + .transition-leave-to {
-		transform: translateX(120%);
-	}
-
-	// Going backward
-	.c-page + .transition-enter {
-		transform: translateX(100%);
-	}
-
-	.transition-leave-to {
-		transform: translateX(-120%);
-		opacity: 0;
-	}
-
 	[id="c-form"] {
 		transition: height ease-in-out $page-transition-duration;
 	}
@@ -100,7 +81,7 @@
 		a {
 			opacity: .8;
 			text-decoration: none;
-			color: $form-text;
+			color: $color;
 			cursor: pointer;
 
 			span {
@@ -156,7 +137,7 @@
 
 		.active :before {
 			background: $highlight;
-			color: $form-bg;
+			color: $reverse;
 			border-color: $highlight;
 		}
 
@@ -166,7 +147,7 @@
 		}
 
 		.active a:focus:before {
-			border-color: rgba($form-bg, .3);
+			border-color: rgba($reverse, .3);
 			background: $highlight;
 			box-shadow: 0 0 0 1px $highlight;
 		}
@@ -251,6 +232,65 @@
 			span {
 				right: 0;
 			}
+		}
+	}
+
+
+	@if( $page-transition == 'ltr'){
+		// Going forward
+		.transition-enter {
+			transform: translateX(-100%);
+			opacity: 0;
+		}
+
+		.c-page + .transition-leave-to {
+			transform: translateX(120%);
+		}
+
+		// Going backward
+		.c-page + .transition-enter {
+			transform: translateX(100%);
+		}
+
+		.transition-leave-to {
+			transform: translateX(-120%);
+			opacity: 0;
+		}
+	}@else if( $page-transition == 'up'){
+		.transition-enter,
+		.transition-leave-to {
+			transform: translateY(100%);
+			opacity: 0;
+		}
+	}@else if( $page-transition == 'fade'){
+		.transition-enter,
+		.transition-leave-to {
+			opacity: 0;
+		}
+	}@else if( $page-transition == 'zoom'){
+		.c-page {
+			transform-origin: 50% 0;
+		}
+		.transition-enter,
+		.transition-leave-to {
+			transform: scale(0);
+			opacity: 0;
+		}
+	}@else if( $page-transition == 'flip'){
+		.c-body {
+			perspective: 1200px;
+		}
+
+		.c-page[class*="transition"] {
+			backface-visibility: hidden;
+		}
+
+		.transition-enter {
+			transform: rotateY( -180deg );
+		}
+
+		.transition-leave-to {
+			transform: rotateY( 180deg );
 		}
 	}
 

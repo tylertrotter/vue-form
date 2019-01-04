@@ -61,7 +61,7 @@
 
     &.next-month,
     &.prev-month {
-      color: $--datepicker-off-color;
+      color: fade(5);
     }
 
     &.today {
@@ -88,7 +88,7 @@
     }
 
     &.current:not(.disabled) span {
-      color: $--color-white;
+      color: $highlight-reverse;
       background-color: $--datepicker-active-color;
     }
     &.start-date div,
@@ -144,8 +144,8 @@
 
   th {
     padding: 5px;
-    color: $--datepicker-header-color;
+    // color: $--datepicker-header-color;
     font-weight: 400;
-    border-bottom: solid 1px $--border-color-lighter;
+    border-bottom: $input-border-width $input-border-style fade(2);
   }
 }

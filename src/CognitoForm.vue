@@ -85,7 +85,7 @@
 				<!-- number, website, currency fields -->
 
 				<c-row>
-					<c-field source="RatingScale2" required="true" label="Rating Scale" class="c-col-24">
+					<c-field  source="ChoiceRadio" required="true" class="c-col-24">
 						<c-rating-scale
 							:questions="[
 								'How happy are you with Vue.js',
@@ -374,11 +374,11 @@
 
 	.cg,
 	.el-popper {
-		background: $form-bg;
+		background: $reverse;
 		// background-image: url('https://images.unsplash.com/photo-1545179920-16c9617c2b60?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80');
 		max-width: $form-width;
 		margin: 0 auto;
-		color: $form-text;
+		color: $color;
 		font-family: $typeface;
 		font-size: $font-size;
 		line-height: 1.4;
@@ -428,5 +428,9 @@
 
 	:focus {
 		outline: 0;
+	}
+
+	.el-date-editor input {
+		padding-right: 30px;
 	}
 </style>

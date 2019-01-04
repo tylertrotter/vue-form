@@ -5,7 +5,12 @@
 				<slot name="thead"></slot>
 			</template>
 			<slot></slot>
-			<c-button v-if="currentType === 'div'" class="c-button--secondary c-repeating-data--add-button"><i-plus /> Add</c-button>
+			<c-button v-if="currentType === 'div'" class="c-button--secondary c-repeating-data--add-button">
+				<!--#if !chameleon-->
+				<i-plus />
+				<!--#endif-->
+				Add
+			</c-button>
 		</component>
 	</keep-alive>
 </template>

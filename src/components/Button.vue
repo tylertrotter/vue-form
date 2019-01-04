@@ -16,7 +16,21 @@
 </script>
 
 <style lang="scss">
+	.c-button--primary,
+	.c-button--secondary,
+	.c-button--tertiary {
 
+		svg {
+			width: 1.15em;
+			vertical-align: bottom;
+			stroke: currentColor;
+		}
+
+		svg:not(:last-child){
+			margin-right: .3em;
+		}
+	}
+// #if !chameleon
 	.el-button {
 		border: 0;
 		background: transparent;
@@ -33,16 +47,6 @@
 		font-size: $button-font-size;
 		padding: $button-padding;
 		border-radius: $button-border-radius;
-
-		svg {
-			width: 1.15em;
-			vertical-align: bottom;
-			stroke: currentColor;
-		}
-
-		svg:not(:last-child){
-			margin-right: .3em;
-		}
 	}
 
 	.c-button--primary {
@@ -52,7 +56,7 @@
 
 		&:focus {
 			box-shadow: 0 0 0 2px $btn-primary-bg;
-			border-color: $form-bg;
+			border-color: $reverse;
 			border-style: dotted;
 		}
 	}
@@ -64,19 +68,20 @@
 
 		&:focus {
 			box-shadow: 0 0 0 2px $btn-secondary-bg;
-			border-color: $form-bg;
+			border-color: $reverse;
 			border-style: dotted;
 		}
 	}
 
 	.c-button--tertiary {
-		background: $form-bg;
-		color: $form-text;
+		background: $reverse;
+		color: $color;
 		border: $input-border-width $btn-primary-bg $input-border-style;
 
 		&:focus {
 			box-shadow: 0 0 0 2px $btn-primary-bg;
 		}
 	}
+// #endif
 </style>
 

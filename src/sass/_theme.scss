@@ -1,109 +1,84 @@
-// Answer 6 Questions to customize a default theme for all your forms.
-// Or spend more time on editing the nitty-gritty details.
+@import './custom-theme';
 
-// Pick your background color.
+// Base
+$reverse: white !default;
+$color: #617272 !default;
+$highlight: #AED136 !default;
+$typeface: Arial !default;
+$font-size: 16px !default;
+$border-radius: 0 !default;
+$border-width: 1px !default;
+$unitless-gutter: 30 !default;
 
-// Pick your text color.
+@function fade($amount){
+	@return mix($color, $reverse, $amount*10);
+}
 
-// Pick a highlight color.
+// Derived
+$highlight-reverse: $reverse !default;
+$button: $reverse !default;
+$button-reverse: $highlight !default;
 
-// Pick your font.
+$form-width: 900px !default;
+$gutter: $unitless-gutter * 1px !default;
+$form-margins: $unitless-gutter * 1.5px !default;
 
-// Pick your text size.  (slider)
-
-// Do you want rounded corners? (slider)
-
-// [save] - [save and refine further]
-
-
-
-// Structure
-$form-width: 900px;
-$unitless-gutter: 30;
-$gutter: $unitless-gutter * 1px;
-$form-margins: $unitless-gutter * 1.5px;
-$small-text: .8em;
-
-$border-radius: 0;
-$circles: true;
-
-// Typeography
-$typeface: Arial;
-$header-typeface: Arial;
-$label-typeface: Arial;
-$link-typeface: Arial;
-$button-typeface: Arial;
-$font-size: 16px;
-
-// General Colors
-$negative: rgb(235, 86, 81);//#A3340D;
-$negative-reverse: white;
-$positive: green;
-$positive-reverse: #698215;
-$highlight: #AED136;
-// $highlight-reverse: black;
-$primary: #D85427;
-$primary-reverse: white;
-
-
-// Element's Primary Color
-$--color-primary: $highlight;
-
-
-
-$midnight: #172d35;
-$warm: #352317;
-$light: #eae6e1;
-
-// Specific Colors
-$form-bg: white;
-$form-text: $midnight;
-
-// $form-bg: $midnight;
-// $form-text: white;
-
+$input-border-width: $border-width !default;
+$header-typeface: $typeface !default;
+$label-typeface: $typeface !default;
+$link-typeface: $typeface !default;
+$button-typeface: $typeface !default;
 
 // Button Styles
-$btn-primary-bg: $primary;
-$btn-primary-text: $primary-reverse;
+$btn-primary-bg: $button-reverse !default;
+$btn-primary-text: $button !default;
 
-$btn-secondary-bg: mix($primary, white, 20%);
-$btn-secondary-text: $primary;
+$btn-secondary-bg: mix($button-reverse, white, 20%) !default;
+$btn-secondary-text: $button-reverse !default;
 
-$btn-tertiary-bg: $primary;
-$btn-tertiary-text: $primary-reverse;
+$btn-tertiary-bg: $button-reverse !default;
+$btn-tertiary-text: $button !default;
 
-$button-font-size: 16px;
-$button-padding: $gutter/3;
-$button-border-color: #D85427;
+$button-font-size: $font-size !default;
+$button-padding: $gutter/3 !default;
+$button-border-color: $button-reverse !default;
 $button-border-radius: $border-radius * .75 !default;
-$button-border-radius: 4px;
 
-// Field Style
-$input-font-size: 16px;
-$input-padding-v: $gutter/3;
-$input-padding-h: $gutter/3;
-$input-radius: $border-radius*.75;
-$input-bg: $form-bg;
-$input-color: $form-text;
-$input-border-color: #55727b;
-$input-border-width: 1px;
-$input-border-style: solid;
-$underline: false;
+// Input
+$input-font-size: $font-size !default;
+$input-padding-v: $gutter/3 !default;
+$input-padding-h: $gutter/3 !default;
+$input-radius: $border-radius*.75 !default;
+$input-bg: $reverse !default;
+$input-color: $color !default;
+$input-border-color: fade(3) !default;
+$input-border-style: solid !default;
+$underline: false !default;
 
+// Checkables
 // @if ($input-radius < 10px){
-	$checkbox-radius: $input-radius / 2;
+	$checkbox-radius: $border-radius / 2 !default;
 // }@else{
 	// $checkbox-radius: 6px;
 // }
 
+// Assumed
+$negative: rgb(235, 86, 81) !default;
+$negative-reverse: white !default;
+$small-text: .8em !default;
 
-$upload-border-style: dashed;
+$circles: true !default;
 
-$table-border-spacing: 0;
+$upload-border-style: dashed !default;
+$table-border-spacing: 0 !default;
 
 // SVG
-$icon-weight: 1.5;
+$icon-weight: 1.5 !default;
 
 // Animation
-$page-transition-duration: 1s;
+$page-transition: 'ltr' !default;
+$page-transition-duration: 1s !default;
+
+// Element's Primary Color
+$--color-primary: $highlight;
+

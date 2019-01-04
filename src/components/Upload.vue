@@ -9,7 +9,9 @@
 		drag
 		action="https://jsonplaceholder.typicode.com/posts/"
 		multiple>
+		<!--#if !chameleon-->
 		<i-upload />
+		<!--#endif-->
 		<div><c-button tabindex="-1">Upload</c-button> or drop files here</div>
 		<div class="c-helptext" slot="tip">jpg/png files with a size less than 500kb</div>
 	</el-upload>
@@ -30,52 +32,9 @@
 </script>
 
 <style lang="scss">
-	@import "../sass/theme-chalk-master/src/upload";
-
-	.el-upload {
-
-
-		svg {
-			width: 2em;
-			margin-bottom: $gutter/3;
-
-			path {
-				fill: rgba($form-text, .5);
-			}
-		}
-
-		button {
-			background: $btn-secondary-bg;
-			color: $btn-secondary-text;
-			padding: $button-padding/2;
-			border-radius: $button-border-radius;
-			outline: 1px solid $form-bg;
-			font-size: $input-font-size;
-		}
-	}
-
 	.el-upload__input {
     display: none;
 	}
-
-	// .el-upload-list {
-	// 	li{
-	// 		position: relative;
-	// 	}
-	// }
-
-	// .el-icon-close-tip {
-	// 		display: none;
-	// 		font-size: $small-text;
-	// 		position: absolute;
-	// 		right: 0;
-	// 		top: .15em;
-	// 		background: $form-bg;
-	// 	}
-
-	// .focusing:not(:hover) .el-icon-close-tip {
-	// 	display: block;
-	// }
 
 	.is-uploading .el-icon-close:before {
 		display: none;
@@ -90,4 +49,27 @@
 		margin: 0 .2em;
 	}
 
+// #if !chameleon
+	@import "../sass/theme-chalk-master/src/upload";
+	.el-upload {
+
+		svg {
+			width: 3em;
+			margin-bottom: $gutter/3;
+
+			path {
+				fill: rgba($color, .5);
+			}
+		}
+
+		button {
+			background: $btn-secondary-bg;
+			color: $btn-secondary-text;
+			padding: $button-padding/2;
+			border-radius: $button-border-radius;
+			outline: 1px solid $reverse;
+			font-size: $input-font-size;
+		}
+	}
+// #endif
 </style>

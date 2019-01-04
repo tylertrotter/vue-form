@@ -27,5 +27,34 @@ export default {
 
 <style lang="scss">
 	@import "../sass/theme-chalk-master/src/date-picker";
+
+	.popper__arrow {
+    position: absolute;
+		display: block;
+	}
+
+	.el-picker-panel__icon-btn {
+		margin: 0 .5em;
+	}
+
+	.el-icon-arrow-left {
+		@include chevron(90deg);
+	}
+
+	.el-icon-d-arrow-left {
+		@include chevron(90deg, true);
+	}
+
+	.el-icon-arrow-right {
+		@include chevron(-90deg);
+	}
+
+	.el-icon-d-arrow-right {
+		@include chevron(-90deg, true);
+	}
+
+	.el-date-editor--date .el-input__suffix .el-input__icon {
+		@include calendar;
+	}
 </style>
 

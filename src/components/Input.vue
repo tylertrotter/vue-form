@@ -99,19 +99,6 @@
 </script>
 
 <style lang="scss">
-	textarea,
-	select,
-	[type="text"],
-	[type="tel"],
-	[type="password"],
-	[type="date"],
-	[type="email"],
-	[type="time"],
-	[type="password"],
-	.c-readonly {
-		@include input-spacing;
-	}
-
 	.c-readonly {
 		border-color: transparent;
 		@include input-border;
@@ -125,8 +112,36 @@
 		resize: vertical;
 	}
 
+// #if !chameleon
+	textarea,
+	select,
+	[type="text"],
+	[type="tel"],
+	[type="password"],
+	[type="date"],
+	[type="email"],
+	[type="time"],
+	[type="password"],
+	.c-readonly {
+		@include input-spacing;
+	}
+
 	.el-input__inner,
 	.el-textarea__inner{
 		@include input-appearance;
 	}
+// #else
+	textarea,
+	select,
+	[type="text"],
+	[type="tel"],
+	[type="password"],
+	[type="date"],
+	[type="email"],
+	[type="time"],
+	[type="password"],
+	.c-readonly {
+		width: 100%;
+	}
+// #endif
 </style>

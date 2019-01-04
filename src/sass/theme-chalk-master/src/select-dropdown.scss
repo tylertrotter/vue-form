@@ -6,7 +6,7 @@
   position: absolute;
   z-index: #{$--index-top + 1};
 	border: $input-border-color $input-border-width $input-border-style;
-	border-top: 0;
+	border-top-color: fade(1);
 	border-bottom-left-radius: $input-radius;
 	border-bottom-right-radius: $input-radius;
   // background-color: $--select-dropdown-background;
@@ -19,20 +19,20 @@
       color: $--select-option-selected;
       // background-color: $--select-dropdown-background;
 
-      &.hover {
-        // background-color: bg-color($form-text);
-      }
+      // &.hover {
+      //   background-color: bg-color($color);
+      // }
 
-      &::after {
-        position: absolute;
-        right: 20px;
-        font-family: 'element-icons';
-        content: "\E611";
-        font-size: 12px;
-        font-weight: bold;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
+      // &::after {
+      //   position: absolute;
+      //   right: 20px;
+      //   font-family: 'element-icons';
+      //   content: "\E611";
+      //   font-size: 12px;
+      //   font-weight: bold;
+      //   -webkit-font-smoothing: antialiased;
+      //   -moz-osx-font-smoothing: grayscale;
+      // }
     }
   }
 

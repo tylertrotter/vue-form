@@ -44,4 +44,7 @@ export default {
 
 <style lang="scss">
 	@import "../sass/theme-chalk-master/src/switch";
+	// #if !chameleon
+
+	// #endif
 </style>

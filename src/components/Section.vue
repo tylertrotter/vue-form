@@ -25,13 +25,13 @@
 <style lang="scss">
 	.c-section {
 		position: relative;
-		@include bg-color($form-text);
+		@include bg-color($color);
 		padding: $gutter/2;
 		border-radius: $border-radius;
 	}
 
 	.c-section:nth-child(even){
-		@include bg-color-alt($form-text);
+		@include bg-color-alt($color);
 	}
 
 	.c-section + .c-section {

@@ -39,7 +39,7 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loaders: 'vue-loader',
         options: {
           loaders: {
             // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
@@ -56,10 +56,16 @@ module.exports = {
 									resources: ['./src/sass/_theme.scss', './src/sass/_field-style.scss', './src/sass/_mixins.scss', './src/sass/_functions.scss']
 								},
 							},
+							{
+								loader: 'condition-loader',
+								options: {
+									chameleon: false
+								}
+							}
             ]
           }
           // other vue-loader options go here
-        }
+				}
       },
 			{
         test: /\.ts?$/,
