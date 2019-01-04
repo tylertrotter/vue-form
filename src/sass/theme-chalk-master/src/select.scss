@@ -19,11 +19,11 @@
       display: contents;
     }
 
-  &:hover {
-    .el-input__inner {
-      border-color: $--select-border-color-hover;
-    }
-  }
+  // &:hover {
+  //   .el-input__inner {
+  //     border-color: $--select-border-color-hover;
+  //   }
+  // }
 
   .el-input__inner {
     cursor: pointer;
