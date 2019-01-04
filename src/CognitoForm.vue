@@ -163,6 +163,7 @@
 							<template slot="thead">
 								<th>Your Name</th>
 								<th>Your Email</th>
+								<th>Your Other Email</th>
 								<th>Your Phone Number</th>
 							</template>
 
@@ -173,6 +174,9 @@
 									</c-field>
 									<c-field source="Name1" label="Your Email" class="c-col-8">
 										<c-select />
+									</c-field>
+									<c-field source="Name1" label="Your Email" class="c-col-8">
+										<c-input />
 									</c-field>
 									<c-field  source="Name1" label="Your Phone Number" class="c-col-8">
 										<c-input type="text" />

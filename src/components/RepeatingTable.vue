@@ -77,6 +77,14 @@
 		.c-readonly {
 			border-radius: 0;
 			min-width: 150px;
+
+			&:focus {
+				position: relative;
+				z-index: 1;
+				border-color: $highlight;
+				outline: $input-border-width solid $highlight;
+				width: calc(100% + 1px);
+			}
 		}
 
 		tbody {

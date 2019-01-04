@@ -54,13 +54,14 @@ $input-color: $color !default;
 $input-border-color: fade(3) !default;
 $input-border-style: solid !default;
 $underline: false !default;
+$checkbox-radius: null;
 
 // Checkables
-// @if ($input-radius < 10px){
-	$checkbox-radius: $border-radius / 2 !default;
-// }@else{
-	// $checkbox-radius: 6px;
-// }
+@if ($input-radius > 0){
+	$checkbox-radius: 2px !default;
+} @else{
+	$checkbox-radius: 0 !default;
+}
 
 // Assumed
 $negative: rgb(235, 86, 81) !default;
@@ -73,6 +74,7 @@ $upload-border-style: dashed !default;
 $table-border-spacing: 0 !default;
 
 // SVG
+// .5 - 2.5 looks decent
 $icon-weight: 1.5 !default;
 
 // Animation
