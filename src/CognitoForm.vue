@@ -12,26 +12,35 @@
 
 				<c-row>
 					<c-field source="Text" class="c-col-12">
-						<c-input />
+						<c-input :readonly="true" />
 					</c-field>
 					<c-field source="Phone" class="c-col-12">
-						<c-phone />
+						<c-phone :readonly="true" />
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field source="Name1" class="c-col-24">
-						<c-name :optionalParts="{title: true, middleInitial: true, middleName: false, suffix: true}" />
+						<c-name :name="{
+							title: 'Lord',
+							first: 'Sam',
+							middleInitial: false,
+							middleName: false,
+							last: 'Byron',
+							suffix: 'Jr.'
+						}"
+						:readonly="true"
+					/>
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field source="ChoiceSelect" class="c-col-12">
-						<c-select />
+						<c-select :readonly="true" />
 					</c-field>
 
 					<c-field source="ChoiceRadio" class="c-col-12">
-						<c-checkable-group :columns="3" class="c-fancy">
+						<c-checkable-group :columns="3" class="c-fancy" :readonly="true">
 							<c-radio-group pre-checked="Option C">
 								<c-radio label="Option A" />
 								<c-radio label="Option B" />
@@ -43,7 +52,7 @@
 
 				<c-row>
 					<c-field source="ChoiceCheckboxes" class="c-col-12">
-						<c-checkable-group :columns="3" class="c-fancy">
+						<c-checkable-group :columns="3" class="c-fancy" :readonly="true">
 							<c-checkbox-group :pre-checked="['Option A', 'Option C']">
 								<c-checkbox label="Option A" />
 								<c-checkbox label="Option B" />
@@ -51,14 +60,24 @@
 							</c-checkbox-group>
 						</c-checkable-group>
 					</c-field>
+
 					<c-field source="Password" class="c-col-12">
-						<c-input type="password" />
+						<c-input type="password" :readonly="false" />
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field source="Address" class="c-col-24">
-						<c-address />
+						<c-address
+							:address="{
+								line1: '76 Hunters Pond Dr.',
+								line2: '',
+								city: 'Columbia',
+								state: 'SC',
+								postal: '29229'
+							}"
+							:readonly="false"
+						/>
 					</c-field>
 				</c-row>
 
@@ -82,10 +101,17 @@
 					</c-field>
 				</c-row>
 
-				<!-- number, website, currency fields -->
+				<c-row>
+					<c-field label="Number"  class="c-col-12">
+						<c-number />
+					</c-field>
+					<c-field label="Website"  class="c-col-12">
+						<c-url />
+					</c-field>
+				</c-row>
 
 				<c-row>
-					<c-field  source="ChoiceRadio" required="true" class="c-col-24">
+					<c-field  source="ChoiceRadio" :required="true" class="c-col-24">
 						<c-rating-scale
 							:questions="[
 								'How happy are you with Vue.js',
@@ -149,7 +175,7 @@
 
 				<c-row>
 					<c-field source="Signature" class="c-col-12">
-						<c-signature />
+						<c-signature :readonly="false" />
 					</c-field>
 					<c-field source="Textarea" class="c-col-12">
 						<c-input type="textarea"/>
@@ -169,8 +195,8 @@
 
 							<c-repeating-section v-for="i in 1" :key="i" :index="i">
 								<c-row>
-									<c-field source="Name1" readonly="true" label="Your Name" class="c-col-8">
-										<c-input type="text"/>
+									<c-field source="Name1" label="Your Name" class="c-col-8">
+										<c-input type="text" :readonly="true"/>
 									</c-field>
 									<c-field source="Name1" label="Your Email" class="c-col-8">
 										<c-select />
@@ -217,6 +243,8 @@
 	import CName from './components/Name.vue';
 	import CPhone from './components/Phone.vue';
 	import CAddress from './components/Address.vue';
+	import CNumber from './components/Number.vue';
+	import CUrl from './components/Url.vue';
 	import CSpinner from './components/Spinner.vue';
 
 	import CSelect from './components/Select.vue';
@@ -258,6 +286,8 @@
 			CName,
 			CAddress,
 			CPhone,
+			CNumber,
+			CUrl,
 			CSpinner,
 
 			CSelect,

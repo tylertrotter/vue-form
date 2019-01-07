@@ -11,7 +11,7 @@
 	import IEx from "./../assets/ex.svg";
 
 	export default {
-		name: "c-field-row",
+		name: "c-row",
 		components: { CButton, IEx, CRepeatingSection },
 		data(){
 			return {

@@ -1,21 +1,24 @@
 <template>
-	<div>
-		<select v-if="native" v-model="selectedValue" @change="handleNativeChange">
-			<option
-				v-for="item in options"
-				:key="item.value"
-				:value="item.value">
-				{{ item.displayValue }}
-			</option>
-		</select>
-		<el-select v-else v-model="selectedValue" @change="handleChange" allow-create filterable>
-			<el-option
-				v-for="item in options"
-				:key="item.value"
-				:label="item.displayValue"
-				:value="item.value">
-			</el-option>
-		</el-select>
+	<div class="c-select">
+		<div v-if="readonly" class="c-readonly c-readonly--input">{{selectedValue || "&nbsp;"}}</div>
+		<template v-else>
+			<select v-if="native" v-model="selectedValue" @change="handleNativeChange">
+				<option
+					v-for="item in options"
+					:key="item.value"
+					:value="item.value">
+					{{ item.displayValue }}
+				</option>
+			</select>
+			<el-select v-else v-model="selectedValue" @change="handleChange" allow-create filterable>
+				<el-option
+					v-for="item in options"
+					:key="item.value"
+					:label="item.displayValue"
+					:value="item.value">
+				</el-option>
+			</el-select>
+		</template>
 	</div>
 </template>
 
@@ -62,7 +65,7 @@ export default {
 		prop: "value",
 		event: "change"
 	},
-	props: ["label", "value", "native"]
+	props: ["label", "value", "native", "readonly"]
 };
 </script>
 

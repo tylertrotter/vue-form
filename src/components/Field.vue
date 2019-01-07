@@ -32,7 +32,13 @@ export default {
       return typeof this.label === "string" ? this.label : sourceLabel;
 		}
 	},
-	props: ["label", "helptext", "error", "required"]
+	props: {
+		label: String,
+		helptext: String,
+		error: String,
+		required: Boolean,
+		readonly: Boolean
+	}
 };
 </script>
 

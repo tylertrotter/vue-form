@@ -28,7 +28,11 @@ Cognito.Forms.model.perform(function() {
 
   formEntry.DatePicker1 = "2018-11-14";
   formEntry.Spinner1 = 3;
-  formEntry.Name1 = "Tyler Trotter";
+	formEntry.Text = "abc";
+	formEntry.Phone = "803-200-4865";
+	formEntry.Name1 = "Tyler";
+
+	formEntry.ChoiceSelect = 'Option B';
   formEntry.Toggle1 = true;
   formEntry.RepeatingSection1[0].Email1 = "jamie@cognitoforms.com";
   formEntry.RepeatingSection1[1].Email1 = "royal@cognitoforms.com";

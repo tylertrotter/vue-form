@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="isReadonly" class="c-readonly">{{value || "&nbsp;"}}</div>
+		<div v-if="readonly" class="c-readonly c-readonly--input">{{inputModel || "&nbsp;"}}</div>
 		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" :placeholder="placeholder" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
 	</div>
 </template>
@@ -8,12 +8,19 @@
 <script>
 	import { VueModel, Vue } from "../imports";
 	import { Input } from "element-ui";
+	import { findField } from "./../find-field";
 	Vue.use(Input);
 
 	export default {
 		name: "c-input",
 		mixins: [VueModel.mixins.SourceConsumer],
-		props: ["type", "text", "mask", "placeholder"],
+		props: {
+			type: String,
+			text: String,
+			mask: String,
+			placeholder: String,
+			readonly: Boolean
+		},
 		model: {
 			prop: "text",
 			event: "change"
@@ -23,7 +30,6 @@
 				hasFocus: false,
 				focusValue: null,
 				selfModel: (typeof this.text === "string" ? this.text : this.$source ? this.$source.displayValue : false),
-				// isReadonly: this.$parent.$attrs.readonly,
 				value: this.$parent.$attrs.value
 			};
 		},
@@ -60,9 +66,6 @@
 						}
 					}
 				}
-			},
-			isReadonly() {
-				return this.$parent.$attrs.readonly;
 			}
 		},
 		methods: {
@@ -99,7 +102,7 @@
 </script>
 
 <style lang="scss">
-	.c-readonly {
+	.c-readonly--input {
 		border-color: transparent;
 		@include input-border;
 	}
@@ -122,8 +125,13 @@
 	[type="email"],
 	[type="time"],
 	[type="password"],
-	.c-readonly {
+	.c-readonly--input {
 		@include input-spacing;
+	}
+
+	.c-readonly--input {
+		padding-left: 0;
+		padding-right: 0;
 	}
 
 	.el-input__inner,

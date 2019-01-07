@@ -1,12 +1,12 @@
 <template>
-	<c-input :readonly="readonly" type="tel" />
+	<c-input class="c-url" :readonly="readonly" />
 </template>
 
 <script>
 import CInput from "./Input.vue";
 
 export default {
-	name: "c-phone",
+	name: "c-url",
 	props: ['readonly'],
   components: {
     CInput

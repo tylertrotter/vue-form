@@ -1,4 +1,5 @@
 import { debouncedResize } from "./debounce.js";
+import { findField } from "./find-field";
 
 export const containerQuery = {
 	data(){
@@ -20,7 +21,7 @@ export const containerQuery = {
 		handleResize() {
 			debouncedResize(() => {
 				let componentWidth = this.$el.clientWidth
-				const field = findField(this);
+				const field = findField(this).$el;
 				if(field){
 					const fieldStyle = window.getComputedStyle(field);
 					const fieldPadding = parseInt(fieldStyle.getPropertyValue("padding-left"), 10) + parseInt(fieldStyle.getPropertyValue("padding-right"), 10);
@@ -37,16 +38,5 @@ export const containerQuery = {
 				}
 			})();
 		}
-	}
-}
-
-function findField(component){
-	if(component.$parent){
-		if(component.$parent.$refs.field){
-			return component.$parent.$el;
-		}else
-			return findField(component.$parent);
-	}else{
-		return null;
 	}
 }

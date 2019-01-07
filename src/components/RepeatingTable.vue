@@ -67,6 +67,8 @@
 		.c-readonly {
 			@include input-appearance;
 			@include disabled-input;
+			padding-left: $input-padding-h;
+			padding-right: $input-padding-h;
 		}
 
 		td {
