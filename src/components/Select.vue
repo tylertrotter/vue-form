@@ -1,5 +1,5 @@
 <template>
-	<div class="c-select">
+	<div class="c-select c-input-container">
 		<div v-if="readonly" class="c-readonly c-readonly--input">{{selectedValue || "&nbsp;"}}</div>
 		<template v-else>
 			<select v-if="native" v-model="selectedValue" @change="handleNativeChange">
@@ -7,7 +7,7 @@
 					v-for="item in options"
 					:key="item.value"
 					:value="item.value">
-					{{ item.displayValue }}
+					{{ item.value }}
 				</option>
 			</select>
 			<el-select v-else v-model="selectedValue" @change="handleChange" allow-create filterable>
@@ -76,6 +76,10 @@ export default {
 	.el-select .is-focus.el-input {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
+	}
+
+	.el-select-dropdown {
+		// margin-top: -$input-spacing;
 	}
 
 	.el-input__suffix {

@@ -6,6 +6,7 @@
 
 <template>
 	<el-upload
+		class="c-upload"
 		drag
 		action="https://jsonplaceholder.typicode.com/posts/"
 		multiple>
@@ -32,6 +33,11 @@
 </script>
 
 <style lang="scss">
+	.c-upload {
+		margin-top: $gutter/3;
+		margin-bottom: $gutter/3;
+	}
+
 	.el-upload__input {
     display: none;
 	}

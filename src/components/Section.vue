@@ -1,7 +1,7 @@
 <template>
 	<div class="c-region">
 		<div class="c-section">
-			<h2>{{heading}}</h2>
+			<h2 class="c-section--header">{{heading}}</h2>
 			<slot></slot>
 		</div>
 	</div>
@@ -28,6 +28,10 @@
 		@include bg-color($color);
 		padding: $gutter/2;
 		border-radius: $border-radius;
+	}
+
+	.c-section--header {
+		margin-left: $input-spacing;
 	}
 
 	.c-section:nth-child(even){

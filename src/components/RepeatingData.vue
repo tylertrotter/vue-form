@@ -1,6 +1,6 @@
 <template>
 	<keep-alive>
-		<component :is="currentType" class="c-repeating-data">
+		<component :is="currentType" class="c-repeating-data" :class="{'c-readonly--section': readonly}">
 			<template v-if="currentType === 'c-repeating-table'" slot="thead">
 				<slot name="thead"></slot>
 			</template>
@@ -23,7 +23,11 @@
 
 	export default {
 		name: "c-repeating-data",
-		props: ["isTable", "heading"],
+		props: {
+			isTable: Boolean,
+			heading: String,
+			readonly: Boolean
+		},
 		components: {
 			CRepeatingTable,
 			CButton,

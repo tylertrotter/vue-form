@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="c-input-container">
 		<div v-if="readonly" class="c-readonly c-readonly--input">{{inputModel || "&nbsp;"}}</div>
 		<el-input v-else v-model="inputModel" :type="type" :value="value" :v-mask="mask" :placeholder="placeholder" @focus="handleFocus" @blur="handleBlur" @keydown.native="handleKeyDown" @change="handleChange" />
 	</div>
@@ -115,7 +115,6 @@
 		resize: vertical;
 	}
 
-// #if !chameleon
 	textarea,
 	select,
 	[type="text"],
@@ -126,7 +125,11 @@
 	[type="time"],
 	[type="password"],
 	.c-readonly--input {
-		@include input-spacing;
+		// #if !chameleon
+			@include input-spacing;
+		// #else
+			width: 100%;
+		// #endif
 	}
 
 	.c-readonly--input {
@@ -138,18 +141,4 @@
 	.el-textarea__inner{
 		@include input-appearance;
 	}
-// #else
-	textarea,
-	select,
-	[type="text"],
-	[type="tel"],
-	[type="password"],
-	[type="date"],
-	[type="email"],
-	[type="time"],
-	[type="password"],
-	.c-readonly {
-		width: 100%;
-	}
-// #endif
 </style>

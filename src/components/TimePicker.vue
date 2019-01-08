@@ -1,12 +1,14 @@
 <template>
-	<el-time-picker
-    arrow-control
-		v-model="date"
-    :picker-options="{
-      selectableRange: '4:30:00 - 20:30:00'
-    }"
-    >
-  </el-time-picker>
+	<div class="c-input-container">
+		<el-time-picker
+			arrow-control
+			v-model="date"
+			:picker-options="{
+				selectableRange: '4:30:00 - 20:30:00'
+			}"
+			>
+		</el-time-picker>
+	</div>
 </template>
 
 <script>

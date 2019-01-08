@@ -76,6 +76,8 @@
 	.signature {
 		position: relative;
 		height: 200px;
+		margin-top: $gutter/3;
+		margin-bottom: $gutter/3;
 
 		&:after {
 			display: block;

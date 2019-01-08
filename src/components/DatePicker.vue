@@ -1,5 +1,8 @@
 <template>
-	<el-date-picker v-model="value" value-format="yyyy-MM-dd" format="MM/dd/yyyy" @change="handleChange" />
+	<div class="c-input-container">
+		<input v-if="native" type="date" />
+		<el-date-picker v-else v-model="value" value-format="yyyy-MM-dd" format="MM/dd/yyyy" @change="handleChange" />
+	</div>
 </template>
 
 <script>
@@ -21,7 +24,10 @@ export default {
 		prop: "value",
 		event: "change"
 	},
-	props: ["value"]
+	props: {
+		value: String,
+		native: Boolean
+	}
 };
 </script>
 

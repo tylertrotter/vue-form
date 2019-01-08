@@ -46,7 +46,7 @@
 		&[data-page]:after {
 			content: attr(data-page);
 			text-align: right;
-			padding: $gutter $gutter/2 0 0;
+			padding: $gutter $input-spacing 0 0;
 			font-size: $small-text;
 		}
 

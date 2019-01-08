@@ -61,6 +61,7 @@
 
 		caption {
 			@include label;
+			margin-bottom: $input-spacing;
 			text-align: left;
 		}
 

@@ -22,6 +22,7 @@ $button-reverse: $highlight !default;
 $form-width: 900px !default;
 $gutter: $unitless-gutter * 1px !default;
 $form-margins: $unitless-gutter * 1.5px !default;
+$input-spacing: $gutter/4;
 
 $input-border-width: $border-width !default;
 $header-typeface: $typeface !default;

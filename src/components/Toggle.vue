@@ -1,9 +1,12 @@
 <template>
-	<el-switch
-		v-model="checked"
-		:active-text="activeText"
-		:inactive-text="inactiveText">
-	</el-switch>
+	<div class="c-input-container">
+		<el-switch
+			class="c-toggle"
+			v-model="checked"
+			:active-text="activeText"
+			:inactive-text="inactiveText">
+		</el-switch>
+	</div>
 </template>
 
 <script>
@@ -44,6 +47,7 @@ export default {
 
 <style lang="scss">
 	@import "../sass/theme-chalk-master/src/switch";
+
 	// #if !chameleon
 
 	// #endif

@@ -1,5 +1,7 @@
 <template>
-	<el-input-number v-model="value" @change="handleChange" :min="min" :max="max" :step="step"></el-input-number>
+	<div class="c-input-container">
+		<el-input-number v-model="value" @change="handleChange" :min="min" :max="max" :step="step"></el-input-number>
+	</div>
 </template>
 
 <script>
@@ -32,8 +34,6 @@ export default {
 
 <style lang="scss">
 	@import "../sass/theme-chalk-master/src/input-number";
-
-
 
 	.el-icon-minus:before{
 		content: "\2212";

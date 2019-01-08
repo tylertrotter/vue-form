@@ -1,5 +1,5 @@
 <template>
-	<div class="c-button-section c-col-24">
+	<div class="c-button-section">
 		<!-- These goto() page numbers are hardcoded right now. Not really sure where to save current page. -->
 		<c-button v-if="!firstPage" @click.native="goto(1)" class="c-button--secondary">Back</c-button>
 		<c-button v-if="!lastPage" @click.native="goto(2)" class="c-button--secondary">Next</c-button>
@@ -44,6 +44,9 @@
 	.c-button-section {
 		display: flex;
 		justify-content: flex-start;
+		padding-top: $gutter;
+		padding-right: $gutter/3;
+		padding-left: $gutter/3;
 
 		button:not(:last-child) {
 			margin-right: $gutter/2;

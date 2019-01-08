@@ -1,6 +1,6 @@
 <template>
 	<div :class="containerIsTable ? '' : 'c-section c-section--repeating'" :is="containerIsTable ? 'tbody' : 'div'">
-		<div v-if="!containerIsTable">
+		<div v-if="!containerIsTable" class="c-section--header">
 			<c-button class="c-remove"><i-ex /></c-button>
 			<h2>{{this.$parent.$props.heading}} {{index}}</h2>
 		</div>

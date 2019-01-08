@@ -1,6 +1,6 @@
 <template>
 	<div
-	class="c-checkable-group"
+	class="c-checkable-group c-input-container"
 	:class="[
 		(columns >= 1 && columns <= 4) ? 'c-inner-col-' + columns : 'c-inline',
 		readonly ? 'c-readonly c-readonly--checkable' : ''

@@ -1,4 +1,5 @@
 <template>
+	<!-- Question: Where to store Chameleon attribute? I would like to not output some code if true, so does webpack config make sense? -->
   <form ref="form" id="c-form" class="cg">
 		<header class="c-header c-wrapper">
 			<div class="c-row">
@@ -6,20 +7,21 @@
 			</div>
 		</header>
 		<div class="c-body">
-			<c-page-progress :pages="['Constantine von Tischendorf', 'Antidisestablishmentarianism']" :show-titles="true" display="steps" />
+			<c-page-progress :pages="['Constantine von Tischendorf', 'Antidisestablishmentarianism']" :show-titles="true" display="bar" />
 
 			<c-page :page="1" :first="true">
 
 				<c-row>
 					<c-field source="Text" class="c-col-12">
-						<c-input :readonly="true" />
+						<c-input :readonly="false" />
 					</c-field>
 					<c-field source="Phone" class="c-col-12">
-						<c-phone :readonly="true" />
+						<c-phone :readonly="false" />
 					</c-field>
 				</c-row>
 
 				<c-row>
+					<!-- Question: See code pertaining to fieldsets in field component. -->
 					<c-field source="Name1" class="c-col-24">
 						<c-name :name="{
 							title: 'Lord',
@@ -29,18 +31,18 @@
 							last: 'Byron',
 							suffix: 'Jr.'
 						}"
-						:readonly="true"
+						:readonly="false"
 					/>
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field source="ChoiceSelect" class="c-col-12">
-						<c-select :readonly="true" />
+						<c-select :readonly="false" />
 					</c-field>
 
 					<c-field source="ChoiceRadio" class="c-col-12">
-						<c-checkable-group :columns="3" class="c-fancy" :readonly="true">
+						<c-checkable-group :columns="3" class="c-fancy" :readonly="false">
 							<c-radio-group pre-checked="Option C">
 								<c-radio label="Option A" />
 								<c-radio label="Option B" />
@@ -52,7 +54,7 @@
 
 				<c-row>
 					<c-field source="ChoiceCheckboxes" class="c-col-12">
-						<c-checkable-group :columns="3" class="c-fancy" :readonly="true">
+						<c-checkable-group :columns="3" class="c-fancy" :readonly="false">
 							<c-checkbox-group :pre-checked="['Option A', 'Option C']">
 								<c-checkbox label="Option A" />
 								<c-checkbox label="Option B" />
@@ -87,8 +89,10 @@
 					<c-field source="Toggle1" class="c-col-12">
 						<c-toggle active-text="Yes" inactive-text="No" />
 					</c-field>
+
 					<c-field source="DatePicker1" class="c-col-12">
-						<c-date-picker />
+						<!-- Question: Does it make more sense to have native as a completely different component rather than a prop so that native inputs don't have to load bloat?  -->
+						<c-date-picker :native="false" />
 					</c-field>
 				</c-row>
 
@@ -101,17 +105,18 @@
 					</c-field>
 				</c-row>
 
-				<c-row>
+				<!-- <c-row>
 					<c-field label="Number"  class="c-col-12">
 						<c-number />
 					</c-field>
 					<c-field label="Website"  class="c-col-12">
 						<c-url />
 					</c-field>
-				</c-row>
+				</c-row> -->
 
 				<c-row>
 					<c-field  source="ChoiceRadio" :required="true" class="c-col-24">
+						<!-- Question: Can somebody tell me why this doesn't work? I can't figure it out. -->
 						<c-rating-scale
 							:questions="[
 								'How happy are you with Vue.js',
@@ -145,7 +150,7 @@
 
 							<c-repeating-section v-for="i in 1" :key="i" :index="i">
 								<c-row>
-									<c-field source="Name1" label="Your Name" class="c-col-8">
+									<c-field source="Name1" label="Text" class="c-col-8">
 										<c-input type="text" />
 									</c-field>
 									<c-field source="Name1" label="Your Email" class="c-col-8">
@@ -153,7 +158,7 @@
 									</c-field>
 								</c-row>
 									<c-row>
-										<c-section source="Section2" class="c-col-24">
+										<c-section heading="'Nother Section" source="Section2" class="c-col-24">
 											<c-field source="SectionText" class="c-col-12">
 												<c-input type="text" />
 											</c-field>
@@ -178,13 +183,14 @@
 						<c-signature :readonly="false" />
 					</c-field>
 					<c-field source="Textarea" class="c-col-12">
-						<c-input type="textarea"/>
+						<c-input type="textarea" :readonly="false"/>
 					</c-field>
 				</c-row>
 
 				<c-row>
 					<c-field class="c-col-24">
-						<c-repeating-data :is-table="true" heading="Repeating Table">
+						<!-- Question: Is there an efficient way to apply 'readonly' attribute to all fields of a section, such as this repeating-data section? -->
+						<c-repeating-data :is-table="true" :readonly="false" heading="Repeating Table">
 
 							<template slot="thead">
 								<th>Your Name</th>
@@ -196,7 +202,7 @@
 							<c-repeating-section v-for="i in 1" :key="i" :index="i">
 								<c-row>
 									<c-field source="Name1" label="Your Name" class="c-col-8">
-										<c-input type="text" :readonly="true"/>
+										<c-input type="text" :readonly="false"/>
 									</c-field>
 									<c-field source="Name1" label="Your Email" class="c-col-8">
 										<c-select />
@@ -376,19 +382,14 @@
 		margin-left: -$gutter/4;
 
 		& > * {
-			margin-left: $gutter/4;
-			margin-right: $gutter/4;
+			margin-left: $input-spacing;
+			margin-right: $input-spacing;
 		}
 	}
 
-	// intra field rows
-	.c-field .c-row > * {
-		margin-top: $gutter/3;
-		margin-bottom: $gutter/3;
-	}
-
-	.c-field .c-row {
-		margin-top: -$gutter/4;
+	.c-input-container {
+		margin-top: $input-spacing;
+		margin-bottom: $input-spacing;
 	}
 
 	.c-outdent {
@@ -401,6 +402,7 @@
 	// Instead of using .c-field, this selector will only apply to fields that have a colspan set.
 	// Allowing us to use the field component outside of 24-column grid context.
 	div[class*='c-col-'],
+	fieldset[class*='c-col-'],
 	.c-container,
 	.c-padding {
 		padding: $gutter/2 ($gutter/2 - $gutter/4);

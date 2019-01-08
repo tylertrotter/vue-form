@@ -29,7 +29,7 @@
     width: $--input-height;
     // height: 100%;
     text-align: center;
-    @include bg-color();
+    background: fade(1);
     cursor: pointer;
 		font-size: 1.5em;
 		display: flex;
