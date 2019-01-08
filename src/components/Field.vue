@@ -44,9 +44,9 @@ export default {
 	},
 	mounted(){
 		// So wrong
-		let label = this.$el.querySelector('label').setAttribute('for', 'input-'+inputId);
-		this.$el.querySelector('input, select, textarea').setAttribute('id', 'input-'+inputId);
-		inputId++;
+		// let label = this.$el.querySelector('label').setAttribute('for', 'input-'+inputId);
+		// this.$el.querySelector('input, select, textarea').setAttribute('id', 'input-'+inputId);
+		// inputId++;
 	},
 	props: {
 		label: String,

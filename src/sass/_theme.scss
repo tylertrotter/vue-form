@@ -86,3 +86,6 @@ $page-transition-duration: 1s !default;
 // Element's Primary Color
 $--color-primary: $highlight;
 
+$--tooltip-fill: $color;
+$--tooltip-color: $reverse;
+

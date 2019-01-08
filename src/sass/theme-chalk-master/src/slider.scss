@@ -9,9 +9,9 @@
 
   @include e(runway) {
     width: 100%;
-    height: $--slider-height;
+    height: $font-size*.4;
     margin: $--slider-margin;
-    background-color: $--slider-runway-background-color;
+    background-color: fade(2);
     border-radius: $--slider-border-radius;
     position: relative;
     cursor: pointer;
@@ -82,7 +82,7 @@
   }
 
   @include e(bar) {
-    height: $--slider-height;
+    height: $font-size*.4;
     background-color: $--slider-main-background-color;
     border-top-left-radius: $--slider-border-radius;
     border-bottom-left-radius: $--slider-border-radius;
@@ -118,11 +118,15 @@
   }
 
   @include e(button) {
-    width: $--slider-button-size;
-    height: $--slider-button-size;
+    width: $font-size*1.3;
+    height: $font-size*1.3;
     border: solid 2px $--slider-main-background-color;
-    background-color: $--color-white;
-    border-radius: 50%;
+		background-color: $--color-white;
+		@if($circles){
+			border-radius: 50%;
+		}@else {
+			border-radius: $checkbox-radius;
+		}
     transition: .2s;
     user-select: none;
 

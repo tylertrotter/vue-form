@@ -46,7 +46,7 @@ Cognito.Forms.model.perform(function() {
   formEntry.Section2.AllSideDishes.push("Loaded Baked Potato");
   formEntry.Section2.AllSideDishes.push("Pita & Hummus");
   formEntry.Section2.AllSideDishes.push("Cheesy Grits");
-  formEntry.Section2.AllSideDishes.push("Asparagus");
+	formEntry.Section2.AllSideDishes.push("Asparagus");
 
   Cognito.Forms.model.entry = formEntry;
 

@@ -7,7 +7,7 @@
   }
   @include e(popper) {
     position: absolute;
-    border-radius: 4px;
+    border-radius: $input-radius/2;
     padding: $--tooltip-padding;
     z-index: $--index-popper;
     font-size: $--tooltip-font-size;

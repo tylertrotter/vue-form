@@ -86,7 +86,8 @@ export function createModel() {
                 onChangeOf: ["Name3", "Email4", "Checkbox2"]
             });
 
-            formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
+						formType.addProperty("Spinner1", Number, false, false, { label: 'Spinner 1' });
+						formType.addProperty("Slider", Number, false, false, { label: 'Slider' });
             formType.addProperty("Select1", String, false, false, { label: 'Select 1' });
             formType.addProperty("RatingScale2", String, false, false, { label: 'Rating Scale 2' });
             formType.addProperty("RatingScale3", Object, false, false, { label: 'Rating Scale 3' });

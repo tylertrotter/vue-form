@@ -227,6 +227,9 @@
 					<c-field source="Spinner1" title="Spinner" class="c-col-12">
 						<c-spinner />
 					</c-field>
+					<c-field source="Slider" title="Slider" class="c-col-12">
+						<c-slider />
+					</c-field>
 				</c-row>
 			</c-page>
 
@@ -252,6 +255,8 @@
 	import CNumber from './components/Number.vue';
 	import CUrl from './components/Url.vue';
 	import CSpinner from './components/Spinner.vue';
+
+	import CSlider from './components/Slider.vue';
 
 	import CSelect from './components/Select.vue';
 	import CDatePicker from './components/DatePicker.vue';
@@ -295,6 +300,7 @@
 			CNumber,
 			CUrl,
 			CSpinner,
+			CSlider,
 
 			CSelect,
 			CDatePicker,
@@ -409,7 +415,8 @@
 	}
 
 	.cg,
-	.el-popper {
+	.el-popper,
+	.el-tooltip__popper {
 		background: $reverse;
 		// background-image: url('https://images.unsplash.com/photo-1545179920-16c9617c2b60?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2134&q=80');
 		max-width: $form-width;
