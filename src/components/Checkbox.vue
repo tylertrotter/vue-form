@@ -11,7 +11,10 @@ Vue.use(CheckboxGroup);
 export default {
 	name: "c-checkbox",
 	mixins: [VueModel.mixins.SourceConsumer],
-	props: ["label", "checked"],
+	props: {
+		label: String,
+		checked: Boolean
+	},
 	model: {
 		prop: "checked",
 		event: "change"
@@ -22,16 +25,16 @@ export default {
 			selfModel: (typeof this.checked === "boolean" ? this.checked : this.$source ? this.$source.value : false),
 		};
 	},
-	watch: {
-		// NOTE: This is here to watch for changes to the
-		// prop coming from OUTSIDE of the component...
-		checked: function(newVal, oldVal) {
-			this.selfModel = newVal;
-			if (this.$source && this.$source.value !== newVal) {
-				this.$source.value = newVal;
-			}
-		},
-	},
+	// watch: {
+	// 	// NOTE: This is here to watch for changes to the
+	// 	// prop coming from OUTSIDE of the component...
+	// 	checked: function(newVal, oldVal) {
+	// 		this.selfModel = newVal;
+	// 		if (this.$source && this.$source.value !== newVal) {
+	// 			this.$source.value = newVal;
+	// 		}
+	// 	},
+	// },
 	computed: {
 		inputLabel: function() {
 			return typeof this.label === "string" ? this.label : this.$source.label;
@@ -59,21 +62,22 @@ export default {
 		}
 	},
 	methods: {
-		handleFocus(value, ev) {
-			// console.log("Received 'c-checkbox' focus event");
-			this.hasFocus = true;
-		},
-		handleBlur(value, ev) {
-			// console.log("Received 'c-checkbox' blur event");
-			this.hasFocus = false;
-		},
+	// 	handleFocus(value, ev) {
+	// 		// console.log("Received 'c-checkbox' focus event");
+	// 		this.hasFocus = true;
+	// 	},
+	// 	handleBlur(value, ev) {
+	// 		// console.log("Received 'c-checkbox' blur event");
+	// 		this.hasFocus = false;
+	// 	},
 		handleChange(value, ev) {
 			// NOTE: Could do some validation in here?
 			// console.log("Received 'c-checkbox' change event");
-			// this.$emit('change', value, ev);
+			this.$emit('change', value, ev.srcElement.defaultValue);
 			// if (this.$source) {
 			// 	this.$source.value = value;
 			// }
+			// console.log(value, ev)
 		}
 	}
 };

@@ -31,7 +31,7 @@ export default {
         sourceLabel = this.$source.label;
       }
 
-      return typeof this.label === "string" ? this.label : sourceLabel;
+      return typeof this.title === "string" ? this.title : sourceLabel;
 		},
 		fieldContainerType(){
 			// Obviously wrong, but this is the idea:
@@ -49,7 +49,7 @@ export default {
 		// inputId++;
 	},
 	props: {
-		label: String,
+		title: String,
 		helptext: String,
 		error: String,
 		required: Boolean,

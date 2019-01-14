@@ -78,10 +78,6 @@ export default {
 		border-bottom-right-radius: 0;
 	}
 
-	.el-select-dropdown {
-		// margin-top: -$input-spacing;
-	}
-
 	.el-input__suffix {
     position: absolute;
     height: 100%;

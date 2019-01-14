@@ -7,6 +7,7 @@
 	.el-radio__label,
 	.el-checkbox__label {
 		padding: 2px 0;
+		margin-left: .4em;
 	}
 
 	.is-focus + .el-checkbox__label,
@@ -17,7 +18,6 @@
 	.el-checkbox__input,
 	.el-radio__input {
 		position: relative;
-		margin-right: .4em;
 		border-radius: 50%;
 	}
 

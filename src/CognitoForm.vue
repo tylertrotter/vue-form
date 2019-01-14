@@ -231,6 +231,52 @@
 						<c-slider />
 					</c-field>
 				</c-row>
+
+				<c-row>
+					<c-field title="Image Picker" class="c-col-12">
+						<c-image-picker />
+					</c-field>
+
+					<c-field title="Choice Group Mini" class="c-col-12">
+						<c-choice-group :show-labels="false" :show-images="true" image-size="mini" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Mini (just words)" class="c-col-24">
+						<c-choice-group :show-labels="true" :show-images="false" image-size="mini" :grid="false" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Mini (both)" class="c-col-24">
+						<c-choice-group :show-labels="true" :show-images="true" image-size="mini" :grid="false" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Small" class="c-col-24">
+						<c-choice-group :show-labels="true" :show-images="true" image-size="small" :grid="false" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Medium" class="c-col-24">
+						<c-choice-group :show-labels="true" :show-images="true" image-size="medium" :grid="false" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Large" class="c-col-24">
+						<c-choice-group :show-labels="true" :show-images="true" image-size="large" :grid="false" />
+					</c-field>
+				</c-row>
+
+				<c-row>
+					<c-field title="Choice Group Medium (grid and gaps set to true)" class="c-col-24">
+						<c-choice-group :show-labels="false" :show-images="true" image-size="medium" :grid="true" :gaps="true" />
+					</c-field>
+				</c-row>
 			</c-page>
 
 			<c-save-resume-dialog />
@@ -274,6 +320,9 @@
 	import CUpload from './components/Upload.vue';
 	import CSaveResumeDialog from './components/SaveResumeDialog.vue';
 
+	import CImagePicker from './components/ImagePicker.vue';
+	import CChoiceGroup from './components/ChoiceGroup.vue';
+
 	import {EventBus} from './event-bus.js';
 	import { debouncedResize } from './debounce.js';
 
@@ -316,7 +365,10 @@
 
 			CSignature,
 			CUpload,
-			CSaveResumeDialog
+			CSaveResumeDialog,
+
+			CImagePicker,
+			CChoiceGroup
 		},
 		created() {
 			window.addEventListener("resize", this.handleResize);

@@ -65,6 +65,11 @@ $placholder: rgba($input-color, .4);
 	$checkbox-radius: 0 !default;
 }
 
+// Choice Group
+$gallery-border-color: fade(3) !default;
+$gallery-border-width: $input-border-width !default;
+$gallery-border-spacing: $gallery-border-width !default;
+
 // Assumed
 $negative: rgb(235, 86, 81) !default;
 $negative-reverse: white !default;

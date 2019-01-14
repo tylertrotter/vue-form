@@ -69,6 +69,12 @@
 	break-inside: avoid;
 }
 
+@mixin nowrap {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 @mixin helptext {
 	font-size: $small-text;
   padding: $gutter/4 0;
