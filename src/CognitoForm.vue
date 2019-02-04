@@ -12,10 +12,10 @@
 			<c-page :page="1" :first="true">
 
 				<c-row>
-					<c-field source="Text" class="c-col-12">
+					<c-field source="Text" class="c-col-4">
 						<c-input :readonly="false" />
 					</c-field>
-					<c-field source="Phone" class="c-col-12">
+					<c-field source="Phone" class="c-col-8">
 						<c-phone :readonly="false" />
 					</c-field>
 				</c-row>
@@ -386,7 +386,6 @@
 		},
 		methods: {
 			handleResize() {
-				// Add classes for every 100px width
 				var width = Math.ceil(this.$el.clientWidth / 25) * 25;
 				var widths = [];
 
@@ -492,12 +491,12 @@
 	}
 
 	.cg:not([data-width~="900"]) {
-		font-size: $font-size - 1px;
+		font-size: $font-size - ($font-size * .07);
 	}
 
 	.cg:not([data-width~="900"]) .c-body {
-		margin-left: $unitless-gutter * .15vw;
-		margin-right: $unitless-gutter * .15vw;
+		margin-left: $unitless-gutter * .17%;
+		margin-right: $unitless-gutter * .17%;
 	}
 
 	.c-wrapper {
@@ -505,7 +504,9 @@
 	}
 
 	.cg:not([data-width~="900"]) .c-wrapper {
-		padding: $form-margins/2 $unitless-gutter * .15vw;
+		padding-left: $unitless-gutter * .17%;
+		padding-right: $unitless-gutter * .17%;
+		padding-top: $unitless-gutter * .175%;
 	}
 
 	.c-wrapper:first-child {

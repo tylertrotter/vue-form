@@ -1,9 +1,9 @@
 @for $i from 1 through 24{
-	.c-col-#{$i} {
+ 	.c-col-#{$i} {
 		flex: 2 1 #{400 * ($i/24)}px;
 		width: calc(#{$i/24 * 100%} - #{$gutter/2});
 	}
 }
-[data-width~="700"] [class*="c-col-"]:first-child:last-child {
+[data-width~="700"] [class*="c-col-"] {
 	flex: initial;
 }
