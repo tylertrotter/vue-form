@@ -7,7 +7,7 @@
 			</div>
 		</header>
 		<div class="c-body">
-			<c-page-progress :pages="['Constantine von Tischendorf', 'Antidisestablishmentarianism']" :show-titles="true" display="bar" />
+			<c-page-progress :pages="['Page One', 'Page Number 2', 'Page Three']" :show-titles="true" display="bar" />
 
 			<c-page :page="1" :first="true">
 
@@ -138,9 +138,14 @@
 
 				<c-row>
 					<c-section source="Section1" heading="Section" class="c-col-24">
-						<c-field source="SectionText" class="c-col-12">
-							<c-input type="text" />
-						</c-field>
+						<c-row>
+							<c-field source="SectionText" class="c-col-12">
+								<c-input type="text" />
+							</c-field>
+							<c-field source="SectionText" class="c-col-12">
+								<c-input type="text" />
+							</c-field>
+						</c-row>
 					</c-section>
 				</c-row>
 
@@ -324,7 +329,7 @@
 	import CChoiceGroup from './components/ChoiceGroup.vue';
 
 	import {EventBus} from './event-bus.js';
-	import { debouncedResize } from './debounce.js';
+	import { debounce } from './debounce.js';
 
 	export default {
 		name: 'c-form',
@@ -371,28 +376,26 @@
 			CChoiceGroup
 		},
 		created() {
-			window.addEventListener("resize", this.handleResize);
+			window.addEventListener("resize", debounce(this.handleResize));
 		},
 		mounted() {
 			this.handleResize();
 		},
 		destroyed() {
-			window.removeEventListener("resize", this.handleResize);
+			window.removeEventListener("resize", debounce(this.handleResize));
 		},
 		methods: {
 			handleResize() {
-				debouncedResize(() => {
-					// Add classes for every 100px width
-					var width = Math.ceil(this.$el.clientWidth / 25) * 25;
-					var widths = [];
+				// Add classes for every 100px width
+				var width = Math.ceil(this.$el.clientWidth / 25) * 25;
+				var widths = [];
 
-					for (var size = width; size >= 200; size = size - 25) {
-						if(size <= 650 || size % 100 === 0)
-						widths.push(size);
-					}
+				for (var size = width; size >= 200; size = size - 25) {
+					if(size <= 650 || size % 100 === 0)
+					widths.push(size);
+				}
 
-					this.$el.setAttribute('data-width', widths.join(" "));
-				})();
+				this.$el.setAttribute('data-width', widths.join(" "));
 			}
 		}
 	}
@@ -408,7 +411,7 @@
 	}
 
 	.c-region:not(:last-child) {
-			margin-bottom: $gutter;
+		margin-bottom: $gutter;
 	}
 
 	.c-input--full {
@@ -485,7 +488,7 @@
 		margin-left: $form-margins;
 		margin-right: $form-margins;
 		padding-bottom: $form-margins/2;
-		transition: all .5s;
+		// transition: all .5s;
 	}
 
 	.cg:not([data-width~="900"]) {

@@ -1,6 +1,6 @@
 <template>
 	<div v-if="display !== 'none'" class="c-row">
-		<ol class="c-page-progress" :class="'c-page-progress--' + display">
+		<ol class="c-page-progress" :class="['c-page-progress--' + display, isNarrow ? 'c-narrow' : '']">
 			<li v-for="(page, index) in pageTitles" :key="index" :class="{active: index === currentPage-1}">
 				<a href="" @click.prevent="goto(index + 1)" @keydown.prevent.space="goto(index + 1)"><span v-if="showTitles">{{ page }}</span></a>
 			</li>
@@ -11,6 +11,7 @@
 <script>
 	import {EventBus} from "./../event-bus";
 	import {goToPage} from "./../go-to-page";
+	import { debounce } from "./../debounce.js";
 
 	export default {
 		name: "c-page-progress",
@@ -25,10 +26,45 @@
 			},
 			transition: String
 		},
+		data() {
+			return {
+				isNarrow: false
+			}
+		},
 		mixins: [goToPage],
+		created() {
+			window.addEventListener("resize", debounce(this.handleResize));
+			window.addEventListener("resize", this.resetToDesktopSize);
+		},
 		mounted() {
-			let fontSize = parseInt(getComputedStyle(this.$el).fontSize, 10);
-			this.$el.classList.add('c-length-' + Math.ceil( this.pages.join("").length*(fontSize/1.7)/100) * 100);
+			this.handleResize()
+		},
+		destroyed() {
+			window.removeEventListener("resize", debounce(this.handleResize));
+			window.removeEventListener("resize", this.resetToDesktopSize);
+		},
+		methods: {
+			resetToDesktopSize(){
+				// minimize reflow by locking height into place
+				this.$el.style.height = this.$el.getBoundingClientRect().height + 'px';
+				this.isNarrow = false;
+			},
+			handleResize(){
+				let progressWidth = this.$el.getBoundingClientRect().width;
+				let pageLis = [].slice.call(this.$el.querySelectorAll("li span"));
+
+				this.isNarrow = !this.compareEls(pageLis);
+				this.$el.style.height = 'initial';
+			},
+			compareEls(els){
+				for(let i = 0; i < els.length-1; i++){
+					if( els[i].getBoundingClientRect().top !== els[i+1].getBoundingClientRect().top ||
+							els[i].getBoundingClientRect().height !== els[i+1].getBoundingClientRect().height ){
+						return false;
+					}
+				}
+				return true;
+			}
 		}
   };
 </script>
@@ -65,6 +101,7 @@
 	}
 
 	.c-page-progress {
+		width: 100%;
 		margin: 0 0 $gutter;
 		padding: 0;
 		counter-reset: mycounter;
@@ -151,6 +188,12 @@
 			background: $highlight;
 			box-shadow: 0 0 0 1px $highlight;
 		}
+
+		&.c-narrow {
+			li {
+				display: block;
+			}
+		}
 	}
 
 	.c-page-progress--bar {
@@ -159,6 +202,11 @@
 		li {
 			display: flex;
 			width: 100%;
+		}
+
+		li {
+			align-items: flex-start;
+
 		}
 
 		a {
@@ -192,49 +240,18 @@
 				left: 0;
 			}
 
-			.active 		:before {
+			.active :before {
 				left: initial;
 				right: 0;
 			}
 		}
-	}
 
-	.cg:not([data-width~="1000"]) .c-length-1000,
-	.cg:not([data-width~="900"]) .c-length-900,
-	.cg:not([data-width~="800"]) .c-length-800,
-	.cg:not([data-width~="700"]) .c-length-700,
-	.cg:not([data-width~="600"]) .c-length-600,
-	.cg:not([data-width~="500"]) .c-length-500,
-	.cg:not([data-width~="450"]) .c-length-400,
-	.cg:not([data-width~="325"]) .c-length-300,
-	.cg:not([data-width~="275"]) .c-length-200 {
-		span {
-			font-size: .75em;
-			transition: opacity .3s;
-		}
-	}
-
-	.cg:not([data-width~="825"]) .c-length-1000,
-	.cg:not([data-width~="725"]) .c-length-900,
-	.cg:not([data-width~="625"]) .c-length-800,
-	.cg:not([data-width~="525"]) .c-length-700,
-	.cg:not([data-width~="450"]) .c-length-600,
-	.cg:not([data-width~="400"]) .c-length-500,
-	.cg:not([data-width~="350"]) .c-length-400{
-		span {
-			position: absolute;
-			opacity: 0;
-		}
-		li:hover span {
-			opacity: 1;
-		}
-		li:last-child {
+		&.c-narrow {
 			span {
-				right: 0;
+				display: none;
 			}
 		}
 	}
-
 
 	@if( $page-transition == 'ltr'){
 		// Going forward
