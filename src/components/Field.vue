@@ -22,7 +22,8 @@ const fieldsetList = ['Address'];
 let inputId = 0;
 
 export default {
-  name: "c-field",
+	name: "c-field",
+	// Something in this mixin is causing IE to not render fields.
 	mixins: [VueModel.mixins.SourceProvider],
   computed: {
     fieldLabel: function() {
